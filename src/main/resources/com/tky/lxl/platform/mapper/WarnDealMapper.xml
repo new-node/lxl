@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.WarnDealMapper">
+  <resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.WarnDeal">
+    <result column="WARNDEALID" jdbcType="DECIMAL" property="warndealid" />
+    <result column="ACCOUNT" jdbcType="VARCHAR" property="dealuserid" />
+    <result column="DEALCS" jdbcType="VARCHAR" property="dealcs" />
+    <result column="DEALTIMETMP" jdbcType="VARCHAR" property="dealtime" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="USEFLAG" jdbcType="DECIMAL" property="useflag" />
+    <result column="CREATETIME" jdbcType="VARCHAR" property="createtime" />
+    <result column="GKBM" jdbcType="DECIMAL" property="gkbm" />
+    <result column="PHONE" jdbcType="DECIMAL" property="phone" />
+    <result column="CONBEAMID" jdbcType="DECIMAL" property="lxlid" />
+    <result column="PARTID" jdbcType="DECIMAL" property="ldcode" />
+    <result column="ACCOUNTNAME" jdbcType="VARCHAR" property="accountname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    WARNDEALID, ACCOUNT, DEALCS, TO_CHAR(DEALTIME,'YYYY-MM-DD HH24:MI:SS') AS DEALTIMETMP, REMARK,USEFLAG, CREATETIME, GKBM, CONBEAMID, PARTID, PHONE, ACCOUNTNAME
+  </sql>
+  
+  <insert id="insertSelective" parameterType="com.tky.lxl.platform.model.business.WarnDeal">
+    insert into T_WARNDEAL
+	values(
+        SEQ_WARNDEALID.NEXTVAL,
+        #{dealuserid,jdbcType=DECIMAL},
+        #{dealcs,jdbcType=VARCHAR},
+        SYSDATE,
+        TO_DATE(#{dealtime,jdbcType=VARCHAR},'YYYY-MM-DD HH24:MI:SS'),
+        #{remark,jdbcType=VARCHAR},
+        0,
+        #{gkbm,jdbcType=DECIMAL},
+        #{phone,jdbcType=DECIMAL},
+        #{lxlid,jdbcType=DECIMAL},
+        #{ldcode,jdbcType=DECIMAL},
+        #{accountname,jdbcType=VARCHAR}
+        )
+  </insert>
+  <select id="selectWarnDeal" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_WARNDEAL
+    where gkbm = #{gkbm,jdbcType=DECIMAL}
+    and   conbeamid = #{conbeamId,jdbcType=DECIMAL}
+    and   partid = #{partId,jdbcType=DECIMAL}
+    and   useflag = 0
+    order by DEALTIMETMP DESC
+  </select>
+  
+  <!--  查询连续梁 梁段的处置信息 -->
+  <select id="isCloseWarn" resultType="com.tky.lxl.platform.model.business.LdMonitorStatus">
+	  select t.conbeamid, t.partid, t.pier, t.seq, t.status,t.ldtype
+	  from T_LDMONITORSTATUS t
+	 where t.conbeamid = #{conbeamid}
+	 and t.pier = #{pier}
+	 <if test="ldtype==4 or ldtype==3">
+		 and t.ldtype=#{ldtype}
+	 </if>
+	 <if test="mileageflag==0">
+	  <![CDATA[and t.seq<=0]]> 
+	 </if>
+	 <if test="mileageflag==1">
+	  <![CDATA[and t.seq>=0]]> 
+	 </if>
+	<!--  <if test="ldtype==1">
+	 	and t.pier = #{pier}
+	 </if> -->
+	 <!-- <if test="ldtype==1 and mileageflag==1">/*大里程*/
+	 
+	 </if> -->
+	 order by t.pier, t.seq
+  </select>
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.business.LxlMapper">
+	<sql id="Base_Column_List">
+		CONBEAMID, CODE, NAME, BEAMASPAN, MAINKDLENGTH,
+		LDCOUNT, CDCOUNT, WARNLDCOUNTDEAL,WARNLDCOUNTNODEAL, 
+		STATUS, REMARK, USEFLAG, PROJECTINFOID, SECTIONID,
+		SITEID,LENGTH,BASECOUNT,WARNLDCOUNT,CENTERMILE,CENTERMILESTR
+	</sql>
+	
+<select id="findByLxlId" resultType="com.tky.lxl.platform.model.business.Lxl" parameterType="java.lang.Long">
+			SELECT LXL.CONBEAMID,
+				LXL.NAME,
+				LXL.LENGTH,
+				MIN(CASE
+				 WHEN XX.GKBM IS NULL THEN
+				 	0
+				 ELSE
+				  XX.GKBM
+				END) ISZH
+		  FROM T_LXL LXL
+		 LEFT JOIN T_LD LD
+			ON LXL.CONBEAMID = LD.CONBEAMID
+			AND LD.TYPE = 3
+			AND LD.USEFLAG = 0
+		 LEFT JOIN T_XXKZD XX
+			ON LD.PARTID = XX.PARTID
+			AND LD.CONBEAMID = XX.CONBEAMID
+			AND XX.USEFLAG = 0
+		 WHERE LXL.CONBEAMID = #{id}
+			AND LXL.USEFLAG = 0
+		 GROUP BY LXL.CONBEAMID, LXL.NAME, LXL.LENGTH
+	</select>
+
+	<select id="findById" resultType="com.tky.lxl.platform.model.business.Lxl" parameterType="java.lang.Long">
+			SELECT
+			<include refid="Base_Column_List" />
+			FROM T_LXL
+			WHERE 1=1
+			<if test="id!=null">
+			AND CONBEAMID = #{id}
+			</if>
+			AND USEFLAG = 0
+	</select>
+	<insert id="UpdateBySggs" parameterType="com.tky.lxl.platform.model.business.Lxl">
+		<selectKey keyProperty="count" resultType="int" order="BEFORE">
+			SELECT COUNT(CONBEAMID) FROM T_LXL WHERE CONBEAMID = #{conbeamid}
+		</selectKey>
+		<if test="count > 0">
+			update T_LXL
+			<set>
+			  <if test="beamaspan != null">
+				BEAMASPAN = #{beamaspan,jdbcType=VARCHAR},
+			  </if>
+			  <if test="mainkdlength != null">
+				MAINKDLENGTH = #{mainkdlength,jdbcType=DECIMAL}
+			  </if>
+			</set>
+			where CONBEAMID = #{conbeamid}
+		</if>
+	</insert>
+	
+	<update id="updateWarnLDcount" parameterType="com.tky.lxl.platform.model.business.Lxl">
+		UPDATE T_LXL
+		<set>
+		  <if test="warnldcountdeal != null">
+			WARNLDCOUNTDEAL = #{warnldcountdeal},
+		  </if>
+		  <if test="warnldcountnodeal != null">
+			WARNLDCOUNTNODEAL = #{warnldcountnodeal},
+		  </if>
+		</set>
+		 WHERE CONBEAMID = #{conbeamid}
+	</update>
+		
+	<update id="updateBasecount" parameterType="com.tky.lxl.platform.model.business.Lxl">
+		UPDATE T_LXL
+			SET BASECOUNT =#{basecount}
+		 WHERE CONBEAMID = #{conbeamid}
+	</update>
+	<insert id="UpdateCDCount" parameterType="com.tky.lxl.platform.model.business.Lxl">
+		UPDATE T_LXL
+			SET CDCOUNT = CDCOUNT + 1
+		 WHERE T_LXL.CONBEAMID = #{conbeamid}
+			AND T_LXL.USEFLAG = 0
+	</insert>
+	
+	<!-- 获取最新上传数据的连续梁信息 -->
+	<select id="getNewLxl" resultType="com.tky.lxl.platform.model.business.NewLxl">
+		SELECT NEWLXL.NAME,TO_CHAR(NEWLXL.UPTIME,'MM-dd hh24:mi') AS NEWDATE FROM (
+			SELECT LXL.NAME,MAX(XX.UPDATETIME) AS UPTIME FROM T_LXL LXL  INNER JOIN T_XXKZD XX
+			ON LXL.CONBEAMID = XX.CONBEAMID
+			AND XX.PSTATE=0 AND XX.USEFLAG=0
+			WHERE LXL.USEFLAG=0
+			 AND LXL.SECTIONID =#{sectionid}
+			GROUP BY LXL.NAME
+			ORDER BY UPTIME DESC) NEWLXL
+			WHERE TO_CHAR(UPTIME,'yyyy-MM-dd') >= TO_CHAR(TO_DATE(#{startdate}, 'yyyy-MM-dd'),'yyyy-MM-dd')
+			  AND TO_CHAR(TO_DATE(#{enddate}, 'yyyy-MM-dd'),'yyyy-MM-dd') >= TO_CHAR(UPTIME,'yyyy-MM-dd')
+			 
+	</select>
+</mapper>

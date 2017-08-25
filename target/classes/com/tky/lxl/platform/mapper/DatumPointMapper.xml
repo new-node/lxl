@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.DatumPointMapper">
+	<resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.DatumPoint">
+		<id column="BASEID" jdbcType="DECIMAL" property="baseid" />
+		<result column="BASENAME" jdbcType="VARCHAR" property="basename" />
+		<result column="BASECODE" jdbcType="VARCHAR" property="basecode" />
+		<result column="SITEID" jdbcType="DECIMAL" property="siteid" />
+		<result column="UPDATETIME" jdbcType="TIMESTAMP" property="updatetime" />
+		<result column="CREATETIME" jdbcType="TIMESTAMP" property="createtime" />
+		<result column="USEFLAG" jdbcType="DECIMAL" property="useflag" />
+		<result column="BASETYPE" jdbcType="DECIMAL" property="basetype" />
+		<result column="BASENUM" jdbcType="DECIMAL" property="basenum" />
+		<result column="BASEHEIGHT" jdbcType="DECIMAL" property="baseheight" />
+		<result column="BASEXX" jdbcType="DECIMAL" property="basexx" />
+		<result column="BASEYY" jdbcType="DECIMAL" property="baseyy" />
+		<result column="BASEZZ" jdbcType="DECIMAL" property="basezz" />
+		<result column="CONBEAMID" jdbcType="DECIMAL" property="conbeamid" />
+		<!-- <result column="PARTID" jdbcType="DECIMAL" property="partid" /> -->
+	</resultMap>
+	<sql id="Base_Column_List">
+		BASEID, BASENAME, BASECODE, SITEID, UPDATETIME, CREATETIME,
+		USEFLAG,
+		BASETYPE, BASENUM,
+		BASEHEIGHT, BASEXX, BASEYY, BASEZZ,
+		CONBEAMID
+	</sql>
+	<!-- 分页查询 -->
+	<sql id="selectpagestart">
+		SELECT *
+		FROM (SELECT ROWNUM RW,A.*
+		FROM (
+	</sql>
+	<sql id="selectpageend">
+		 <![CDATA[
+		          ) A
+		         WHERE ROWNUM < #{endNum}) B
+		 WHERE B.RW > #{startNum}
+		 ]]>
+	</sql>
+	<select id="queryTBase" parameterType="com.tky.lxl.platform.model.business.DatumPoint" resultMap="BaseResultMap">
+		<include refid="selectpagestart"></include>
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM T_BASE 
+		WHERE  CONBEAMID = #{conbeamid,jdbcType=DECIMAL}
+		ORDER BY CREATETIME DESC
+		<include refid="selectpageend"></include>
+	</select>
+	<select id="queryTBaseCount" resultType="int">
+		SELECT
+			COUNT(T.BASEID)
+		FROM T_BASE T 
+		WHERE   CONBEAMID = #{conbeamid,jdbcType=DECIMAL}
+		ORDER BY CREATETIME DESC
+	</select>
+	<update id="updateTBase" parameterType="com.tky.lxl.platform.model.business.DatumPoint">
+		UPDATE T_BASE
+		<set>
+			<if test="basename != null">
+				BASENAME = #{basename},
+			</if>
+			<if test="basecode != null">
+				BASECODE = #{basecode},
+			</if>
+			<if test="siteid != null">
+				SITEID = #{siteid},
+			</if>
+				UPDATETIME = SYSDATE,
+			<if test="createtime != null">
+				CREATETIME = #{createtime},
+			</if>
+			<if test="useflag != null">
+				USEFLAG = #{useflag},
+			</if>
+			<if test="basetype != null">
+				BASETYPE = #{basetype},
+			</if>
+			<if test="basenum != null">
+				BASENUM = #{basenum},
+			</if>
+			<if test="baseheight != null">
+				BASEHEIGHT = #{baseheight},
+			</if>
+			<if test="basexx != null">
+				BASEXX = #{basexx},
+			</if>
+			<if test="baseyy != null">
+				BASEYY = #{baseyy},
+			</if>
+			<if test="basezz != null">
+				BASEZZ = #{basezz},
+			</if>
+			<if test="conbeamid != null">
+				CONBEAMID = #{conbeamid},
+			</if>
+		</set>
+		WHERE BASEID = #{baseid}
+	</update>
+	
+	<!-- 录入基准点信息 -->
+	<insert id="insertTBase" parameterType="com.tky.lxl.platform.model.business.DatumPoint" keyProperty="BASEID">
+		<selectKey resultType="java.lang.Long" order="BEFORE" keyProperty="baseid">
+	SELECT SEQ_T_BASE.NEXTVAL FROM DUAL
+	</selectKey>
+		INSERT INTO T_BASE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+				BASEID,
+			<if test="basename != null">
+				BASENAME,
+			</if>
+			<if test="basecode != null">
+				BASECODE,
+			</if>
+			<if test="siteid != null">
+				SITEID,
+			</if>
+				UPDATETIME,
+				CREATETIME,
+			<if test="basetype != null">
+				BASETYPE,
+			</if>
+			<if test="basenum != null">
+				BASENUM,
+			</if>
+			<if test="baseheight != null">
+				BASEHEIGHT,
+			</if>
+			<if test="basexx != null">
+				BASEXX,
+			</if>
+			<if test="baseyy != null">
+				BASEYY,
+			</if>
+			<if test="basezz != null">
+				BASEZZ,
+			</if>
+			<if test="conbeamid != null">
+				CONBEAMID,
+			</if>
+			<if test="username != null">
+				USERNAME,
+			</if>
+			
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+				#{baseid},
+			<if test="basename != null">
+				#{basename},
+			</if>
+			<if test="basecode != null">
+				#{basecode},
+			</if>
+			<if test="siteid != null">
+				#{siteid},
+			</if>
+				SYSDATE,
+				SYSDATE,
+			<if test="basetype != null">
+				#{basetype},
+			</if>
+			<if test="basenum != null">
+				#{basenum},
+			</if>
+			<if test="baseheight != null">
+				#{baseheight},
+			</if>
+			<if test="basexx != null">
+				#{basexx},
+			</if>
+			<if test="baseyy != null">
+				#{baseyy},
+			</if>
+			<if test="basezz != null">
+				#{basezz},
+			</if>
+			<if test="conbeamid != null">
+				#{conbeamid},
+			</if>
+			<if test="username != null">
+				#{username},
+			</if>
+			
+		</trim>
+	</insert>
+
+</mapper>

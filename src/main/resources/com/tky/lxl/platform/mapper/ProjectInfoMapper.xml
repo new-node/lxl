@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.business.ProjectInfoMapper">
+	<sql id="Base_Column_List">
+	    ID, ACTUALSTARTDATE, CATEGORYID, CODE, CONSTRUCTIONDEPID, CREATEDATE, DELETEDATE, 
+	    ISFINISH, MODIFYDATE, NAME, NAMEABBR, PLANOPERATIONDATE, PRIORITY, PROJECTINFOSOURCEID, 
+	    PROJECTINFOTYPEID, RID, STARTDATE, STARTMILE, STOPDATE, STOPMILE, USEFLAG
+	</sql>
+	
+	<select id="findByPqId" resultType="com.tky.lxl.platform.model.business.ProjectInfo">
+		SELECT <include refid="Base_Column_List" /> FROM PROJECTINFO
+		WHERE 1=1 
+		  AND categoryId=#{categoryId}
+		  AND USEFLAG = 0
+	</select>
+	
+	<select id="findByJSdeptId" resultType="com.tky.lxl.platform.model.business.ProjectInfo">
+		SELECT <include refid="Base_Column_List" /> FROM
+		PROJECTINFO
+		WHERE 1=1 and constructionDepId=#{constructionDepId}
+	</select>
+	
+	<select id="findById" resultType="com.tky.lxl.platform.model.business.ProjectInfo" parameterType="java.lang.Long">
+		SELECT <include refid="Base_Column_List" /> FROM
+		PROJECTINFO
+		WHERE 1=1 and ID=#{id}
+	</select>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.DictionaryMapper">
+  <resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.Dictionary">
+    <id column="NO" jdbcType="DECIMAL" property="no" />
+    <result column="TYPEID" jdbcType="DECIMAL" property="typeid" />
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="USEFLAG" jdbcType="DECIMAL" property="useflag" />
+    <result column="UPDATEDATE" jdbcType="TIMESTAMP" property="updatedate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    NO, TYPEID, ID, NAME, USEFLAG, UPDATEDATE
+  </sql>
+  <select id="select" parameterType="com.tky.lxl.platform.model.business.Dictionary" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM T_DICTIONARY
+    WHERE 1=1
+    <if test="typeid != null">
+        AND TYPEID = #{typeid}
+    </if>
+    <if test="id != null">
+        AND ID != #{id}
+    </if>
+    AND USEFLAG = 0
+  </select>
+</mapper>

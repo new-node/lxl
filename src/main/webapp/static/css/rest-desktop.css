@@ -1,0 +1,355 @@
+@charset "utf-8";
+@media screen and (min-width: 1600px){
+	.mask{
+		width:100%;
+		height:100%;
+		background:rgba(201,201,201,0.7);
+		position:absolute;
+		top:0;
+		display:none;
+		z-index:0;
+	}
+	.managementPage{
+		width:540px;
+		height:345px;
+		border:1px solid #797979;
+		border-radius:6px 6px 0 0;
+		-webkit-border-radius:6px 6px 0 0;
+		-moze-border-radius:6px 6px 0 0;
+		position:absolute;
+		top:100px;
+		left:300px;
+		background:#fff;
+		z-index:1;
+	}
+	.managementHead{
+		width:100%;
+		height:35px;
+		background:#169BD5;
+		line-height:35px;
+		padding-left:15px;
+		border-radius:6px 6px 0 0;		
+		-webkit-border-radius:6px 6px 0 0;
+		-moze-border-radius:6px 6px 0 0;
+	}
+	.head-font{
+		font-size:16px;
+		color:#fff;
+		line-height:35px;
+	}
+	.closePage{
+		float:right;
+		width:30px;
+		height:30px;
+		font-size:22px;
+		color:#333;
+		font-weight:bold;
+		line-height:35px;
+	}
+	.closePage:hover{
+		color:#FF0000;
+		cursor:pointer;
+	}
+	.managementBody{
+		width:100%;
+		height:270px;
+		
+	}
+	p.mb-head{
+		font-size:16px;
+		width:100%;
+		height:35px;
+		padding-top:10px;
+		padding-left:50px;
+		background:float:right;
+		background:#F2F2F2;
+	}
+	p.mb-head span{
+		margin:10px;
+		font-size:16px;
+		
+	}
+	p #dealUserName{
+		float:right;
+		margin-top:-3px;
+		margin-right:45px;
+	}
+	p.disposal-scheme{
+		width:100%;
+		height:80px;
+	
+	}
+	p.disposal-scheme span{
+		font-size:16px;
+		float:left;
+		margin-top:23px;
+		margin-left:41px;
+	}
+	.disposal-scheme textarea{
+		width:394px;
+		height:80px;
+		float:right;
+		margin-right:20px;
+	}
+	
+	
+	p.contact-region{
+		width:100%;
+		height:35px;
+		padding-left:40px;
+	}
+		p.contact-region input{
+			height:32px;
+			border:1px solid #ABADB3;
+			width:143px;
+			margin-left:-5px;
+	}
+	p.contact-region span{
+		font-size:16px;
+		
+	}
+p.contact-region span.contact-time{
+	
+	margin-left:17px;
+}
+	.remarks-region{
+		width:100%;
+		height:80px;
+	}
+	.remarks-region span{
+		font-size:16px;
+		margin:30px 0 0 40px;
+		display:inline-block;
+	}
+	.remarks-region textarea{
+		width:394px;
+		height:80px;
+		float:right;
+		margin-right:20px;
+	}
+	.managementBottom{
+		width:100%;
+		height:40px;
+		padding-left:180px;
+	}
+	.managementBottom input{
+		margin:0 30px 0 30px;
+		font-size:14px;
+		height:25px;
+		width:70px;
+	}
+	.save-btn{
+		width:60px;
+		height:30px;
+		border-radius:5px;
+		-webkit-border-radius:5px;
+		-moz-border-radius:5px;
+		color:#fff;
+		font-size:16px;
+		background:#008000;
+		float:left;
+	}
+	.cancel-btn{
+		width:60px;
+		height:30px;
+		border-radius:5px;
+		-webkit-border-radius:5px;
+		-moz-border-radius:5px;
+		color:#fff;
+		font-size:16px;
+		background:#FF0000;
+		float:left;
+	}
+	/*桥梁首页css*/
+  .content-wrapper .content-wrapper-top #sectionHomeTop{
+	
+	width:32%;
+	height:300px;
+	float:left;
+	margin:5px 19px 0 2px;;
+	background:#fff;
+	
+   }
+   
+ .content-wrapper .content-wrapper-top  #sectionHomeTop-second{
+	
+	width:32%;
+	height:300px;
+	float:left;
+	margin:5px 19px 0 1px;;
+	background:#fff;
+	
+   }
+   
+ .content-wrapper .content-wrapper-top  #sectionHomeTop-third{
+	
+	width:32%;
+	height:300px;
+	float:left;
+	margin:5px 19px 0 2px;;
+	background:#fff;
+	
+   }  
+   
+   
+   
+	
+.head{
+    width: 100%;
+    height: 30px;
+    border-bottom: 1px solid #C9C9C9;
+    font-size: 16px;
+    font-weight: bold;
+    padding-top:3px;
+    position: relative;
+}
+.head a{
+    display: inline-block;
+    width: 130px;
+    height: 30px;
+   line-height: 26px;
+    float: left;
+    color:#000;
+    font-size:16px;
+}
+.head a:hover{
+	color:#333!important;
+}
+.head a span{
+	font-size:16px;
+}
+
+.head-num{
+    color: #FFFFFF;
+    width: 50px;
+    height: 22px;
+    border-radius: 5px;
+    background:#FF0000;
+    display: inline-block;
+    position: absolute;
+    text-align: center;
+    line-height: 22px;
+    top: 5px;
+    font-size:16px;
+}
+.bridge-head{
+    width: 100%;
+    height:200px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #0a88ad;
+}
+.bridge-content{
+    width: 100%;
+    height: 500px;
+}
+.bridge-content ul{
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    margin-top:2px;
+}
+.bridge-content ul li.bridge-hover{
+    background: #FFFFFF;
+}
+.bridge-content ul li{
+    float: left;
+    background: #D7D7D7;
+    margin: 2px 5px 0 0;
+}
+.bridge-content ul li a{
+    padding:10px;
+    color: #333333;
+}
+.bridge-content ul li a:hover{
+	color:#333!important;
+}
+
+
+.bridge-echart>div{
+    width: 100%;
+    height: 450px;
+    margin-top: -8px;
+    background:#fff;
+}
+.centerLine,.verticalMold,.ld,.deviation-region{
+    display: none;
+
+}
+	
+/*标段首页顶部*/
+.content-wrapper-top{
+	width:100%;
+	
+}
+
+	
+.content-wrapper-top #sectionHomeTop h5{
+	font-weight:bold;
+	padding-left:27px;
+	
+}	
+
+.content-wrapper-top #sectionHomeTop img{
+	margin: 25px 30px 5px 120px;
+}
+	
+#sectionHomeTop-second h5{
+	font-weight:bold;
+	padding-left:27px;
+}	
+#sectionHomeTop-main{
+	width:100%;
+	height:100%;
+	
+	
+	}
+	
+ #sectionHomeTop-third  h5{
+	font-weight:bold;
+	padding-left:27px;
+	
+}	
+
+.content-wrapper-top #sectionHomeTop-third  ul{
+	padding-left:27px;
+}
+	
+.content-wrapper-top #sectionHomeTop-third  ul li{
+	 margin: 20px 2px 35px 2px;
+    font-size: 16px;
+    font-weight: 600;
+}	
+	
+.sectionHead-bottom	{
+	width: 90%;
+    height: 5px;
+    background: #F2F2F2;
+    margin: 0 auto;
+}
+.content-wrapper-top #sectionHomeTop-third  ul li span.newIcon{
+	display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    background: #000;
+    margin-right: 5px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+
+}
+.content-wrapper-top #sectionHomeTop-third  ul li .sectionHomeTop-third-bottom{
+	width: 95%;
+    height: 2px;
+    background: #33CC48;
+    margin-top: 8px;
+}
+
+.content-wrapper-top #sectionHomeTop-third  ul li span.newTime{
+	float: right;
+    margin-right: 20px;
+
+}
+
+	
+}

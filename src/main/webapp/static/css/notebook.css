@@ -1,0 +1,935 @@
+@charset "utf-8";
+
+@media screen and (max-width:1300px) and (min-width: 449px){
+    .main-header{
+        width: 1263px;
+        height: 60px;
+        margin: auto;
+        background: #214080;
+    }
+
+    article{
+        min-width: 1263px;
+        min-height: 600px;
+        margin: 0 auto;
+        background:#F2F2F2;
+    }
+
+	.allmask{
+		width:1263px;
+		height:100%;
+		background:rgba(201,201,201,0.7);
+		position:absolute;
+		top:0;
+		display:none;
+		z-index:0;
+	}
+    #tit{
+        background: url(../images/tit1.png);
+        background-repeat:repeat-x;
+        width:500px;
+        float:right;
+    }
+    #logo{
+        height:60px;
+        width: 580px;
+      	background:url(../images/logo.png) no-repeat;
+        float: left; 
+        display:inline-block;
+    }
+   #tit ul.tit{
+    	margin-bottom:-10px;
+    }
+    ul.tit li{
+        float:right;
+        line-height:60px;
+        color:#fff;
+        margin:0 10px;
+    }
+    .main-sidebars{
+        background-color: #F2F2F2;
+        padding:1px 2px;
+        width: 220px;;
+        height:100%;
+        float:left;
+        margin: 0 10px 2px 2px;
+    }
+    p.measuring span.measuring em{
+	position:absolute;
+	top:-7px;
+	left:3px;
+}
+ span.measuring{
+	display:inline-block;
+	width:16px;
+	height:16px;
+	
+	position:relative;
+	border:1px solid #000;
+}
+ span.measuring em{
+	position:absolute;
+	top:0px;
+	left:3px;
+}
+    .structure-number{
+	
+	margin-left:30%;
+   }
+    .aside-head{
+        width:215px;
+        height:32px;
+    }
+    .main-sidebars select{
+        width:50px;
+        height:34px;
+        font-size:14px;
+    }
+    .input-text {
+        width: 100px;
+        height: 33px;
+        border:1px solid #797979;
+    }
+    #left-menu{
+        height:774px;
+        margin-top:3px;
+     	border:1px solid #949494;
+     	overflow:auto;
+    }
+    .head-nav{
+        width: 1031px;
+        height: 37px;
+        background: #000000;
+        margin-right:3px;
+        float:right;
+        margin:0 6px 1px 0;
+    }
+
+    nav.head-nav ul{
+        width:100%;
+        height:100%
+    }
+    nav.head-nav ul li{
+        float: left;
+        line-height:37px;
+    }
+    nav.head-nav ul li a{
+        padding: 12px 20px;
+        text-decoration: none;
+        color:#fff;
+        width:65px;
+        height:37px;
+        line-height:37px;
+    }
+
+    .hovers{
+        background: #0099FF;
+    }
+    .all-region{
+        
+        width: 1269px;
+        margin-left:7px;
+        margin:0 auto;
+    }
+    .myChart {
+        background-color: #ffffff;
+        height: 270px;
+        margin-top: 3px;
+        width: 44%;
+        float: left;
+    }
+
+ .for-echart{
+ 	width:1010px;
+ 	height:290px;
+ }
+ 
+ #main{
+ 	width:54%;
+ 	float:left;
+ 	height:245px;;
+ 	background:#fff!important;
+ }
+ #echartProgress{
+ 	width:43%;
+ 	float:left;
+ 	height:280px;
+ 	background:#fff;
+ 	margin-left:15px;
+ 	margin-top:-35px;
+ 	padding-top:3px;
+ }
+ 
+ .progress1{
+ 	margin:5px 0 39px 18px;
+ }
+    .chartHead {
+        margin-top: 10px;
+        padding-left: 10px;
+    }
+    .myDiv h5 {
+        display: inline;
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .date {
+        display: inline;
+        margin-left: 35px;
+    }
+    .chart_Head{
+        margin-top: 10px;
+        padding-left: 5px;
+
+    }
+    .chartHead input {
+        width: 100px;
+        height: 20px;
+    }
+    .progress{
+        height: 92px!important;
+    }
+    .progressN{
+        display: inline-block;
+        font-size: 16px;
+    }
+    .progressName{
+        height: 38px;
+        line-height: 38px;
+        font-size: 16px;
+    }
+    .echart-region {
+        width: 81%;
+        height: 774px;
+        float: left;
+        background: #F2F2F2;
+        overflow:auto;
+        position:relative;
+    }
+    section.content {
+        width: 100%;
+        height: 227px;
+        float: right;
+    }
+    #myTab{
+        margin-left: 5px;
+        width: 100%;
+        border-radius: 5px;
+        height:41px;
+        background: rgba(0,102,255,1);
+        line-height:40px;
+        padding-top:2px;
+        padding-left:180px;
+    }
+    .area-region{
+        width: 99%;
+        margin-left: 5px;
+    }
+    table.span-list{
+        height: 90px;
+        margin-left: 10px;
+        background: #FFFFFF;
+        width: 100%;
+    }
+   
+   .span-list-first{
+	width:76%;
+}
+    .span-region{
+        background-color:#FFFFFF;
+        width:99%;
+        margin-bottom:10px;
+       margin-left:-8px;
+       margin-top:-5px;
+    }
+    .circle-region li{
+        float: left;
+    }
+    #mainPie2,#mainPie3,#mainPie4,#mainPie5,#mainPie1{
+        height:190px;
+        width:20%;
+        border:0 solid #FFFFFF;
+      
+    }
+    .monitoring-statistics{
+        background-color:#FFFFFF;
+        width:99%;
+        height: 160px;
+        padding-left:15px;
+    }
+    .region-list{
+        width:99%;
+        padding:10px 0;
+    }
+   ul#myTab li{
+        float: left;
+		margin:0 5px;
+    }
+    
+     ul#myTab li h5{
+     	font-size:16px;
+     	color:#fff;
+     	padding:0 12px 0 5px;
+     }
+    ul#myTab li a{
+        padding: 10px 10px;
+        color:#fff;
+        font-size:14px;
+        font-weight:bold;
+        border-radius:7px 7px 0 0;
+    }
+    ul#myTab li a.active{
+        background: #FFFFFF;
+		color:#555;
+    }
+    
+    ul#myTab li a.default{
+    	 padding: 10px 10px;
+        color:#fff;
+        font-size:14px;
+        font-weight:bold;
+        border-radius:7px 7px 0 0;
+        background:#199ED8;
+    }
+    
+     .right-region{
+		 width: 1023px;
+        height: auto;
+        margin: 0 auto;
+        float:left;
+  }
+.tablehead form {
+	font-size:14px;
+}
+
+.tablehead    select.categoryItem{
+	width:100px;
+	height:24px;
+	margin-right:20px;
+}
+.tablehead #search{
+	display: inline;
+    font-size: 14px;
+    width: 75px;
+    height: 28px;
+    background: #169BD5;
+    color: #fff;
+    margin-left: 60px;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border: none;
+	
+}
+
+/*观测人员*/
+.content-wrapper{
+	width:1011px;
+	float:left;
+}
+
+  .tablehead {	
+	padding-left: 15px;
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    border-bottom: 1px solid #C9C9C9;
+}
+
+.tablehead    select.categoryItem{
+	width:80px;
+	height:24px;
+	margin-right:20px;
+	padding-left:29px;
+}
+
+.tablehead  #name{
+	height:24px;	
+}
+.tablehead #search{
+	display:inline;
+	font-size:14px;
+	width:75px;
+	height:28px;
+	background:#169BD5;
+	color:#fff;
+	margin-left:60px;
+	border-radius:6px;
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+	border:none;
+	line-height:20px;
+ }
+ 
+   thead tr th{
+  	background:#169BD5;
+  	color:#fff;
+  	font-size:14px;	
+  	font-family:'微软雅黑','Arial';
+  }
+  
+  /*观测人员结束*/
+  
+.structure-number,.beam-section{
+    display: inline-block;
+    font-size: 14px;
+}
+#structure{
+    width: 90px;
+    margin-right: 50px;
+}
+#beam{
+    width: 90px;
+}
+#structure,#beam:hover{
+    cursor: pointer;
+}
+#drawing-area{
+    width: 100%;
+    height: 270px;
+    background: #ffffff;
+   
+}
+.drawing{
+    border-right: 1px solid #D7D7D7;
+    margin-top: 20px;
+    height: 220px;
+    width:502px;
+    float:left;
+}
+.construction-condition{
+    padding-top: 33px;
+    height: 100%;
+    font-size: 16px;
+    position: relative;
+    width:480px;
+    float:left;
+   
+}
+.construction{
+    padding-left: 50px;
+}
+.construction span{
+    padding-left: 10px;
+}
+#condition{
+    width: 135px;
+   height: 25px;
+   margin-left:5px;
+}
+.measuring-point{
+    padding-left: 50px;
+}
+.measuring{
+    display: inline;
+    padding-left: 1 5px;
+}
+.measuring input[type='radio']{
+    margin: 0 5px 0 14px;
+}
+.measuring input[type='radio']:hover{
+    cursor: pointer;
+}
+.circle-point{
+    padding-left: 64px;
+}
+.circle-point span{
+    font-size: 12px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border: 1px solid #333333;
+    display: inline-block;
+    text-align: center;
+    margin-right: 15px;
+    position:relative;
+    margin-left:1px;
+}
+.circle-point span e{
+	position:absolute;
+	top:-7px;
+	left:3px;
+}
+
+.circle-point input[type=radio]{
+    margin: 3px;
+}
+.theoretical{
+    padding-left: 52px;
+}
+.theoretical-elevation{
+    display: inline-block;
+    margin-left: 16px;
+}
+.theory{
+    width: 143px;
+    height: 22px;
+    text-align:right;
+    border:1px solid #797979;
+}
+
+.elevation{
+    padding-left: 48px;
+}
+.elevationX{
+    display: inline-block;
+    margin-left: 19px;
+}
+.theoryX,.theoryY{
+    width: 70px;
+    height: 22px;
+    border:1px solid #797979;
+    text-align:center;
+}
+
+.add-list{
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.list{
+    width: 100px;
+    height: 28px;
+    background: #169BD5;
+    color: #ffffff;
+    font-size: 14px;
+    border: none;
+    border-radius: 7px;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+}
+.add-list a{
+    margin-left: 10px;
+}
+.test-table{
+    margin-top: 10px;
+}
+.test-table thead{
+    background: #169BD5;
+    color: #ffffff;
+}
+.test{
+    text-align: center;
+}
+.test-number{
+    width: 4%;
+    line-height: 24px!important;
+    padding-top: 14px!important;
+}
+.test-style{
+    line-height: 55px!important;
+}
+.test tr td{
+    border:1px solid #797671!important;
+}
+.measuring-pile{
+    font-weight: bold;
+}
+.theory-color{
+    background: #F2F2F2;
+}
+
+#canvas{
+	 width: 400px;
+    height: 240px;
+    background: url(../images/theroPic.png) center no-repeat;
+    margin: 5px 50px;
+    float: left;
+}
+#celiangzhuang thead tr td.test-number {
+    width: 4%;
+    padding: 5px;
+}
+table#celiangzhuang  thead tr td{
+	padding:7px;
+	vertical-align:middle;
+}
+.point-type{
+    width: 10%;
+    line-height: 38px!important;
+}
+.draw-circle{
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border: 1px solid #F2F2F2;
+    display: inline-block;
+    line-height: 17px;
+    color:#fff;
+}
+.elevation-point{
+    font-weight: bold;
+    line-height: 45px!important;
+    font-size: 14px;
+}
+
+.altitude{
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.test-table table{
+	width:100%;
+}
+
+.test-number{
+	width:5%;
+}
+
+.right-head-region{
+	width:1020px;
+	height:30px;
+	
+	line-height:30px;
+ }
+ 
+ 
+ /*偏差超限*/
+
+section.devi{
+    width: 1020px;
+    height: auto;
+}
+.top-header{
+    width: 100%;
+    height: 35px;
+    border-bottom: 1px solid #333333;
+    background: #F2F2F2;
+    line-height: 32px;
+    padding-left:5px;
+}
+.clear{
+    clear: both;
+}
+.head-left{
+    width: 369px;
+    height: 100%;
+    float: left;
+    font-size:14px;
+}
+.head-right{
+    width: 600px;
+    height: 100%;
+    float: left;
+    font-size:14px;
+}
+.cons-segment{
+	width:103px;
+	height:22px;
+}
+#dater-star,#dater-end{
+    width: 103px;
+    height: 22px;
+}
+.Number,.segment{
+    width: 103px;
+    height: 22px;
+}
+.deviation-region{
+    width: 100%;
+    height: 200px;
+    background: #F2F2F2;
+    padding-top: 12px;
+}
+
+#searchBtn{
+	width:50px;
+	height:22px;
+	line-height:22px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	color:#fff;
+	background:#169BD5;
+}
+
+.deviation-region ul{
+    width: 100%;
+    height: 30px;
+  
+}
+.deviation-region ul li{
+    float: left;
+    list-style: none;
+    margin:0 2px 0 0;
+}
+.deviation-region ul li a.close-deviation-list{
+      padding: 10px 25px;
+    text-decoration: none;
+    background: #FFFFFF;
+    line-height: 35px;
+    color: #333333;
+    font-size: 13px;
+}
+.deviation-region ul li a.deviation-list{
+    padding:10px 25px;
+    text-decoration: none;
+    color: #000000;
+    line-height: 35px;
+}
+.deviation-list{
+   background: #D7D7D7;
+}
+
+.over-list{
+    display: block;
+}
+.deviation-bottom{
+    width: 100%;
+    height: 30px;
+    margin-top: -10px;
+}
+.bottom-left{
+    float: left;
+    width: 300px;
+    height: 100%;
+    padding-left:10px;
+}
+.bottom-right{
+    float: right;
+    width: 300px;
+    height: 100%;
+}
+.close-list{
+    display: none;
+}
+.table{
+	width:98%!important;
+}
+.allNum{
+	line-height:86px;
+	text-align:center;
+	float:left;
+	height:86px;
+	width:86px;
+	background-color: rgba(108, 202, 201, 1);
+}
+.allNum span{
+	color: #FFFFFF;
+	font-size: 24px;
+	font-weight: 700;
+	font-style: normal;
+	font-family: 'Arial Normal', 'Arial';
+}
+    .num{
+	line-height:86px;
+	text-align:center;
+	float:left;
+	height:86px;
+	width:86px;
+	background-color: rgba(220, 220, 220, 1);
+}
+.num span{
+	color: #333333;
+	font-size: 24px;
+	font-weight: 700;
+	font-style: normal;font-family: 'Arial Normal', 'Arial'
+}
+
+.tablehead-btn button{
+	width:50px;
+	height:22px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	background:#169BD5;
+	color:#fff;
+	line-height:22px;
+	border:none;
+	
+	
+}
+.tablehead-btn{
+	width:99%;
+	height:35px;
+	border-bottom:1px solid #C9C9C9;
+	margin-bottom:8px;
+	padding-top:2px;
+}
+
+.M-tablehead{
+	font-size:14px;
+	font-family:"微软雅黑， Arial";
+	margin-bottom:10px;
+	border-bottom:1px solid #C9C9C9;
+	padding-left:16px;
+}
+.M-tablehead select{
+	width:115px;
+	height:22px;
+}
+
+.m-search #search{
+	 width: 70px;
+    height: 26px;
+    font-size: 14px;
+    color: #fff;
+    background: #169BD5;
+    border: none;
+    float:right;
+    margin-right:24px;
+    border-radius:3px;
+    -web-border-radius:3px;
+    -moz-border-radius:3px;
+    margin-top:-8px;
+}
+
+.m-search{
+	width:100%;
+	height:21px;
+	border-bottom:1px solid #C9C9C9;
+	margin-bottom:10px;
+}
+
+.measureHeaderDiv{
+	height:30px;
+}
+.measureSearchBtn{
+	 width: 70px;
+    height: 26px;
+    font-size: 14px;
+    color: #fff;
+    background: #169BD5;
+    border: none;
+    margin-left:60px;
+    border-radius:3px;
+    -web-border-radius:3px;
+    -moz-border-radius:3px;
+    margin-top:-6px;
+}
+
+.ld-tablehead{
+	width:100%;
+	height:34px;
+	border-bottom:1px solid #C9C9C9;
+	margin-bottom:5px;
+}
+#ld-btn{
+	width:70px;
+	height:25px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	background:#169BD5;
+	color:#fff;
+	float:right;
+	margin-right:50px;
+	border:none;
+	font-size:14px;
+	margin-top:4px;
+}
+
+.ld-head{
+	width:300px;
+	height:30px;
+	float:left;
+	padding-left:23px;
+	font-size:14px;
+	margin-top:4px;
+}
+.ld-head select{
+	width:100px;
+	height:25px;
+}
+.ld-cx{
+	width:71px;
+	height:25px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	background:#169BD5;
+	color:#fff;
+	font-size:14px;
+	border:none;
+	margin-left:10px;
+}
+
+.stru-T{
+	vertical-align:middle;
+	
+}
+  .mileage-region{
+  	display:inline-block;
+  	display:none;
+  }
+  .sall-mileage{
+  	margin:0 3px 0 100px!important;
+  }
+   .mileage-region .big-mileage{
+   	margin:0 0 0 40px;
+   }
+   .mileage-region input:hover{
+   	cursor:point;
+   }
+   .circle-point input:hover{
+   	cursor:point;	
+   }
+   
+   /*
+   *某项目首页增加的时间样式
+   
+   */
+   
+   .mainHead{
+   	width:55%;
+	background:#fff;
+	position:relative;
+   }
+   
+   
+   
+   
+   
+   /*铁路首页样式补充开始
+   */
+   
+ .echartsRegionHead span{
+	margin-right:49%;
+}
+.lxljcHead{
+	float:left;
+	margin-left:15px;
+}
+.lxljcBottom{
+	padding-top: 30px;
+    width: 96%;
+    margin-left: 9px;
+    background-color: #F2F2F2;
+    padding-top: 2px;
+    height: 4px;
+    margin-bottom: 15px;
+    margin-top:30px;
+}
+
+ /*
+   *铁路首页样式补充结束
+   */
+   
+     /*理论维护值增加的按钮*/
+ .T-chaxun{
+	margin-left:41px;
+	display:inline-block;
+}
+.T-chaxun-btn{
+	width:58px;
+	height:25px;
+	font-size:14px;
+	line-height:25px;
+	color:#fff;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	-o-border-radius:5px;
+	background:#169BD5;
+	
+}
+   
+   
+   
+    
+}

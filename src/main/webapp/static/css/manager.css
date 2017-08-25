@@ -1,0 +1,531 @@
+/*标段管理员页面*/
+div.managerPage{
+	min-width: 1263px;
+    min-height: 600px;
+    margin: -10px auto;
+}
+.menuNav-manager{
+	width:100%;
+	height:30px;
+	line-height:30px;
+}
+.menuNav-manager>nav>ul>li{
+	display: none;
+}
+tr.selct-title td{
+	background: #fff;
+    color: #333;
+    font-weight: 700;
+    font-size: 13px;
+    font-style: normal;
+}
+.select-user{
+	height:33px;
+}
+.selct-title{
+	height:33px;
+}
+
+/*管理员主体*/
+.manager-content{
+    width: 94%;
+    height:100%;
+    position:relative;
+    padding-top:2px;
+    margin:auto;
+}
+
+
+/*设置观测人员*/
+
+.observer table{
+    width: 1220px;
+    min-height: 100px;
+    text-align: center;
+    margin: 0 auto;
+}
+.observer table thead tr td a:hover{
+    text-decoration: none;
+}
+.observer{
+    display: block;
+}
+
+
+/*设置观测人员 头部*/
+
+.smObserver-title{
+    width: 99%;
+    height: 40px;
+    border-bottom: 1px solid #C9C9C9;
+}
+
+/*设置观测人员 头部 左边按钮(设置 取消)*/
+
+.smObserver-title-left{
+    float: left;
+    width: 260px;
+    height: 40px;
+    margin-left:-24px;
+}
+.smObserver-title-left li{
+    float: left;
+    color: #FFFFFF;
+    font-weight: 600;
+    background: #4F8E1B;
+    width: 100px;
+    height: 28px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    margin:5px;
+    text-align: center;
+    line-height: 28px;
+    font-size: 13px;
+}
+.smObserver-title-left li{
+    cursor: pointer;
+}
+
+/*设置观测人员 头部 查询区*/
+
+.smObserver-cx{
+    float: left;
+    width: 350px;
+    height: 40px;
+    padding-left: 30px;
+    font-size: 14px;
+    font-weight:400;
+    padding-top:3px;
+}
+
+/*设置观测人员 头部 下拉框*/
+
+.smObserver-cx select{
+    width: 110px;
+    height: 24px;
+    margin-left: 5px;
+    font-size: 14px;
+}
+.smObserver-cx span{
+    display: inline-block;
+}
+
+/*设置观测人员 头部 查询按钮*/
+
+.smObserver-cx span .smObserver-btn{
+    width: 70px;
+    height: 28px;
+    background: #1597CF;
+    color: #FFFFFF;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    margin-left: 34px;
+    font-size: 13px;
+    border:none;
+    margin-top:2px;
+}
+
+/*设置观测人员 头部 同步按钮*/
+
+.synchronization{
+    float: right;
+    width: 150px;
+    height: 30px;
+    margin-right: 50px;
+    background: #429017;
+    color: #FFFFFF;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    line-height: 34px;
+    text-align: center;
+}
+
+
+/*设置观测人员 弹窗(设为观测人员)*/
+
+.smObserver-tc{
+    width: 600px;
+    height: 170px;
+    border: 1px solid #797979;
+    border-radius: 4px 4px 0 0;
+    -moz-border-radius:4px 4px 0 0 ;
+    -webkit-border-radius: 4px 4px 0 0;
+    position: absolute;
+    top: 200px;
+    left: 400px;
+    display: none;
+    background:#fff;
+    z-index:111;
+}
+
+/*设置观测人员 弹窗头部(设为观测人员)*/
+
+.smObserver-tc-head{
+    width: 100%;
+    height: 25px;
+    background: #169BD5;
+    border-radius: 4px 4px 0 0;
+    -moz-border-radius:4px 4px 0 0 ;
+    -webkit-border-radius: 4px 4px 0 0;
+    
+    padding-left: 30px;
+    line-height: 25px;
+}
+.smObserver-tc-head span:nth-child(1){
+	color: #FFFFFF;
+	
+}
+.smObserver-tc-head span{
+    display: inline-block;
+}
+.smObserver-tc-head span.smObserver-tc-head-close{
+    font-size: 20px;
+    color: #333333;
+    float: right;
+    margin-right: 20px;
+}
+.smObserver-tc-head span.smObserver-tc-head-close:hover{
+    color: #FF0000;
+    cursor: pointer;
+}
+
+/*设置观测人员 弹窗内容(设为观测人员)*/
+
+.smObserver-tc-content ul{
+    width: 100%;
+    height: 100px;
+    padding-top: 25px;
+    padding-left: 35px;
+}
+.smObserver-tc-content ul li{
+    float: left;
+    width: 260px;
+    height: 40px;
+}
+.smObserver-tc-content ul li:nth-child(1){
+    width: 225px;
+    margin-left: 61px;
+}
+.smObserver-tc-content ul li:nth-child(2){
+    padding-left:29px;
+}
+.smObserver-tc-content ul li:nth-child(1) input{
+    background: #F0F0F0;
+}
+.smObserver-tc-content ul li:nth-child(2) input{
+    background: #F0F0F0;
+}
+
+.smObserver-tc-content ul li:nth-child(3){
+    margin: 0 27px 0 -5px;
+    width: 280px;
+}
+.smObserver-tc-content ul li:nth-child(3) span{
+    color:#FF0000 ;
+}
+.smObserver-tc-content ul li input{
+    width: 150px;
+    height: 25px;
+    border:1px solid #ABADB3;
+}
+.smObserver-tc-content ul li input.certificate{
+    display: inline-block;
+}
+
+/*设置观测人员 弹窗按钮(设为观测人员)*/
+
+.smObserver-tc-bottom {
+    width: 100%;
+    height: 30px;
+    margin-top: -5px;
+    text-align: center;
+}
+.smObserver-tc-bottom input{
+    margin: 0 3px;
+}
+.smObserver-tc-bottom .smObserver-save{
+    width: 65px;
+    height: 30px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    background: #008000;
+    line-height: 30px;
+    color: #FFFFFF;
+}
+.smObserver-tc-bottom .smObserver-qx{
+    width: 65px;
+    height: 30px;
+    border-radius: 9px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    background: #FF0000;
+    line-height: 30px;
+    color: #FFFFFF;
+}
+
+
+/*设置观测人员 遮罩(查看上岗证书)*/
+
+.view-mask {
+	text-align:center;
+	
+}
+
+/*设置观测人员 弹窗(查看上岗证书)*/
+
+.hideView {
+	display: none;
+}
+.smObserver-view{
+	position:relative;
+    z-index:10;
+    top:50%;
+}
+
+/*************************************************************************************************/
+
+/*角色授权*/
+
+.role-grant{
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+/*角色授权 授权信息*/
+.role-grant-right{
+    width: 42%;
+    height: 84%;
+    float: right;
+    padding: 0px 0px 0px 0px;
+    position: relative;
+    margin-top: 15px;
+}
+
+/*角色授权 表样式*/
+
+.role-grant table td{
+    height:33px;
+    word-break: break-all;
+}
+
+
+/*角色授权 选择用户*/
+
+.role-grant-left{
+    width: 55%;
+    border-right: 1px solid #D7D7D7;
+    float: left;
+    text-align: center;
+    position: relative;
+    margin-top: 15px;
+    margin-left: 0px;
+}
+
+/*角色授权 选择用户 数据表*/
+
+.role-grant-user-head table{
+    width:94%;
+/*     padding: 0px 25px 0 0px; */
+}
+
+/*角色授权 选择用户 数据表内容*/
+.role-grant-user-content{
+    margin-top: -1px;
+/*     width: 94%; */
+	text-align:left;
+	height:350px;
+	overflow: auto;
+	 
+
+}
+
+/*角色授权 选择用户 数据表内容*/
+.role-grant-user-content table{
+/*     display: inline-block; */
+    width: 100%;
+/*     height: 300px;10条 */
+   
+}
+
+
+
+
+/*************************************************************************************************/
+
+/*连续梁授权*/
+.lxl-grant{
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+
+/*连续梁授权 表样式*/
+.lxl-grant table td{
+    height:33px;
+    word-break: break-all;
+}
+
+
+/*连续梁授权 选择用户*/
+.lxl-grant-left{
+    width: 49%;
+    height:512px;
+    border-right: 1px solid #D7D7D7;
+    float: left;
+    position: relative;
+    margin-top: 15px;
+    margin-left: 0px;
+    
+}
+
+/*连续梁授权 选择用户 数据表*/
+
+.lxl-grant-left table{
+    width: 95%;
+}
+
+.lxl-grant-user-head table{
+	width:94%;
+}
+table#userList{
+/* 	display: inline-block; */
+    width: 94%;
+/*     height:445px; */
+    overflow: auto;
+	
+}
+
+/*连续梁授权 选择用户 数据表内容*/
+
+.lxl-grant-user-content{
+    margin-top: -6px;
+    padding: 0px 0 0 0px;
+    width:100%;
+    
+    
+}
+
+/*连续梁授权 选择连续梁*/
+
+.lxl-grant-right{
+    width: 46%;
+    height: 512px;
+    float: right;
+    padding: 0px 0px 0px 0px;
+    position: relative;
+    margin: 14px 0 0 0 ;
+}
+
+/*连续梁授权 连续梁表头*/
+
+.lxl-grant-conbeam-head{
+	position:relative;
+}
+.lxl-grant-conbeam-head span{
+	display: inline-block;
+    width: 100px;
+    height: 24px;
+    border-radius: 12px;
+    position: absolute;
+    color: #333;
+    background: #CDCDCD;
+    line-height: 24px;
+    text-align: center;
+    top: 6px;
+    right: 10%;
+    cursor: pointer;
+}
+
+/*连续梁授权 选择连续梁 数据表(表头和内容)*/
+
+.lxl-grant-conbeam-head table{
+    width: 95%;
+    padding: 0px 10px 0 0px;
+}
+
+/*连续梁授权 选择连续梁 数据表内容*/
+.lxl-grant-conbeam-content{
+    margin-top: -1px;
+    width: 100%;
+    height:445px;
+    overflow:auto;
+}
+
+/*连续梁授权 选择连续梁 数据表内容 */
+
+.lxl-grant-conbeam-content table{
+    width: 95%;
+}
+
+
+/*角色授权 连续梁授权 保存*/
+.lxl-grant-grant-bottom{
+    width: 100%;
+    height: 30px;
+/*     text-align: center; */
+}
+
+/*角色授权 连续梁授权 保存按钮*/
+.lxl-grant-grant-bottom input{
+    width: 95px;
+    height: 30px;
+    background: #169BD5;
+    color: #FFFFFF;
+    border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border: none;
+    margin-top: 35px;
+    margin-left: 45%;
+}
+
+/*************************************************************************************************/
+
+/*设置仪器设备 头部*/
+
+.smEquipment-title{
+    width: 99%;
+    height: 40px;
+    border-bottom: 1px solid #C9C9C9;
+}
+
+/*设置观测人员 头部 左边按钮(设置 取消)*/
+
+.smEquipment-title-left{
+    width: 381px;
+    height: 40px;
+    display:inline;
+}
+.smEquipment-title-left li{
+    float: left;
+    color: #FFFFFF;
+    font-weight: bold;
+    background: #4F8E1B;
+    width: 100px;
+    height: 30px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    margin: 2px 5px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 14px;
+}
+.smEquipment-title-left li{
+    cursor: pointer;
+}
+
+
+#grantedRoleList,#noGrantRoleList{
+	width:80%;
+}
+
+
+
+
+

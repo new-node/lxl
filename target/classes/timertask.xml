@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd"
+	default-lazy-init="true">
+	<description>定时任务配置 </description>
+	<!-- 配置需要定时的bean类 -->
+	<bean id="compUpdateTimerTask" class="com.tky.lxl.controller.DataSyncController"></bean>
+	<!-- 配置任务的具体类和方法 -->
+	<bean id="startWorkTask1"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 要调用的bean -->
+		<property name="targetObject" ref="compUpdateTimerTask"></property>
+		<!-- 要调用的Method -->
+		<property name="targetMethod" value="syncDepartment"></property>
+		<!-- 是否并发,false表示 如果发生错误也不影响下一次的调用 -->
+		<property name="concurrent" value="false"></property>
+	</bean>
+
+	<bean id="startWorkTask2"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 要调用的bean -->
+		<property name="targetObject" ref="compUpdateTimerTask"></property>
+		<!-- 要调用的Method -->
+		<property name="targetMethod" value="syncCategoryItem"></property>
+		<!-- 是否并发,false表示 如果发生错误也不影响下一次的调用 -->
+		<property name="concurrent" value="false"></property>
+	</bean>
+	<bean id="startWorkTask3"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 要调用的bean -->
+		<property name="targetObject" ref="compUpdateTimerTask"></property>
+		<!-- 要调用的Method -->
+		<property name="targetMethod" value="syncProjectInfo"></property>
+		<!-- 是否并发,false表示 如果发生错误也不影响下一次的调用 -->
+		<property name="concurrent" value="false"></property>
+	</bean>
+	<bean id="startWorkTask4"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 要调用的bean -->
+		<property name="targetObject" ref="compUpdateTimerTask"></property>
+		<!-- 要调用的Method -->
+		<property name="targetMethod" value="syncProjectSection"></property>
+		<!-- 是否并发,false表示 如果发生错误也不影响下一次的调用 -->
+		<property name="concurrent" value="false"></property>
+	</bean>
+	<!-- 配置一个触发器 -->
+	<bean id="startWorkTrigger1"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="startWorkTask1"></property>
+<!-- 		<property name="startDelay" value="1000"></property> -->
+<!-- 		<property name="repeatInterval" value="31536000000"></property> -->
+<!-- 		<property name="repeatCount" value="1"></property> -->
+		<property name="cronExpression" value="${cronExpression}" /><!-- 每天定时执行一次 -->
+	</bean>
+	<!-- 配置一个触发器 -->
+	<bean id="startWorkTrigger2"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="startWorkTask2"></property>
+<!-- 		<property name="startDelay" value="1000"></property> -->
+<!-- 		<property name="repeatInterval" value="31536000000"></property> -->
+<!-- 		<property name="repeatCount" value="1"></property> -->
+		<property name="cronExpression" value="${cronExpression}" /><!-- 每天定时执行一次 -->
+	</bean>
+	<!-- 配置一个触发器 -->
+	<bean id="startWorkTrigger3"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="startWorkTask3"></property>
+<!-- 		<property name="startDelay" value="1000"></property> -->
+<!-- 		<property name="repeatInterval" value="31536000000"></property> -->
+<!-- 		<property name="repeatCount" value="1"></property> -->
+		<property name="cronExpression" value="${cronExpression}" /><!-- 每天定时执行一次 -->
+	</bean>
+	<!-- 配置一个触发器 -->
+	<bean id="startWorkTrigger4"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="startWorkTask4"></property>
+<!-- 		<property name="startDelay" value="1000"></property> -->
+<!-- 		<property name="repeatInterval" value="31536000000"></property> -->
+<!-- 		<property name="repeatCount" value="1"></property> -->
+		<property name="cronExpression" value="${cronExpression}" /><!-- 每天定时执行一次 -->
+	</bean>
+
+	<!-- 总调度,用于启动定时器 -->
+	<bean id="schedulerFactory"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="startWorkTrigger1" />
+				<ref bean="startWorkTrigger2" />
+				<ref bean="startWorkTrigger3" />
+				<ref bean="startWorkTrigger4" />
+			</list>
+		</property>
+	</bean>
+</beans>

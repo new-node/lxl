@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.business.InitPointMapper" >
+  <resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.InitPoint" >
+    <id column="INITPOINTID" property="initpointid" jdbcType="DECIMAL" />
+    <result column="CONBEAMID" property="conbeamid" jdbcType="DECIMAL" />
+    <result column="PIER" property="pier" jdbcType="DECIMAL" />
+    <result column="PARTID" property="partid" jdbcType="DECIMAL" />
+    <result column="CREATETIME" property="createtime" jdbcType="DATE" />
+    <result column="USEFLAG" property="useflag" jdbcType="DECIMAL" />
+    <result column="LDTYPE" property="ldtype" jdbcType="DECIMAL" />
+    <result column="MILEAGEFLAG" property="mileageflag" jdbcType="DECIMAL" />
+    <result column="PROJECTID" property="projectid" jdbcType="DECIMAL" />
+    <result column="SECTIONID" property="sectionid" jdbcType="DECIMAL" />
+    <result column="SITEID" property="siteid" jdbcType="DECIMAL" />
+    <result column="POINTNAME" property="pointname" jdbcType="VARCHAR" />
+    <result column="POINTPLACE" property="pointplace" jdbcType="DECIMAL" />
+    <result column="POINTTYPE" property="pointtype" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    INITPOINTID, CONBEAMID, PIER, PARTID, CREATETIME, USEFLAG, LDTYPE, MILEAGEFLAG, PROJECTID, 
+    SECTIONID, SITEID, POINTNAME, POINTPLACE,POINTTYPE
+  </sql>
+  <select id="selectInitPointInfo" parameterType="com.tky.lxl.platform.model.business.InitPoint" resultMap="BaseResultMap">
+   SELECT 
+   <include refid="Base_Column_List" />
+     FROM T_INITPOINT T
+    WHERE 1 = 1
+    <if test="partid != null">
+      AND PARTID = #{partid}
+    </if>
+    <if test="mileageflag != null">
+      AND MILEAGEFLAG = #{mileageflag}
+    </if>
+      AND USEFLAG = 0
+  </select>
+  
+  <select id="queryInitPoint" resultMap="BaseResultMap">
+	  	SELECT T.CONBEAMID,
+			       T.PIER,
+			       T.PARTID,
+			       T.TYPE AS LDTYPE,
+			       T.PROJECTID,
+			       T.SECTIONID,
+			       T.SITEID,
+			       T.SHORTNAME,
+			       T.MILEAGEFLAG
+			  FROM (SELECT LD.CONBEAMID,
+			               LD.PIER,
+			               LD.PARTID,
+			               LD.TYPE,
+			               LD.SHORTNAME,
+			               LD.MILEAGEFLAG,
+			               LXL.PROJECTINFOID AS PROJECTID,
+			               LXL.SECTIONID,
+			               LXL.SITEID,
+			               PO.PARTID         AS POPARTID
+			          FROM T_LD LD
+			         INNER JOIN T_LXL LXL
+			            ON LXL.CONBEAMID = LD.CONBEAMID
+			           AND LXL.USEFLAG = 0
+			          LEFT JOIN T_INITPOINT PO
+			            ON LD.CONBEAMID = PO.CONBEAMID
+			           AND LD.PIER = PO.PIER
+			           AND LD.PARTID = PO.PARTID
+			           AND PO.USEFLAG = 0
+			         WHERE 1 = 1
+			           AND LD.USEFLAG = 0
+			           ) T
+			 WHERE T.POPARTID IS NULL
+			ORDER BY T.CONBEAMID,T.PIER
+  	
+  </select>
+  
+  <!-- 批量生成测点 -->
+  <insert id="createInitPoint"  parameterType="com.tky.lxl.platform.model.business.InitPoint">
+  
+			  INSERT INTO T_INITPOINT(
+						        INITPOINTID,
+						        CONBEAMID,
+						        PIER,
+						        PARTID,
+						        LDTYPE,
+						        MILEAGEFLAG,
+						        PROJECTID,
+						        SECTIONID,
+						        SITEID,
+						        POINTNAME,
+						        POINTPLACE,
+						        POINTTYPE
+						        ) VALUES
+								(SQL_INITPOINT_ID.NEXTVAL,
+						        #{initPoint.conbeamid,jdbcType=DECIMAL},
+						        #{initPoint.pier,jdbcType=DECIMAL},
+						        #{initPoint.partid,jdbcType=DECIMAL},
+						        #{initPoint.ldtype,jdbcType=DECIMAL},
+						        #{initPoint.mileageflag,jdbcType=DECIMAL},
+						        #{initPoint.projectid,jdbcType=DECIMAL},
+						        #{initPoint.sectionid,jdbcType=DECIMAL},
+						        #{initPoint.siteid,jdbcType=DECIMAL},
+						        #{initPoint.pointname,jdbcType=VARCHAR},
+						        #{initPoint.pointplace,jdbcType=DECIMAL},
+						        #{initPoint.pointtype,jdbcType=DECIMAL}
+						        )
+		<!-- BEGIN
+		 <foreach collection="initPonitKeys" item="item" index="index" separator=";" >
+			INSERT INTO T_INITPOINT(
+			        INITPOINTID,
+			        CONBEAMID,
+			        PIER,
+			        PARTID,
+			        LDTYPE,
+			        MILEAGEFLAG,
+			        PROJECTID,
+			        SECTIONID,
+			        SITEID,
+			        POINTNAME,
+			        POINTPLACE,
+			        POINTTYPE
+			        ) VALUES
+					(SQL_INITPOINT_ID.NEXTVAL,
+			        #{item.conbeamid,jdbcType=DECIMAL},
+			        #{item.pier,jdbcType=DECIMAL},
+			        #{item.partid,jdbcType=DECIMAL},
+			        #{item.ldtype,jdbcType=DECIMAL},
+			        #{item.mileageflag,jdbcType=DECIMAL},
+			        #{item.projectid,jdbcType=DECIMAL},
+			        #{item.sectionid,jdbcType=DECIMAL},
+			        #{item.siteid,jdbcType=DECIMAL},
+			        #{item.pointname,jdbcType=VARCHAR},
+			        #{item.pointplace,jdbcType=DECIMAL},
+			        #{item.pointtype,jdbcType=DECIMAL}
+			        )
+		 </foreach>
+		;END; -->
+		
+  </insert>
+  
+  <update id="UpdateByinitPoint" parameterType="com.tky.lxl.platform.model.business.InitPoint">
+    update T_INITPOINT
+    <set>
+      UPDATETIME = SYSDATE
+    </set>
+    where 1=1
+    <if test="initpointid != null">
+      AND INITPOINTID = #{initpointid}
+    </if>
+  </update>
+  
+  <select id="getInitPointMessage" resultMap="BaseResultMap">
+   SELECT 
+   <include refid="Base_Column_List" />
+     FROM T_INITPOINT T
+    WHERE T.CONBEAMID = #{conbeamid} AND T.PARTID=#{beam} AND T.POINTTYPE=#{ptype} AND T.POINTPLACE=#{point}
+    <if test="miletype != null and miletype !=''">
+    	AND T.MILEAGEFLAG=#{miletype}
+    </if>
+  </select>
+</mapper>

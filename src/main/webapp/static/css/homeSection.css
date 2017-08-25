@@ -1,0 +1,240 @@
+.section-content-wrapper{
+	width:100%;
+	height:100%
+}
+
+.content-wrapper-top{
+	height:300px;
+	width:100%;
+	margin-right:20px;
+	
+}
+
+.content-wrapper-bottom{
+	background:white;
+	padding:5px 0px 5px 0px;
+	margin-right:20px;
+	min-height:48%;
+	margin-top:15px;
+}
+
+.conBeam-info-title{
+	font-size:15px;
+	font-weight:700;
+	text-align:left;
+	border-bottom:3px solid #F2F2F2;
+	margin-bottom:10px;
+	margin-left:10px;
+	margin:0 10px 10px 10px ;
+	color:#1E1E1E;
+	padding:0 0 3px 6px;
+}
+
+.table-box-warnInfo{
+	margin-left:10px;
+	margin-right:10px;
+}
+
+.table-conbeam
+{
+	border:1px solid #D7D7D7 !important;
+	width:100%!important;
+	margin:0px;
+	table-layout:fixed;
+}
+
+.table-conbeam tr td, tr th {
+	border: 1px solid #D7D7D7 !important;
+	vertical-align: inherit !important;
+	padding:0px 0px 0px 5px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	height:32px;
+	line-height:30px;
+	
+}
+input:-ms-input-placeholder{
+	color:#bbb;
+}
+.table-conbeam tr th {
+	background:#CCCCCC;
+	font-size:14px !important;
+}
+
+.table-conbeam thead tr td {
+	background: white;
+	font-size: 13px;
+	font-weight: 400;
+	font-style: normal;
+	color: #333;
+}
+
+.btnGkListTd{
+	border:0px solid #D7D7D7 !important;
+}
+
+.btnGkListImg{
+	display:inline-block;
+	margin-top:-1px;
+	margin-left:14px;
+	float:right;
+}
+
+.hlSuccessImg{
+	display:inline-block;
+	float:right;
+}
+
+.greenClor{
+	display:inline-block;
+	color:#00CC00;
+}
+
+.ldWarnInfoDiv{
+	width:690px;
+	height:290px;
+	border:1px solid #797979;
+	border-radius:6px 6px 0 0;
+
+	-webkit-border-radius:6px 6px 0 0;
+	-moze-border-radius:6px 6px 0 0;
+	z-index:1;
+	position:absolute;
+	top:100px;
+	left:189px;
+	background:#fff;
+}
+
+.ldExceptionInfoDiv{
+	width:690px;
+	height:340px;
+	border:1px solid #797979;
+	border-radius:6px 6px 0 0;
+
+	-webkit-border-radius:6px 6px 0 0;
+	-moze-border-radius:6px 6px 0 0;
+	z-index:1;
+	position:absolute;
+	top:100px;
+	left:30%;
+	background:#fff;
+}
+
+.managementHeadTitle{
+	color:white;
+	font-weight:bold;
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+	font-size:14px !important;
+	display:inline-block;
+	width:90%;
+}
+
+.ldWarnInfoContent{
+	width:100%;
+	height:255px;
+}
+
+.warnTblHeaderDiv {
+	width: 100%;
+}
+
+.warnTblContentDiv {
+	width: 100%;  
+	overflow-y: auto; 
+	height:221px;
+}
+
+.notDisplay{
+	height:0px;
+}
+
+.percentBar{
+	border-radius:3px;
+	background:#FDDD2A;
+	height:21px;
+	margin:5px 0px 5px 0px;
+	line-height:21px;
+}
+
+.percentBarSpan{
+	display:inline-block;
+}
+
+.closePage{
+	width:18px !important;
+	height:18px !important;
+	font-size:16px !important;
+	color:#5F6263;
+	line-height:31px !important;
+}
+.closePage:hover{
+	color:#454745;
+	cursor:pointer;
+	font-weight:bold;
+}
+
+.exceptionDataFooterDiv{
+	margin-top:10px;
+	text-align:center;
+	margin-bottom:10px;
+}
+
+.save-btn-section{
+	float:none;
+}
+
+.cancel-btn-section{
+	float:none;
+}
+#newLxlData{
+	max-height:262px;
+	overflow-y:auto;
+	overflow-x:hidden;
+}
+
+.dbsx-title-right {
+	display:inline-block;
+	text-align:right;
+	font-size:14px;
+	width:45%;
+}
+
+.dbsx-title-left {
+	display:inline-block;
+	text-align:left;
+	width:50%;
+	font-size:15px;
+	font-weight:700;
+	padding-left:20px;
+	line-height:15px;
+	margin:10px 0px 10px 0px;
+	color:#1E1E1E;
+}
+
+.dbsxli {
+	font-size:13px;
+	line-height:26px;
+	word-break:break-all;
+}
+
+#dbsxDiv {
+	padding-left:18px;
+	padding-right:18px;
+	height:262px;
+	overflow:hidden;
+}
+#dbsxDiv h4{
+	text-align:center;
+	line-height: 200px;
+    font-weight: bold;
+    font-size: 26px;
+    color: #CACACE;
+}
+.dbsxTblContentDiv {
+	width: 100%;  
+	overflow-y: auto; 
+	height:269px;
+}

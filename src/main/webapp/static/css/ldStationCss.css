@@ -1,0 +1,270 @@
+.cedian-content{
+    width:100%;
+    background:#fff;
+    
+}
+
+.cedian-head{
+    width:98%;
+    height:30px;
+    padding-left:15px;
+    position:relative;
+}
+.cedian-head h5{
+    display:inline-block;
+    height:30px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.cedian-head ldmileage{
+	display:inline-block;
+}
+
+.cedian-head h6{
+    display:inline-block;
+    height:15px;
+    font-size:13px;
+}
+.ldStation{
+	display:inline-block;
+	position:absolute;
+	right:10px;
+}
+a#cdUpdate,#cdRecord{
+	display:inline-block;
+    font-size:14px;
+    margin-top:10px;
+}
+
+.BottomButton{
+	width:100%;
+	height:80px;
+}
+
+.cedian-middleLine {
+	width:98%;
+	height:24px;
+}
+.cedian-middleLine p{
+	
+	font-size:14px;
+}
+
+.cancelbtn{
+    width:102px;
+    height:29px;
+    border-radius:5px;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    color:#fff;
+    font-size:12px;
+    background:#169BD5;
+    color:#fff;
+    float:right;
+    margin-right:500px;
+}
+
+#cancelbtn:hovers{
+    background: #FF5100;
+}
+#ld-btn{
+	margin-right:15px;
+}
+
+.comment{
+	float:right;
+}
+
+.stru-T{
+	height:37px;
+}
+
+.cdUpdatePage{
+    width:816px;
+    height:340px;
+    border:1px solid #797979;
+    border-radius:6px 6px 0 0;
+    z-index:1;
+    -webkit-border-radius:6px 6px 0 0;
+    -moze-border-radius:6px 6px 0 0;
+    position:absolute;
+    top:23%;
+    left:30%;
+    background:#fff;
+}
+    
+.cdconstruction-condition{
+    padding-top: 20px;
+    height: 100%;
+    font-size: 14px;
+    position: relative;
+    width:400px;
+    float:left;
+   
+}
+
+#cddrawing-area{
+    width: 75%;
+    height: 320px;
+    background: #ffffff;
+    border: 1px solid #333333;
+}
+    
+.ldtheoretical{
+    padding-left: 31px;
+}
+
+p.cdmanagementBottom{
+	margin-top:5px;
+}
+
+.cdmanagementBottom{
+    width:100%;
+    height:30px;
+    padding-left:100px;
+}
+.cdmanagementBottom input{
+    margin:0 2px 0 35px;
+}
+.save-btn{
+    width:60px;
+    height:26px;
+    border-radius:5px;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    color:#fff;
+    font-size:14px;
+    background:#008000;
+    float:left;
+    line-height:26px;
+}
+.cancel-btn{
+    width:60px;
+    height:26px;
+    border-radius:5px;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    color:#fff;
+    font-size:14px;
+    background:#FF0000;
+    float:left;
+    line-height:26px;
+}
+
+
+.cdUpdatePage p{
+	margin:0,0,5px;
+}
+    
+    
+.RecordPage{
+    width:857px;
+    height:290px;
+    border:1px solid #797979;
+    border-radius:6px 6px 0 0;
+    z-index:1;
+    -webkit-border-radius:6px 6px 0 0;
+    -moze-border-radius:6px 6px 0 0;
+    
+    position:absolute;
+    top:100px;
+    left:22%;
+    background:#fff;
+}
+    
+    
+.ldright-region{
+    width: 100%;
+    float:right;
+    position:relative;
+}
+    
+.showRecord{
+    margin-top:10px;
+    overflow-y:auto;
+    max-height:140px;
+    width:98%;
+}
+
+.watchmodelBottom{
+    padding-left:320px !important;
+}
+.watchmodelBottomButton{
+	padding-left:100px !important;
+}
+
+.cedian BottomButton{
+	padding-left:400px !important;
+}
+
+.watchmodelBody{
+	margin: 10px;
+	height:170px !important;
+}
+
+
+.cdconstruction{
+    padding-left: 82px;
+}
+.cdconstruction span{
+    padding-left: 2px;
+}
+
+.cdmeasuring-point{
+    padding-left: 72px;
+}
+.cdmeasuring-point p.measuring{
+	display:inline-block;
+}
+#lddrawing-area{
+    width: 75%;
+    height: 270px;
+    background: #ffffff;
+    border: 1px solid #333333;
+}
+.cdelevation{
+    padding-left: 30px;
+}
+
+
+.drawing{
+    border-right: 1px solid #D7D7D7;
+    margin-top: 20px;
+    height: 260px;
+    width:400px;
+    float:left;
+    background:url('../images/cdPage.png') no-repeat;
+}
+
+
+.ldtheoretical-elevation{
+    display: inline-block;
+    margin-left: 29px;
+}
+
+
+p.ldmeasuring span.ldmeasuring em{
+    position:absolute;
+    top:-7px;
+    left:2px;
+}
+ span.ldmeasuring{
+    display:inline-block;
+    width:16px;
+    height:16px;
+    position:relative;
+    border:1px solid #000;
+    margin-right:11px;
+}
+ span.ldmeasuring em{
+    position:absolute;
+    top:-8px;
+    left:3px;
+}
+
+.ldmeasuring{
+    display: inline;
+    padding-left: 11px;
+}
+

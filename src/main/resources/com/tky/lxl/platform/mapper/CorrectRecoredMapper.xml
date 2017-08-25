@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.CorrectRecoredMapper">
+  <select id="selectByPartid" parameterType="com.tky.lxl.platform.model.business.CorrectRecored" 
+            resultType="com.tky.lxl.platform.model.business.CorrectRecored">
+    select 
+    CORRECTID, CORRECTOR, RECORD, REASON, CORRECTTYPE, CORRECTTIME,PARTID,MILEAGEFLAG
+    from T_CORRECT_RECORD
+    where 1 = 1
+      and PARTID = #{partid}
+    <if test="mileageflag != null">
+      and MILEAGEFLAG = #{mileageflag}
+    </if>
+    order by CORRECTTIME desc
+  </select>
+  
+  <insert id="insert" parameterType="com.tky.lxl.platform.model.business.CorrectRecored">
+    insert into T_CORRECT_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        CORRECTID,
+      <if test="corrector != null">
+        CORRECTOR,
+      </if>
+      <if test="record != null">
+        RECORD,
+      </if>
+      <if test="reason != null">
+        REASON,
+      </if>
+      <if test="correcttype != null">
+        CORRECTTYPE,
+      </if>
+        CORRECTTIME,
+      <if test="partid != null">
+        PARTID,
+      </if>
+      <if test="mileageflag != null">
+        MILEAGEFLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+<!--         #{correctid,jdbcType=DECIMAL}, -->
+        seq_t_correct_record.nextval,
+      <if test="corrector != null">
+        #{corrector,jdbcType=VARCHAR},
+      </if>
+      <if test="record != null">
+        #{record,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="correcttype != null">
+        #{correcttype,jdbcType=DECIMAL},
+      </if>
+        SYSDATE,
+      <if test="partid != null">
+        #{partid,jdbcType=DECIMAL},
+      </if>
+      <if test="mileageflag != null">
+        #{mileageflag,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPartid" parameterType="com.tky.lxl.platform.model.business.CorrectRecored">
+    update T_CORRECT_RECORD
+    <set>
+      <if test="corrector != null">
+        CORRECTOR = #{corrector,jdbcType=VARCHAR},
+      </if>
+      <if test="record != null">
+        RECORD = #{record,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        REASON = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="correcttype != null">
+        CORRECTTYPE = #{correcttype,jdbcType=DECIMAL},
+      </if>
+        CORRECTTIME = SYSDATE,
+    </set>
+    where PARTID = #{partid}
+  </update>
+</mapper>

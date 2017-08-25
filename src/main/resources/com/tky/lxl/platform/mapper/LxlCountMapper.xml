@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.business.LxlCountMapper" >
+
+<!--
+	LDCOUNT 梁段数量
+	QLLEVEL  桥梁树层级 0-工点/1-连续梁
+	STATUS  1 - 未监测
+  -->
+	<sql id="lxl_zkd_count_start">
+		<!-- SELECT QL.ZCOUNT,QL.WCOUNT,QL.YCOUNT,ROUND(1 - QL.WCOUNT / QL.ZCOUNT,1)*100 || '%' AS WPERCENT FROM (
+    SELECT COUNT(GDID) AS ZCOUNT,
+         COUNT(CASE
+                 WHEN STATUS IN ('1') THEN
+                  'WCOUNT'
+               END) WCOUNT,
+         COUNT(CASE
+                 WHEN STATUS NOT IN ('1') THEN
+                  'YCOUNT'
+               END) YCOUNT
+       FROM T_LXL
+      WHERE MAINKDLENGTH IS NOT NULL AND USEFLAG=1 AND QLLEVEL=1 AND LDCOUNT>=0 -->
+	SELECT QL.ZCOUNT,
+	       QL.WCOUNT,
+	       QL.YCOUNT,
+	       (CASE
+	         WHEN QL.ZCOUNT = 0 THEN
+	          0
+	         ELSE
+	          ROUND(1 - QL.WCOUNT / QL.ZCOUNT, 2)
+	       END) AS YPERCENT
+	  FROM (SELECT COUNT(CONBEAMID) AS ZCOUNT,
+	               COUNT(CASE
+	                       WHEN STATUS IN ('1') THEN
+	                        'WCOUNT'
+	                     END) WCOUNT,
+	               COUNT(CASE
+	                       WHEN STATUS NOT IN ('1') THEN
+	                        'YCOUNT'
+	                     END) YCOUNT
+	          FROM T_LXL
+	         WHERE 1 = 1
+<!-- 	           AND MAINKDLENGTH IS NOT NULL -->
+	           AND USEFLAG = 0
+	           <if test="conbeamid != null">
+               AND CONBEAMID IN
+               <foreach item="item" index="index" collection="conbeamid" open="(" separator="," close=")">
+		       #{item}
+	           </foreach>
+               </if>
+	</sql>
+	<sql id="lxl_zkd_count_end">
+		) QL
+	</sql>
+	<!-- 连续梁监测状态统计 
+		0:合计  1：未监控  2：监控中 3：待合龙 4：已合龙
+	-->
+  <select id="selectLxlMonitorStatusCount"  resultType="com.tky.lxl.platform.model.business.LxlMonitorStatusCount"
+        parameterType="com.tky.lxl.platform.model.business.WarnInfo">
+	<!-- SELECT COUNT(GDID) COUNT,STATUS FROM VIEW_LXL GROUP BY STATUS -->
+		<!-- SELECT COUNT(GDID) COUNT, STATUS
+		  FROM VIEW_LXL
+		 	GROUP BY STATUS
+			UNION
+		SELECT SUM(COUNT), 0 AS STATUS
+		  FROM (SELECT COUNT(GDID) COUNT, STATUS FROM VIEW_LXL GROUP BY STATUS) -->
+	SELECT COUNT(CONBEAMID) ZCOUNT,
+       COUNT(CASE
+               WHEN STATUS IN ('1') THEN
+                'WJCCOUNT'
+             END) WJCCOUNT,
+       COUNT(CASE
+               WHEN STATUS IN ('2') THEN
+                'JCZCOUNT'
+             END) JCZCOUNT,
+       COUNT(CASE WHEN STATUS IN('3') THEN
+                 'DHLCOUNT'
+               END) DHLCOUNT,
+               COUNT(CASE
+                 WHEN STATUS IN ('4') THEN
+                  ' YHLCOUNT '
+               END) YHLCOUNT
+               FROM T_LXL
+      WHERE 1 = 1
+<!--         AND MAINKDLENGTH IS NOT NULL -->
+      <if test="projectid != null">
+        AND PROJECTINFOID = #{projectid}
+      </if>
+        AND USEFLAG = 0
+  </select>
+  
+  <!-- 桥梁主跨度<60 -->
+  <select id="select60Count" resultType="com.tky.lxl.platform.model.business.LxlDetailCount"
+        parameterType="Map">
+  	<include refid="lxl_zkd_count_start"></include>
+ 	<![CDATA[
+   	AND MAINKDLENGTH < 60
+   	]]>
+   	<if test="projectid != null">
+   	    AND PROJECTINFOID = #{projectid}
+   	</if>
+   	<include refid="lxl_zkd_count_end"></include>
+  </select>
+  
+  <!-- 桥梁主跨度>=60 <80 -->
+  <select id="select80Count" resultType="com.tky.lxl.platform.model.business.LxlDetailCount"
+        parameterType="Map">
+  	<include refid="lxl_zkd_count_start"></include>
+   	AND MAINKDLENGTH >= 60
+   	<![CDATA[
+   	AND MAINKDLENGTH < 80
+   	]]>
+   	<if test="projectid != null">
+        AND PROJECTINFOID = #{projectid}
+    </if>
+   	<include refid="lxl_zkd_count_end"></include>
+  </select>
+  
+  <!-- 桥梁主跨度>=80 <100 -->
+  <select id="select100Count" resultType="com.tky.lxl.platform.model.business.LxlDetailCount"
+        parameterType="Map">
+  	<include refid="lxl_zkd_count_start"></include>
+   	AND MAINKDLENGTH >= 80
+   	<![CDATA[
+   	AND MAINKDLENGTH < 100
+   	]]>
+   	<if test="projectid != null">
+        AND PROJECTINFOID = #{projectid}
+    </if>
+   	<include refid="lxl_zkd_count_end"></include>
+  </select>
+  
+  <!-- 桥梁主跨度 <120 -->
+  <select id="select120Count" resultType="com.tky.lxl.platform.model.business.LxlDetailCount"
+        parameterType="Map">
+  	<include refid="lxl_zkd_count_start"></include>
+   	AND MAINKDLENGTH >= 100
+   	<![CDATA[
+   	AND MAINKDLENGTH < 120
+   		]]>
+    <if test="projectid != null">
+        AND PROJECTINFOID = #{projectid}
+    </if>
+   <include refid="lxl_zkd_count_end"></include>
+  </select>
+  
+  <!-- 桥梁主跨度>=120 -->
+  <select id="selectElseCount" resultType="com.tky.lxl.platform.model.business.LxlDetailCount"
+        parameterType="Map">
+  	<include refid="lxl_zkd_count_start"></include>
+   		AND MAINKDLENGTH >= 120
+   	    <if test="projectid != null">
+        AND PROJECTINFOID = #{projectid}
+        </if>
+   	<include refid="lxl_zkd_count_end"></include>
+  </select>
+  
+  <!-- 连续梁主跨度总体统计 -->
+  <select id="selectLxlTotalCount" resultType="com.tky.lxl.platform.model.business.LxlTotalCount"
+        parameterType="Map">
+       SELECT COUNT(CONBEAMID) AS ZCOUNT,
+               COUNT(CASE
+                      <![CDATA[ WHEN MAINKDLENGTH < 60 THEN]]>
+                        '60COUNT'
+                     END) SIXTYCOUNT,
+               COUNT(CASE
+                      <![CDATA[  WHEN (MAINKDLENGTH >= 60 AND MAINKDLENGTH < 80) THEN]]>
+                        '80COUNT'
+                     END) EIGHTYCOUNT,
+               COUNT(CASE
+                     <![CDATA[  WHEN (MAINKDLENGTH >= 80 AND MAINKDLENGTH < 100) THEN]]>
+                        '100COUNT'
+                     END) HUNDREDCOUNT,
+               COUNT(CASE
+                     <![CDATA[   WHEN (MAINKDLENGTH >= 100 AND MAINKDLENGTH < 120) THEN]]>
+                        '120COUNT'
+                     END) HUNDREDTWENTYCOUNT,
+               COUNT(CASE WHEN (MAINKDLENGTH >= 120) THEN
+                        '80COUNT'
+                     END) ELSECOUNT
+          FROM T_LXL
+         WHERE MAINKDLENGTH IS NOT NULL
+         <if test="conbeamid != null">
+               AND CONBEAMID IN 
+         <foreach item="item" index="index" collection="conbeamid" open="(" separator="," close=")">
+		          #{item}
+	     </foreach>
+         
+         </if>
+         <if test="projectid != null">
+           AND PROJECTINFOID = #{projectid}
+         </if>
+           AND USEFLAG = 0
+  		
+  </select>
+  
+  <!-- 根据片区统计连续梁监测状态,超限连续梁,超限梁段,梁段总数,测点总数,工作基点总数的信息 -->
+  <select id="selectLxlInfobyPianqu" resultType="com.tky.lxl.platform.model.business.LxlPianquCount" 
+        parameterType="Map">
+	SELECT CATEID AS CATEGORYID,
+	       CATENAME AS CATEGORYNAME,
+	       COUNT(CASE
+	               WHEN STATUS IN ('1') THEN
+	                'WJCCOUNT'
+	             END) WJCCOUNT,
+	       COUNT(CASE
+	               WHEN STATUS IN ('2') THEN
+	                'JCZCOUNT'
+	             END) JCZCOUNT,
+	       COUNT(CASE
+	               WHEN STATUS IN ('3') THEN
+	                'DHLCOUNT'
+	             END) DHLCOUNT,
+	       COUNT(CASE
+	               WHEN STATUS IN ('4') THEN
+	                ' YHLCOUNT '
+	             END) YHLCOUNT,
+	       COUNT(CASE
+	               WHEN WARNLDCOUNTNODEAL NOT IN ('0') THEN
+	                'WARNLXLCOUNTNODEAL'
+	             END) WARNLXLCOUNTNODEAL,
+	       COUNT(CASE
+	               WHEN WARNLDCOUNTNODEAL IN ('0') AND WARNLDCOUNTDEAL NOT IN ('0') THEN
+	                'WARNLXLCOUNTDEAL'
+	             END) WARNLXLCOUNTDEAL,
+	       SUM(WARNLDCOUNTDEAL) AS WARNLDCOUNTDEAL,
+	       SUM(WARNLDCOUNTNODEAL) AS WARNLDCOUNTNODEAL,
+	       SUM(LDCOUNT) AS LDCOUNT,
+	       SUM(CDCOUNT) AS CDCOUNT,
+	       SUM(BASECOUNT) AS GZJDCOUNT
+	  FROM (SELECT CATE.ID                AS CATEID,
+	               CATE.NAME              AS CATENAME,
+	               LXL.STATUS             AS STATUS,
+	               LXL.WARNLDCOUNTDEAL    AS WARNLDCOUNTDEAL,
+	               LXL.WARNLDCOUNTNODEAL  AS WARNLDCOUNTNODEAL,
+	               LXL.LDCOUNT            AS LDCOUNT,
+	               LXL.CDCOUNT            AS CDCOUNT,
+	               LXL.BASECOUNT          AS BASECOUNT
+	          FROM T_LXL LXL
+	         INNER JOIN PROJECTINFO PRO
+	            ON PRO.ID = LXL.PROJECTINFOID
+	         INNER JOIN CATEGORYITEM CATE
+	            ON CATE.ID = PRO.CATEGORYID
+	           AND CATE.USEFLAG = 0
+	         WHERE 1 = 1
+	      <!--      AND LXL.MAINKDLENGTH IS NOT NULL  --> 
+            <if test="conbeamid != null">
+            AND LXL.CONBEAMID IN 
+               
+ 		<foreach item="item" index="index" collection="conbeamid" open="(" separator="," close=")">
+		#{item}
+	</foreach>
+               
+               
+            </if>
+	           AND LXL.USEFLAG = 0
+	           AND PRO.USEFLAG = 0)
+	 GROUP BY CATEID, CATENAME
+  </select>
+  
+    <!-- 根据各个片区取得项目下统计连续梁监测状态,超限连续梁,超限梁段,梁段总数,测点总数,工作基点总数的信息 -->
+  <select id="selectLxlInfobyItem" resultType="com.tky.lxl.platform.model.business.LxlPianquCount" 
+            parameterType="Map">
+	SELECT PROID AS ITEMID,
+	       PRONAME AS ITEMNAME,
+	       COUNT(CASE
+	               WHEN STATUS IN ('1') THEN
+	                'WJCCOUNT'
+	             END) WJCCOUNT,
+	       COUNT(CASE
+	               WHEN STATUS IN ('2') THEN
+	                'JCZCOUNT'
+	             END) JCZCOUNT,
+	       COUNT(CASE
+	               WHEN STATUS IN ('3') THEN
+	                'DHLCOUNT'
+	             END) DHLCOUNT,
+	       COUNT(CASE
+	               WHEN STATUS IN ('4') THEN
+	                ' YHLCOUNT '
+	             END) YHLCOUNT,
+	       COUNT(CASE
+	               WHEN WARNLDCOUNTNODEAL NOT IN ('0') THEN
+	                'WARNLXLCOUNTNODEAL'
+	             END) WARNLXLCOUNTNODEAL,
+	       COUNT(CASE
+	               WHEN WARNLDCOUNTNODEAL IN ('0') AND WARNLDCOUNTDEAL NOT IN ('0') THEN
+	                'WARNLXLCOUNTDEAL'
+	             END) WARNLXLCOUNTDEAL,
+	       SUM(WARNLDCOUNTDEAL) AS WARNLDCOUNTDEAL,
+	       SUM(WARNLDCOUNTNODEAL) AS WARNLDCOUNTNODEAL,
+	       SUM(LDCOUNT) AS LDCOUNT,
+	       SUM(CDCOUNT) AS CDCOUNT,
+	       SUM(BASECOUNT) AS GZJDCOUNT
+	  FROM (SELECT PRO.ID                AS PROID,
+	               PRO.NAMEABBR          AS PRONAME,
+	               LXL.STATUS            AS STATUS,
+	               LXL.WARNLDCOUNTDEAL   AS WARNLDCOUNTDEAL,
+	               LXL.WARNLDCOUNTNODEAL AS WARNLDCOUNTNODEAL,
+	               LXL.LDCOUNT           AS LDCOUNT,
+	               LXL.CDCOUNT           AS CDCOUNT,
+	               LXL.BASECOUNT         AS BASECOUNT
+	          FROM T_LXL LXL
+	         INNER JOIN PROJECTINFO PRO
+	            ON PRO.ID = LXL.PROJECTINFOID
+	         WHERE 1 = 1
+			<!--    AND LXL.MAINKDLENGTH IS NOT NULL --> 
+	           AND PRO.CATEGORYID = #{categoryid}
+	         <if test="conbeamid != null">
+               AND LXL.CONBEAMID IN 
+             <foreach item="item" index="index" collection="conbeamid" open="(" separator="," close=")">
+		       #{item}
+	         </foreach>
+             </if>
+	           AND LXL.USEFLAG = 0
+	           AND PRO.USEFLAG = 0)
+	 GROUP BY PROID, PRONAME
+  </select>
+  
+     <!-- 根据项目统计各标段下连续梁监测状态,超限连续梁,超限梁段,梁段总数,测点总数,工作基点总数信息 -->
+  <select id="selectLxlInfobyPro" resultType="com.tky.lxl.platform.model.business.LxlProjectCount" 
+                parameterType="Map">
+	SELECT SECID AS SECTIONID,
+	       SECNAME AS SECTION,
+	       COUNT(CASE
+	               WHEN STATUS IN ('1') THEN
+	                'WJCCOUNT'
+	             END) WJCCOUNT,
+	       COUNT(CASE
+	               WHEN STATUS IN ('2') THEN
+	                'JCZCOUNT'
+	             END) JCZCOUNT,
+	       COUNT(CASE
+	               WHEN STATUS IN ('3') THEN
+	                'DHLCOUNT'
+	             END) DHLCOUNT,
+	       COUNT(CASE
+	               WHEN STATUS IN ('4') THEN
+	                ' YHLCOUNT '
+	             END) YHLCOUNT,
+	       COUNT(CASE
+	               WHEN WARNLDCOUNTNODEAL NOT IN ('0') THEN
+	                'WARNLXLCOUNTNODEAL'
+	             END) WARNLXLCOUNTNODEAL,
+	       COUNT(CASE
+	               WHEN WARNLDCOUNTNODEAL IN ('0') AND WARNLDCOUNTDEAL NOT IN ('0') THEN
+	                'WARNLXLCOUNTDEAL'
+	             END) WARNLXLCOUNTDEAL,
+	       SUM(WARNLDCOUNTDEAL) AS WARNLDCOUNTDEAL,
+	       SUM(WARNLDCOUNTNODEAL) AS WARNLDCOUNTNODEAL,
+	       SUM(LDCOUNT) AS LDCOUNT
+<!-- 	       SUM(CDCOUNT) AS CDCOUNT, -->
+<!-- 	       SUM(BASECOUNT) AS GZJDCOUNT -->
+	  FROM (SELECT LXL.SECTIONID         AS SECID,
+	               SEC.NAME              AS SECNAME,
+	               LXL.STATUS            AS STATUS,
+	               LXL.WARNLDCOUNTDEAL   AS WARNLDCOUNTDEAL,
+	               LXL.WARNLDCOUNTNODEAL AS WARNLDCOUNTNODEAL,
+	               NVL(
+	                 (
+	                     SELECT COUNT(DISTINCT LD.PARTID)
+						  FROM T_LD LD
+						 INNER JOIN T_XXKZD XD
+						    ON LD.CONBEAMID = XD.CONBEAMID
+						   AND LD.PARTID = XD.PARTID
+						   AND LD.USEFLAG = 0
+						   AND XD.USEFLAG = 0
+ 						 WHERE LXL.CONBEAMID = LD.CONBEAMID
+	                 )
+	               ,0) AS LDCOUNT
+<!-- 	               LXL.CDCOUNT           AS CDCOUNT, -->
+<!-- 	               LXL.BASECOUNT         AS BASECOUNT -->
+	          FROM T_LXL LXL
+	         INNER JOIN PROJECTSECTION SEC
+	            ON SEC.ID = LXL.SECTIONID
+	         WHERE 1 = 1
+ 	     <!--        AND LXL.MAINKDLENGTH IS NOT NULL -->
+	           AND LXL.PROJECTINFOID = #{projectid}
+	         <if test="conbeamid != null">
+               AND LXL.CONBEAMID IN 
+             <foreach item="item" index="index" collection="conbeamid" open="(" separator="," close=")">
+		       #{item}
+	         </foreach>
+             </if>
+	           AND LXL.USEFLAG = 0
+	           AND SEC.USEFLAG = 0)
+	 GROUP BY SECID, SECNAME
+	 ORDER BY SECNAME
+  </select>
+  
+  
+      <!-- 各标超限数    超限连续梁，超限梁段 -->
+  <select id="selectCxlxlldBySection" resultType="com.tky.lxl.platform.model.business.LxlProjectCount" 
+                    parameterType="Map">
+	SELECT SECID AS SECTIONID,
+	       SECNAME AS SECTION,
+	       COUNT(CASE
+	               WHEN WARNLDCOUNTNODEAL NOT IN ('0') THEN
+	                'WARNLXLCOUNTNODEAL'
+	             END) WARNLXLCOUNTNODEAL,
+	       COUNT(CASE
+	               WHEN WARNLDCOUNTNODEAL IN ('0') AND WARNLDCOUNTDEAL NOT IN ('0') THEN
+	                'WARNLXLCOUNTDEAL'
+	             END) WARNLXLCOUNTDEAL,
+	       SUM(WARNLDCOUNTDEAL) AS WARNLDCOUNTDEAL,
+	       SUM(WARNLDCOUNTNODEAL) AS WARNLDCOUNTNODEAL
+	  FROM (SELECT SECID,
+	               SECNAME,
+	               LCONBEAMID,
+	               COUNT(CASE
+	                       WHEN MDEALFLAG IN ('0') THEN
+	                        'WARNLDCOUNTNODEAL'
+	                     END) WARNLDCOUNTNODEAL,
+	               COUNT(CASE
+	                       WHEN MDEALFLAG IN ('2') THEN
+	                        'WARNLDCOUNTDEAL'
+	                     END) WARNLDCOUNTDEAL
+	          FROM (SELECT SECID,
+	                       SECNAME,
+	                       LCONBEAMID,
+	                       WPARTID,
+	                       MIN(WDEALFLAG) AS MDEALFLAG
+	                  FROM (SELECT DISTINCT LXL.SECTIONID AS SECID,
+	                                        SEC.NAME      AS SECNAME,
+	                                        LXL.CONBEAMID AS LCONBEAMID,
+	                                        WARN.PARTID   AS WPARTID,
+	                                        WARN.DEALFLAG AS WDEALFLAG
+	                          FROM T_WARN WARN
+	                         INNER JOIN T_LD LD
+	                            ON WARN.PARTID = LD.PARTID
+	                           AND LD.USEFLAG = 0
+	                           AND WARN.USEFLAG = 0
+	                           AND (WARN.DEALFLAG = 0 OR WARN.DEALFLAG = 2)
+	                         INNER JOIN T_LXL LXL
+	                            ON LD.CONBEAMID = LXL.CONBEAMID
+	                           AND LXL.USEFLAG = 0
+                      <!--    	 AND LXL.MAINKDLENGTH IS NOT NULL  -->
+	                         INNER JOIN PROJECTSECTION SEC
+	                            ON SEC.ID = LXL.SECTIONID
+	                         WHERE LXL.PROJECTINFOID = #{projectid}
+	                         <if test="conbeamid != null">
+                              AND LXL.CONBEAMID IN
+                             <foreach item="item" index="index" collection="conbeamid" open="(" separator="," close=")">
+		                     #{item}
+	                         </foreach>
+                              
+                            </if>
+                             <if test="sttime != null">
+                               AND TO_CHAR(WARN.WARNTIME, 'yyyy-MM-dd') >= TO_CHAR(TO_DATE(#{sttime}, 'yyyy-MM-dd'), 'yyyy-MM-dd')
+                             </if>
+                             <if test="endtime != null">
+                               <![CDATA[AND TO_CHAR(WARN.WARNTIME, 'yyyy-MM-dd') <=TO_CHAR(TO_DATE(#{endtime}, 'yyyy-MM-dd'), 'yyyy-MM-dd')]]>
+                             </if>
+	                         GROUP BY LXL.SECTIONID,
+	                                  SEC.NAME,
+	                                  LXL.CONBEAMID,
+	                                  WARN.PARTID,
+	                                  WARN.DEALFLAG
+	                         ORDER BY WARN.PARTID)
+	                 GROUP BY SECID, SECNAME, LCONBEAMID, WPARTID
+	                 ORDER BY LCONBEAMID)
+	         GROUP BY SECID, SECNAME, LCONBEAMID)
+	 GROUP BY SECID, SECNAME
+	 ORDER BY SECNAME
+  </select>
+      <!-- 超限处置进度    超限连续梁梁段数 -->
+  <select id="selectCxlxlldCount" resultType="com.tky.lxl.platform.model.business.LxlProjectCount" 
+                    parameterType="Map">
+                    SELECT COUNT(CASE
+			                   WHEN WARNLDCOUNTNODEAL NOT IN ('0') THEN
+			                    'WARNLXLCOUNTNODEAL'
+			                 END) WARNLXLCOUNTNODEAL,
+			           COUNT(CASE
+			                   WHEN WARNLDCOUNTNODEAL IN ('0') AND WARNLDCOUNTDEAL NOT IN ('0') THEN
+			                    'WARNLXLCOUNTDEAL'
+			                 END) WARNLXLCOUNTDEAL,
+			           COUNT(CASE
+			                   WHEN WARNLDCOUNT NOT IN ('0') THEN
+			                    'WARNLDCOUNT'
+			                 END) WARNLXLCOUNT,
+			           SUM(WARNLDCOUNTDEAL) AS WARNLDCOUNTDEAL,
+			           SUM(WARNLDCOUNTNODEAL) AS WARNLDCOUNTNODEAL,
+			           SUM(WARNLDCOUNT) AS WARNLDCOUNT
+			      FROM (SELECT LXL.CONBEAMID          AS CONBEAMID,
+			                   LXL.WARNLDCOUNTDEAL    AS WARNLDCOUNTDEAL,
+			                   LXL.WARNLDCOUNTNODEAL  AS WARNLDCOUNTNODEAL,
+			                   LXL.WARNLDCOUNT AS WARNLDCOUNT
+			              FROM T_LXL LXL
+			             WHERE 1 = 1
+                        <!--    AND LXL.MAINKDLENGTH IS NOT NULL  -->
+			               AND LXL.PROJECTINFOID = #{projectid}
+			           <if test="conbeamid != null">
+			               AND LXL.CONBEAMID IN 
+			               <foreach item="item" index="index" collection="conbeamid" open="(" separator="," close=")">
+		                    #{item}
+	                       </foreach>
+			             </if>
+			               AND LXL.USEFLAG = 0)
+    <!-- SELECT COUNT(CASE
+                   WHEN WARNLDCOUNTNODEAL NOT IN ('0') THEN
+                    'WARNLXLCOUNTNODEAL'
+                 END) WARNLXLCOUNTNODEAL,
+           COUNT(CASE
+                   WHEN WARNLDCOUNTNODEAL IN ('0') AND WARNLDCOUNTDEAL NOT IN ('0') THEN
+                    'WARNLXLCOUNTDEAL'
+                 END) WARNLXLCOUNTDEAL,
+           COUNT(CASE
+                   WHEN WARNLDCOUNTNODEAL IN ('0') AND WARNLDCOUNTDEAL IN ('0') AND
+                        WARNLDCOUNTYESDEAL NOT IN ('0') THEN
+                    'WARNLXLCOUNTYESDEAL'
+                 END) WARNLXLCOUNTYESDEAL,
+           SUM(WARNLDCOUNTDEAL) AS WARNLDCOUNTDEAL,
+           SUM(WARNLDCOUNTNODEAL) AS WARNLDCOUNTNODEAL,
+           SUM(WARNLDCOUNTYESDEAL) AS WARNLDCOUNTYESDEAL
+      FROM (SELECT LXL.CONBEAMID          AS CONBEAMID,
+                   LXL.WARNLDCOUNTDEAL    AS WARNLDCOUNTDEAL,
+                   LXL.WARNLDCOUNTNODEAL  AS WARNLDCOUNTNODEAL,
+                   LXL.WARNLDCOUNTYESDEAL AS WARNLDCOUNTYESDEAL
+              FROM T_LXL LXL
+             WHERE LXL.MAINKDLENGTH IS NOT NULL
+               AND LXL.PROJECTINFOID = #{projectid}
+             <if test="conbeamid != null">
+               AND LXL.CONBEAMID IN (${conbeamid})
+             </if>
+               AND LXL.USEFLAG = 0) -->
+  </select>
+  
+    <!-- 桥梁首页  查询总梁段数 -->
+  <select id="selectLdZCount" resultType="com.tky.lxl.platform.model.business.LxlProjectCount"
+                parameterType="Long">
+    SELECT COUNT(TLD.PARTID) AS LDCOUNT
+      FROM T_LD TLD
+     INNER JOIN T_LXL LXL
+        ON LXL.CONBEAMID = TLD.CONBEAMID
+     WHERE LXL.CONBEAMID = #{conbeamid}
+       AND LXL.USEFLAG = 0
+       AND TLD.USEFLAG = 0
+	 <!--   AND LXL.MAINKDLENGTH IS NOT NULL  -->
+  </select>
+  
+     <!-- 桥梁首页  查询总测点数 -->
+  <select id="selectCdZCount" resultType="com.tky.lxl.platform.model.business.LxlProjectCount"
+                parameterType="Long">
+    SELECT COUNT(T.INITPOINTID) AS CDCOUNT
+      FROM T_INITPOINT T
+     WHERE T.CONBEAMID = #{conbeamid}
+       AND T.USEFLAG = 0
+  </select>
+  
+    <!-- 桥梁首页  查询偏差超限数 -->
+  <select id="selectCdWarnCount" resultType="com.tky.lxl.platform.model.business.LxlProjectCount"
+                parameterType="Long">
+	SELECT COUNT(WARN.CONBEAMID) AS WARNCDCOUNT
+	  FROM T_WARN WARN
+	 INNER JOIN T_LXL LXL
+	    ON LXL.CONBEAMID = WARN.CONBEAMID
+	 WHERE LXL.CONBEAMID = #{conbeamid}
+       <!--  AND LXL.MAINKDLENGTH IS NOT NULL-->
+	   AND LXL.USEFLAG = 0
+	   AND WARN.USEFLAG = 0
+	   AND WARN.DEALFLAG in(0,2,3)
+  </select>
+</mapper>

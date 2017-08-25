@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.business.SectionInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.SectionInfo" >
+	<result column="NAME" property="name" jdbcType="VARCHAR" />
+	<result column="CONBEAMID" property="conbeamid" jdbcType="DECIMAL" />
+	<result column="STATUS" property="status" jdbcType="DECIMAL" />
+	<result column="NODEALCOUNT" property="nodealcount" jdbcType="DECIMAL" />
+	<result column="DEALINGCOUNT" property="dealingcount" jdbcType="DECIMAL" />
+	<result column="NORMALLD" property="normalld" jdbcType="VARCHAR" />
+	<result column="SPECIALLD" property="specialld" jdbcType="VARCHAR" />
+	<result column="CDCOUNT" property="cdcount" jdbcType="DECIMAL" />
+	<result column="BASECOUNT" property="basecount" jdbcType="DECIMAL" />
+	<result column="LDCOUNT" property="ldcount" jdbcType="DECIMAL" />
+	<result column="SECTIONID" property="sectionid" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectSectionInfo" resultMap="BaseResultMap">
+  /*连续梁基本信息*/
+  SELECT DISTINCT LXL.NAME,
+				  LXL.CONBEAMID,
+				  LXL.SECTIONID,
+				  LXL.STATUS,
+				  NVL(LXL.WARNLDCOUNTNODEAL,0) AS NODEALCOUNT,  /*超限梁段未处置 总数*/
+				  NVL(LXL.WARNLDCOUNTDEAL,0) AS DEALINGCOUNT,  /*超限梁段处置中 总数*/
+
+				  NVL((SELECT TO_CHAR(wm_concat(DISTINCT
+									TLD.PIER || '#' ||
+									SUBSTR(TLD.SHORTNAME,
+											0,
+											DECODE(INSTR(TLD.SHORTNAME, '-'),
+												  0,
+												  LENGTH(TLD.SHORTNAME),
+												  INSTR(TLD.SHORTNAME, '-') - 1)) ||DECODE(TLD.MILEAGEFLAG,0,'(小)','(大)')|| '、' ||
+									TLD.PIER || '#' ||
+									SUBSTR(TLD.SHORTNAME,
+											0,
+											DECODE(INSTR(TLD.SHORTNAME, '-'),
+												  0,
+												  LENGTH(TLD.SHORTNAME),
+												  INSTR(TLD.SHORTNAME, '-') - 1)) || ''''||DECODE(TLD.MILEAGEFLAG,0,'(大)','(小)') ||
+									'号梁段' ||
+									NVL((SELECT DC.NAME AS NAME
+										  FROM T_DICTIONARY DC
+										 WHERE DC.TYPEID = 1  /*工况*/
+											AND TO_NUMBER(DC.ID) =
+												(SELECT MAX(XD.GKBM)
+												  FROM T_XXKZD XD
+												 WHERE XD.PARTID = TLD.PARTID
+													AND XD.USEFLAG = 0
+													AND XD.PSTATE = 0)),
+										'AA')))
+					 FROM T_LD TLD, T_XXKZD TXD
+							,(
+							 /*当前施工梁段 所有类型*/
+							 SELECT LD.CONBEAMID, LD.PIER, MAX(ABS(SEQ)) AS MAX_SEQ
+								FROM T_LD LD
+							  INNER JOIN T_XXKZD XXD
+								 ON LD.CONBEAMID = XXD.CONBEAMID
+								AND LD.PARTID = XXD.PARTID
+								AND LD.USEFLAG = 0
+								AND XXD.PSTATE = 0 /*测点状态0：正常*/
+								AND XXD.USEFLAG = 0
+							  GROUP BY LD.CONBEAMID, LD.PIER /*以连续梁 T构分组*/
+							) CURRENT_LD
+					WHERE LXL.CONBEAMID = TLD.CONBEAMID
+					
+					  AND TLD.CONBEAMID = CURRENT_LD.CONBEAMID
+					  AND TLD.PIER = CURRENT_LD.PIER
+					  AND ABS(TLD.SEQ) = CURRENT_LD.MAX_SEQ
+
+					  AND TLD.USEFLAG = 0
+					  AND TLD.TYPE NOT IN (3, 4, 5, 0)  /*梁段类型 0:0号梁段 3:中合 4:边合 5:直线段  以外*/
+					  AND TLD.PARTID = TXD.PARTID
+					  AND TXD.PSTATE = 0  /*测点状态0：正常*/
+					  AND TXD.USEFLAG = 0
+					  
+					  AND INSTR(TLD.SHORTNAME, '''') = 0),
+					  
+					  (SELECT TO_CHAR(wm_concat(DISTINCT
+									TLD.PIER || '#' ||
+									SUBSTR(TLD.SHORTNAME,
+											0,
+											DECODE(INSTR(TLD.SHORTNAME, '-'),
+												  0,
+												  LENGTH(TLD.SHORTNAME),
+												  INSTR(TLD.SHORTNAME, '-') - 2)) ||DECODE(TLD.MILEAGEFLAG,0,'(小)','(大)')|| '、' ||
+									TLD.PIER || '#' ||
+									SUBSTR(TLD.SHORTNAME,
+											0,
+											DECODE(INSTR(TLD.SHORTNAME, '-'),
+												  0,
+												  LENGTH(TLD.SHORTNAME)-1,
+												  INSTR(TLD.SHORTNAME, '-') - 1)) ||DECODE(TLD.MILEAGEFLAG,0,'(大)','(小)') ||
+									'号梁段' ||
+									NVL((SELECT DC.NAME AS NAME
+										  FROM T_DICTIONARY DC
+										 WHERE DC.TYPEID = 1
+											AND TO_NUMBER(DC.ID) =
+												(SELECT MAX(XD.GKBM)
+												  FROM T_XXKZD XD
+												 WHERE XD.PARTID = TLD.PARTID
+													AND XD.USEFLAG = 0
+													AND XD.PSTATE = 0)),
+										'AA')))
+					 FROM T_LD TLD, T_XXKZD TXD
+							,(
+							 /*当前施工梁段 所有类型*/
+							 SELECT LD.CONBEAMID, LD.PIER, MAX(ABS(SEQ)) AS MAX_SEQ
+								FROM T_LD LD
+							  INNER JOIN T_XXKZD XXD
+								 ON LD.CONBEAMID = XXD.CONBEAMID
+								AND LD.PARTID = XXD.PARTID
+								AND LD.USEFLAG = 0
+								AND XXD.PSTATE = 0 /*测点状态0：正常*/
+								AND XXD.USEFLAG = 0
+							  GROUP BY LD.CONBEAMID, LD.PIER /*以连续梁 T构分组*/
+							) CURRENT_LD
+					WHERE LXL.CONBEAMID = TLD.CONBEAMID
+					
+					  AND TLD.CONBEAMID = CURRENT_LD.CONBEAMID
+					  AND TLD.PIER = CURRENT_LD.PIER
+					  AND ABS(TLD.SEQ) = CURRENT_LD.MAX_SEQ
+					  
+					  AND TLD.USEFLAG = 0
+					  AND TLD.TYPE NOT IN (3, 4, 5, 0)  /*梁段类型 0:0号梁段 3:中合 4:边合 5:直线段  以外*/
+					  AND TLD.PARTID = TXD.PARTID
+					  AND TXD.PSTATE = 0  /*测点状态0：正常*/
+					  AND TXD.USEFLAG = 0
+					  
+					  <![CDATA[AND INSTR(TLD.SHORTNAME, '''') <> 0))]]>
+						AS NORMALLD,
+						
+				  (SELECT TO_CHAR(wm_concat(DISTINCT
+									TLD.PIER || '#' ||
+									SUBSTR(TLD.SHORTNAME,
+											0,
+											DECODE(INSTR(TLD.SHORTNAME, '-'),
+												  0,
+												  LENGTH(TLD.SHORTNAME),
+												  INSTR(TLD.SHORTNAME, '-') - 1)) ||
+									DECODE(TLD.TYPE,
+											0,
+											'号梁段',
+											3,
+											'(中合)',
+											4,
+											'(边合)',
+											5,
+											'(直线段)') ||
+									NVL((SELECT DC.NAME AS NAME
+										  FROM T_DICTIONARY DC
+										 WHERE DC.TYPEID = 1
+											AND TO_NUMBER(DC.ID) =
+												(SELECT MAX(XD.GKBM)
+												  FROM T_XXKZD XD
+												 WHERE XD.PARTID = TLD.PARTID
+													AND XD.USEFLAG = 0
+													AND XD.PSTATE = 0)),
+										'AA')))
+					 FROM T_LD TLD, T_XXKZD TXD
+							,(
+							 /*当前施工梁段 所有类型*/
+							 SELECT LD.CONBEAMID, LD.PIER, MAX(ABS(SEQ)) AS MAX_SEQ
+								FROM T_LD LD
+							  INNER JOIN T_XXKZD XXD
+								 ON LD.CONBEAMID = XXD.CONBEAMID
+								AND LD.PARTID = XXD.PARTID
+								AND LD.USEFLAG = 0
+								AND XXD.PSTATE = 0 /*测点状态0：正常*/
+								AND XXD.USEFLAG = 0
+							  GROUP BY LD.CONBEAMID, LD.PIER /*以连续梁 T构分组*/
+							) CURRENT_LD
+					WHERE LXL.CONBEAMID = TLD.CONBEAMID
+									  
+					  AND TLD.CONBEAMID = CURRENT_LD.CONBEAMID
+					  AND TLD.PIER = CURRENT_LD.PIER
+					  AND ABS(TLD.SEQ) = CURRENT_LD.MAX_SEQ
+
+					  AND TLD.USEFLAG = 0
+					  AND TLD.PARTID = TXD.PARTID
+					  AND TXD.PSTATE = 0  /*测点状态0：正常*/
+					  AND TXD.USEFLAG = 0
+					  AND TLD.TYPE IN (0, 3, 4, 5)) AS SPECIALLD,  /*梁段类型 0:0号梁段 3:中合 4:边合 5:直线段*/
+					  
+					  
+				  NVL(
+					(SELECT COUNT(DISTINCT XD.INITPOINTID)
+					  FROM T_LD LD
+					 INNER JOIN T_XXKZD XD
+						ON LD.CONBEAMID = XD.CONBEAMID
+						<!-- AND LD.PARTID = XD.PARTID -->
+						AND LD.PARTID = XD.NOWPARTID
+						AND XD.PSTATE=0
+						AND LD.USEFLAG = 0
+						AND XD.USEFLAG = 0
+						AND XD.POINTTYPE = 1 /*测点*/
+					 WHERE LXL.CONBEAMID = LD.CONBEAMID)
+					, 0) AS CDCOUNT,  /*已测测点总数*/
+
+				  NVL(
+					(SELECT COUNT(B.CONBEAMID) FROM T_BASE B 
+					WHERE B.CONBEAMID = LXL.CONBEAMID AND B.ISUSE=1 AND B.USEFLAG=0 GROUP BY B.CONBEAMID)
+					, 0) AS BASECOUNT,  /*已测工作基点总数*/
+
+				  NVL(
+					(SELECT COUNT(DISTINCT LD.PARTID)
+					  FROM T_LD LD
+					 INNER JOIN T_XXKZD XD
+						ON LD.CONBEAMID = XD.CONBEAMID
+						<!-- AND LD.PARTID = XD.PARTID -->
+						AND LD.PARTID = XD.NOWPARTID
+						AND XD.PSTATE=0
+						AND LD.USEFLAG = 0
+						AND XD.USEFLAG = 0
+					 WHERE LXL.CONBEAMID = LD.CONBEAMID)
+					, 0) AS LDCOUNT  /*已测梁段总数*/
+				  
+	FROM T_LXL LXL, PROJECTSECTION PS
+	WHERE LXL.SECTIONID =#{sectionId}
+	 AND LXL.SECTIONID = PS.ID
+	 AND LXL.USEFLAG = 0
+	 AND PS.USEFLAG = 0
+	 <if test="conbeamId != null">
+		AND LXL.CONBEAMID IN 
+     <foreach item="item" index="index" collection="conbeamId" open="(" separator="," close=")">
+		#{item}
+	 </foreach>
+	 </if>
+	ORDER BY LXL.CONBEAMID
+  </select>
+  <resultMap id="ldWarnInfoList" type="com.tky.lxl.platform.model.business.LxlWarnInfo" >
+	<result column="PIER" property="pier" jdbcType="DECIMAL" />
+	<result column="SHORTNAME" property="shortname" jdbcType="VARCHAR" />
+	<result column="TYPE" property="ldtype" jdbcType="VARCHAR" />
+	<result column="LOWERWARNTYPES" property="lowerwarntypes" jdbcType="VARCHAR" />
+	<result column="UPPERWARNTYPES" property="upperwarntypes" jdbcType="VARCHAR" />
+ </resultMap>
+  <select id="selectLxlWarnInfo" resultMap="ldWarnInfoList">
+	 /*连续梁超限梁段信息*/
+	 SELECT DISTINCT LD.PIER,
+			LD.SHORTNAME,
+			LD.SEQ,
+			(SELECT TO_CHAR(wm_concat(DISTINCT (SELECT DIC.NAME
+								FROM T_DICTIONARY DIC
+								WHERE DIC.TYPEID = 2  /*2:超限类型*/
+								 AND W.WARNTYPE = DIC.ID
+								 AND DIC.USEFLAG = 0)))
+				FROM T_WARN W, T_CD CD
+			  WHERE LD.PARTID = W.PARTID
+				AND W.USEFLAG = 0
+				AND W.DEALFLAG = 0	/*0:未处置*/
+				AND W.POINTID = CD.CDID
+				AND CD.USEFLAG = 0
+				AND CD.MILEAGEFLAG = 0) AS LOWERWARNTYPES,  /*小里程*/
+			(SELECT TO_CHAR(wm_concat(DISTINCT (SELECT DIC.NAME
+								FROM T_DICTIONARY DIC
+								WHERE DIC.TYPEID = 2  /*2:超限类型*/
+								 AND W.WARNTYPE = DIC.ID
+								 AND DIC.USEFLAG = 0)))
+				FROM T_WARN W, T_CD CD
+			  WHERE LD.PARTID = W.PARTID
+				AND W.USEFLAG = 0
+				AND W.DEALFLAG = 0  /*0:未处置*/
+				AND W.POINTID = CD.CDID
+				AND CD.USEFLAG = 0
+				AND CD.MILEAGEFLAG = 1) AS UPPERWARNTYPES,  /*大里程*/
+			LD.TYPE  /*梁段类型*/
+		FROM T_LD LD, T_XXKZD TXD
+	  WHERE LD.CONBEAMID = #{conbeamID}
+			AND LD.USEFLAG=0
+			AND LD.PARTID = TXD.PARTID
+			AND TXD.PSTATE = 0
+			AND TXD.USEFLAG = 0
+	  ORDER BY LD.PIER, LD.SEQ
+  </select>
+
+  <resultMap id="LxlDataExceptionMap" type="com.tky.lxl.platform.model.business.LxlDataException" >
+	<result column="CONBEAMID" property="conbeamid" jdbcType="DECIMAL" />
+	<result column="PIER" property="pier" jdbcType="DECIMAL" />
+	<result column="SHORTNAME" property="shortname" jdbcType="VARCHAR" />
+	<result column="PARTID" property="partid" jdbcType="DECIMAL" />
+	<result column="MILEAGEFLAG" property="mileageflag" jdbcType="DECIMAL" />
+	<result column="LDTYPE" property="ldtype" jdbcType="DECIMAL" />
+	<result column="LINEFLAG" property="lineflag" jdbcType="DECIMAL" />
+	<result column="LOWERGKBM" property="lowergkbm" jdbcType="VARCHAR" />
+	<result column="LOWERDELTA" property="lowerdelta" jdbcType="VARCHAR" />
+	<result column="LOWEROUTL" property="loweroutl" jdbcType="DECIMAL" />
+	<result column="LOWERLMPCZ" property="lowerlmpcz" jdbcType="DECIMAL" />
+	<result column="LOWERREMARKS" property="lowerremarks" jdbcType="VARCHAR" />
+	<result column="UPPERGKBM" property="uppergkbm" jdbcType="VARCHAR" />
+	<result column="UPPERDELTA" property="upperdelta" jdbcType="VARCHAR" />
+	<result column="UPPEROUTL" property="upperoutl" jdbcType="DECIMAL" />
+	<result column="UPPERLMPCZ" property="upperlmpcz" jdbcType="DECIMAL" />
+	<result column="UPPERREMARKS" property="upperremarks" jdbcType="VARCHAR" />
+	<result column="MAXGKBM" property="maxgkbm" jdbcType="VARCHAR" />
+	<result column="SEQ" property="seq" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectLxlDataException" resultMap="LxlDataExceptionMap">
+	 /*连续梁的异常信息*/
+	 SELECT LD.CONBEAMID,
+			LD.PIER,
+			LD.SHORTNAME,  /*梁段简称*/
+			LD.PARTID,  /*梁段ID*/
+			LD.MILEAGEFLAG,  /*大小里程区分标识*/
+			LD.TYPE AS LDTYPE,  /*梁段类型*/
+			LD.LINEFLAG,
+			LD.LOWERREMARKS AS LOWERREMARKS,  /*备注(小里程)*/
+			LD.UPPERREMARKS AS UPPERREMARKS,  /*备注(大里程）*/
+			LD.SEQ AS SEQ,
+			/*小里程 工况*/
+			(SELECT TO_CHAR(WM_CONCAT(DISTINCT XD.GKBM || '#' ||
+							  (SELECT TDC.NAME
+								 FROM T_DICTIONARY TDC
+								WHERE XD.GKBM = TO_NUMBER(TDC.ID)
+								  AND TDC.TYPEID = 1  /*工况*/
+								  AND TDC.USEFLAG = 0)))
+				FROM T_XXKZD XD, T_CD CD
+			  WHERE XD.PARTID = LD.PARTID
+				AND XD.USEFLAG = 0
+				AND XD.CDID = CD.CDID
+				AND CD.USEFLAG = 0
+				AND CD.MILEAGEFLAG = 0) AS LOWERGKBM,  /*0:小里程*/
+			/*小里程 高程偏差*/
+			(SELECT MIN(TXD.PCZ * 1000) || '#' || MAX(TXD.PCZ * 1000) /*最小偏差值 # 最大偏差值*/
+				FROM T_XXKZD TXD, T_CD CD
+			  WHERE TXD.PARTID = LD.PARTID
+				AND TXD.USEFLAG = 0
+				AND TXD.GKBM IN (2, 3, 4, 5, 6)
+				AND TXD.PTYPE = 2  /*测点类型  2:测量桩*/
+				AND TXD.GKBM = GK.MAXGKBM  /*工况  2:浇筑前 3:浇筑后 4:预应力张拉前 5:预应力张拉后 6:挂篮前*/
+				AND TXD.CDID = CD.CDID
+				AND CD.USEFLAG = 0
+				AND CD.MILEAGEFLAG = 0) AS LOWERDELTA,  /*0:小里程*/
+			/*小里程 中线偏差*/
+			(SELECT TXD.XXPCZ * 1000  /*线性偏差值*/
+				FROM T_XXKZD TXD, T_CD CD
+			  WHERE TXD.PARTID = LD.PARTID
+				AND TXD.USEFLAG = 0
+				AND TXD.GKBM IN (2, 3, 4, 5, 6)  /*工况  2:浇筑前 3:浇筑后 4:预应力张拉前 5:预应力张拉后 6:挂篮前*/
+				AND TXD.PTYPE = 2  /*测点类型  2:测量桩*/
+				AND TXD.CDWZ = 3  /*测点位置3*/
+				AND TXD.GKBM = GK.MAXGKBM
+				AND TXD.CDID = CD.CDID
+				AND CD.USEFLAG = 0
+				AND CD.MILEAGEFLAG = 0) AS LOWEROUTL,  /*0:小里程*/
+			/*小里程 立模标高偏差*/
+			(SELECT MIN(TXD.PCZ * 1000) || '#' || MAX(TXD.PCZ * 1000) /*偏差值的平均值*/
+				FROM T_XXKZD TXD, T_CD CD
+			  WHERE TXD.PARTID = LD.PARTID
+				AND TXD.USEFLAG = 0
+				AND TXD.GKBM = 1  /*工况  1:挂篮后*/
+				AND TXD.PTYPE = 1  /*测点类型  1:临时测量点*/
+				AND TXD.CDID = CD.CDID
+				AND CD.USEFLAG = 0
+				AND CD.MILEAGEFLAG = 0) AS LOWERLMPCZ,
+			/*大里程 工况*/
+			(SELECT TO_CHAR(WM_CONCAT(DISTINCT XD.GKBM || '#' ||
+							  (SELECT TDC.NAME
+								 FROM T_DICTIONARY TDC
+								WHERE XD.GKBM = TO_NUMBER(TDC.ID)
+								  AND TDC.TYPEID = 1  /*工况*/
+								  AND TDC.USEFLAG = 0)))
+				FROM T_XXKZD XD, T_CD CD
+			  WHERE XD.PARTID = LD.PARTID
+				AND XD.USEFLAG = 0
+				AND XD.CDID = CD.CDID
+				AND CD.USEFLAG = 0
+				AND CD.MILEAGEFLAG = 1) AS UPPERGKBM,  /*  1:大里程*/
+			/*大里程 高程偏差*/
+			(SELECT MIN(TXD.PCZ * 1000) || '#' || MAX(TXD.PCZ * 1000)  /*最小偏差值 # 最大偏差值*/
+				FROM T_XXKZD TXD, T_CD CD
+			  WHERE TXD.PARTID = LD.PARTID
+				AND TXD.USEFLAG = 0
+				AND TXD.GKBM IN (2, 3, 4, 5, 6)  /*工况  2:浇筑前 3:浇筑后 4:预应力张拉前 5:预应力张拉后 6:挂篮前*/
+				AND TXD.PTYPE = 2  /*测点类型  2:测量桩*/
+				AND TXD.GKBM = GK.MAXGKBM
+				AND TXD.CDID = CD.CDID
+				AND CD.USEFLAG = 0
+				AND CD.MILEAGEFLAG = 1) AS UPPERDELTA,  /*  1:大里程*/
+			/*大里程 路线偏差*/
+			(SELECT TXD.XXPCZ * 1000  /*线性偏差值*/
+				FROM T_XXKZD TXD, T_CD CD
+			  WHERE TXD.PARTID = LD.PARTID
+				AND TXD.USEFLAG = 0
+				AND TXD.GKBM IN (2, 3, 4, 5, 6)  /*工况  2:浇筑前 3:浇筑后 4:预应力张拉前 5:预应力张拉后 6:挂篮前*/
+				AND TXD.PTYPE = 2  /*测点类型  2:测量桩*/
+				AND TXD.CDWZ = 3  /*测点位置3*/
+				AND TXD.GKBM = GK.MAXGKBM
+				AND TXD.CDID = CD.CDID
+				AND CD.USEFLAG = 0
+				AND CD.MILEAGEFLAG = 1) AS UPPEROUTL,  /*  1:大里程*/
+			/*大里程 立模标高偏差*/
+			(SELECT MIN(TXD.PCZ * 1000) || '#' || MAX(TXD.PCZ * 1000)  /*偏差值的平均值*/
+				FROM T_XXKZD TXD, T_CD CD
+			  WHERE TXD.PARTID = LD.PARTID
+				AND TXD.USEFLAG = 0
+				AND TXD.GKBM = 1  /*工况  1:挂篮后*/
+				AND TXD.PTYPE = 1  /*测点类型  1:临时测量点*/
+				AND TXD.CDID = CD.CDID
+				AND CD.USEFLAG = 0
+				AND CD.MILEAGEFLAG = 1) AS UPPERLMPCZ,  /*  1:大里程*/
+			  GK.MAXGKBM AS MAXGKBM
+		FROM T_LXL LXL,
+			T_LD LD
+			LEFT JOIN (SELECT MAX(XD.GKBM) AS MAXGKBM, XD.NOWPARTID AS PARTID  /*梁段的最新工况*/
+					FROM T_XXKZD XD
+					WHERE XD.USEFLAG = 0 AND XD.PSTATE=0
+					GROUP BY XD.NOWPARTID) GK
+		 ON LD.PARTID = GK.PARTID
+	  WHERE LXL.CONBEAMID = LD.CONBEAMID
+		AND LXL.USEFLAG = 0
+		AND LXL.SECTIONID = #{sectionId}
+		AND LXL.CONBEAMID=23653
+		<!-- AND LD.PIER=659 -->
+		AND LD.USEFLAG = 0
+	  ORDER BY LD.PIER, LD.SEQ<!-- LD.SHORTNAME -->
+  </select>
+
+  <select id="selectPccxLimit" resultType="com.tky.lxl.platform.model.business.Deviation">
+	SELECT CASE
+			 WHEN (SELECT TO_CHAR(TDE.LOWER)
+								 FROM T_DEVIATION TDE
+								WHERE TDE.USEFLAG = 0
+									AND TDE.TYPE = #{warnType}
+									AND TDE.PROJECTINFOID = #{projectId}) IS NULL THEN
+					TO_CHAR(TD.LOWER)
+				 ELSE
+					(SELECT TO_CHAR(TDE.LOWER)
+						 FROM T_DEVIATION TDE
+						WHERE TDE.USEFLAG = 0
+							AND TDE.TYPE = #{warnType}
+							AND TDE.PROJECTINFOID = #{projectId})
+			 END AS lower,
+			 CASE
+				 WHEN (SELECT TO_CHAR(TDE.UPPER)
+								 FROM T_DEVIATION TDE
+								WHERE  TDE.USEFLAG = 0
+									AND TDE.TYPE = #{warnType}
+									AND TDE.PROJECTINFOID = #{projectId}) IS NULL THEN
+					TO_CHAR(TD.UPPER)
+				 ELSE
+					(SELECT TO_CHAR(TDE.UPPER)
+						 FROM T_DEVIATION TDE
+						WHERE TDE.USEFLAG = 0
+							AND TDE.TYPE = #{warnType}
+							AND TDE.PROJECTINFOID = #{projectId})
+			 END AS upper,
+			 #{warnType} AS type
+		FROM T_DEVIATION TD 
+	 WHERE TD.USEFLAG = 0
+		 AND TD.PROJECTINFOID IS NULL
+		 AND TD.TYPE =  #{warnType}
+  </select>
+
+  <update id="updateLdRemarkByPrimaryKey">
+	UPDATE T_LD
+		<if test="lowerremarks !='undefined'">
+		  SET LOWERREMARKS = #{lowerremarks}
+		</if>
+		<if test="upperremarks != 'undefined'">
+		  SET UPPERREMARKS = #{upperremarks}
+		</if>
+	WHERE T_LD.PARTID = #{partId}
+	  AND USEFLAG = 0
+  </update>
+
+  <!-- 根据标段统计梁段超限处置信息 -->
+  <select id="selectPccxldCount" resultType="com.tky.lxl.platform.model.business.CxLdCount" 
+	parameterType="Map">
+	SELECT 
+		  SUM(NVL(LXL.WARNLDCOUNTNODEAL,0)) AS WARNLDCOUNTNODEAL,
+		  SUM(NVL(LXL.WARNLDCOUNTDEAL,0)) AS WARNLDCOUNT
+	FROM T_LXL LXL
+	WHERE LXL.SECTIONID = #{sectionId}
+	  AND LXL.USEFLAG = 0
+	  AND LXL.CONBEAMID IN 
+ 		<foreach item="item" index="index" collection="conbeamid" open="(" separator="," close=")">
+		#{item}
+	</foreach>
+  </select>
+
+  <!-- 查询偏差超限待办事项 -->
+  <select id="selectPccxLdDbsx" resultType="com.tky.lxl.platform.model.business.DbsxInfo">
+	SELECT DISTINCT TO_CHAR((SELECT MAX(WN.WARNTIME)
+							  FROM T_WARN WN
+							 WHERE WN.PARTID = LD.PARTID
+								AND WN.USEFLAG = 0
+								AND WN.DEALFLAG = 0
+								AND WN.WARNTYPE = W.WARNTYPE
+								AND WN.GKBM = W.GKBM),
+							'yyyyMMddhh24miss') AS UPDATETIME,
+					LXL.NAME || LD.PARTNUM || '梁段' ||
+					(SELECT DC.NAME AS NAME
+						FROM T_DICTIONARY DC
+					  WHERE DC.TYPEID = 1  /*工况*/
+						AND TO_NUMBER(DC.ID) = W.GKBM) ||
+					(SELECT DC.NAME AS NAME
+						FROM T_DICTIONARY DC
+					  WHERE DC.TYPEID = 2  /*超限类型*/
+						AND TO_NUMBER(DC.ID) = W.WARNTYPE) || '未处置' AS CONTENT,
+						LD.SEQ
+	  FROM T_WARN W, T_LD LD, T_LXL LXL
+	 WHERE LXL.SECTIONID = #{sectionId}
+		AND W.CONBEAMID = LXL.CONBEAMID
+		AND LXL.CONBEAMID = W.CONBEAMID
+		AND W.PARTID = LD.PARTID
+		AND W.USEFLAG = 0
+		AND LD.USEFLAG = 0
+		AND W.DEALFLAG = 0
+		<if test="conbeamId != null">
+		  AND LXL.CONBEAMID IN 
+		<foreach item="item" index="index" collection="conbeamId" open="(" separator="," close=")">
+		  #{item}
+	    </foreach>
+		</if>
+	 ORDER BY UPDATETIME DESC,LD.SEQ
+  </select>
+
+  <!-- 查询仪器设备待办事项 -->
+	<select id="selectEquimentLdDbsx" resultType="com.tky.lxl.platform.model.business.DbsxInfo">
+		SELECT DISTINCT TO_CHAR(T.Checkupdatetime, 'yyyyMMddhh24miss') AS
+		UPDATETIME,
+		T.NAME ||
+		DECODE(SIGN(TRUNC(T.Checkupdatetime) -
+		TRUNC(sysdate)),
+		0,
+		'今天需要校验',
+		1,
+		'距校验日期还剩',
+		-1,
+		'已超过校验日期',
+		'距校验日期还剩') ||
+		DECODE(SIGN(TRUNC(T.Checkupdatetime) - TRUNC(sysdate)),
+		0,'', - 1,
+		TRUNC(sysdate) - TRUNC(T.Checkupdatetime)||'天', 1,
+		TRUNC(T.Checkupdatetime) - TRUNC(sysdate)||'天',
+		0) AS CONTENT
+		FROM
+		T_EQUIMENT T
+	<!-- <![CDATA[WHERE TRUNC(sysdate) - TRUNC(T.Checkupdatetime) BETWEEN -15 AND 15]]> -->
+	<![CDATA[WHERE TRUNC(sysdate) - TRUNC(T.Checkupdatetime) >= -15]]>
+		AND T.SECTIONID = #{sectionId}
+		AND T.USEFLAG=0
+		ORDER BY UPDATETIME DESC
+	</select>
+  <!-- 查询边合待办事项 -->
+  <select id="selectBhDbsx" resultType="com.tky.lxl.platform.model.business.DbsxInfo">
+	SELECT DISTINCT TO_CHAR((SELECT MAX(TXD.UPDATETIME)
+							  FROM T_XXKZD TXD
+							 WHERE TXD.PARTID = LD.PARTID
+								AND TXD.USEFLAG = 0
+								/*AND TXD.GKBM = 6  挂篮前*/
+								AND XD.GKBM <![CDATA[>=]]> 3   /*浇筑后及以后的工况*/
+								AND TXD.PSTATE = 0), /*测点状态0：正常*/
+							'yyyyMMddhh24miss') AS UPDATETIME,
+					LD.MILEAGEFLAG,
+					CASE
+					  WHEN (SELECT MAX(T_LD.PIER)
+							  FROM T_LD
+							 WHERE T_LD.CONBEAMID = LXL.CONBEAMID
+								AND T_LD.USEFLAG = 0) > LD.PIER THEN
+						LXL.NAME || '小里程即将进行边合'
+					  ELSE
+						LXL.NAME || '大里程即将进行边合'
+					END AS CONTENT
+	  FROM T_LXL LXL,
+			T_XXKZD XD,
+			T_LD LD,
+			(SELECT LD.CONBEAMID, LD.PARTID, LD.SHORTNAME, LD.PIER
+			  FROM T_LD LD, T_LXL LXL
+			 WHERE LXL.SECTIONID = #{sectionId}
+				AND LXL.USEFLAG = 0
+				AND LD.CONBEAMID = LXL.CONBEAMID
+				AND LD.USEFLAG = 0
+				AND LD.TYPE = 5) TMP  /*直线段*/
+	 WHERE LXL.SECTIONID = #{sectionId}
+		AND LXL.USEFLAG = 0
+		AND LD.CONBEAMID = LXL.CONBEAMID
+		AND LD.USEFLAG = 0
+		AND XD.PARTID = LD.PARTID
+		AND XD.USEFLAG = 0
+		AND XD.GKBM <![CDATA[>=]]> 3   /*浇筑后及以后的工况*/
+		AND XD.PSTATE = 0
+		AND LXL.STATUS != 4  /*4-已合龙 以外*/
+		AND TMP.CONBEAMID = LD.CONBEAMID
+		AND TMP.PIER = LD.PIER
+		<if test="conbeamId != null">
+		  AND LXL.CONBEAMID IN 
+		<foreach item="item" index="index" collection="conbeamId" open="(" separator="," close=")">
+		  #{item}
+	    </foreach>
+		</if>
+		AND TO_NUMBER(SUBSTR(LD.SHORTNAME,
+							0,
+							DECODE(INSTR(LD.SHORTNAME, ''''),
+									0,
+									DECODE(INSTR(LD.SHORTNAME, '-'),
+										  0,
+										  LENGTH(LD.SHORTNAME),
+										  INSTR(LD.SHORTNAME, '-') - 1),
+									INSTR(LD.SHORTNAME, '''') - 1))) =
+			(TO_NUMBER(SUBSTR(TMP.SHORTNAME,
+							 0,
+							 DECODE(INSTR(TMP.SHORTNAME, ''''),
+									0,
+									DECODE(INSTR(TMP.SHORTNAME, '-'),
+											0,
+											LENGTH(TMP.SHORTNAME),
+											INSTR(TMP.SHORTNAME, '-') - 1),
+									INSTR(TMP.SHORTNAME, '''') - 1))) - 2)
+	 ORDER BY UPDATETIME DESC
+  </select>
+
+  <!-- 查询中合待办事项 -->
+  <select id="selectZhDbsx" resultType="com.tky.lxl.platform.model.business.ZhDbsx">
+	SELECT DISTINCT LXL.CONBEAMID,
+					LXL.NAME,
+					LD.PIER,
+					LD.MILEAGEFLAG,
+					TO_CHAR((SELECT MAX(TXD.UPDATETIME)
+							  FROM T_XXKZD TXD
+							 WHERE TXD.PARTID = LD.PARTID
+								AND TXD.USEFLAG = 0
+								/*AND TXD.GKBM = 6  挂篮前*/
+								AND TXD.GKBM <![CDATA[>=]]> 3   /*浇筑后及以后的工况*/
+								AND TXD.PSTATE = 0),  /*测点状态0：正常*/
+							'yyyyMMddhh24miss') AS UPDATETIME,
+					LD.PARTID
+	  FROM T_LXL LXL,
+			T_XXKZD XD,
+			T_LD LD,
+			(SELECT LD.CONBEAMID, LD.PARTID, LD.SHORTNAME, LD.PIER
+			  FROM T_LD LD, T_LXL LXL
+			 WHERE LXL.SECTIONID = #{sectionId}
+				AND LXL.USEFLAG = 0
+				AND LD.CONBEAMID = LXL.CONBEAMID
+				AND LD.USEFLAG = 0
+				AND LD.TYPE = 3) TMP /*中合*/
+	 WHERE LXL.SECTIONID = #{sectionId}
+		AND LXL.USEFLAG = 0
+		AND LD.CONBEAMID = LXL.CONBEAMID
+		AND LD.USEFLAG = 0
+		AND XD.PARTID = LD.PARTID
+		AND XD.USEFLAG = 0
+		/*AND XD.GKBM = 6  挂篮前*/
+		AND XD.GKBM <![CDATA[>=]]> 3   /*浇筑后及以后的工况*/
+		AND XD.PSTATE = 0  /*测点状态0：正常*/
+		AND LXL.STATUS != 4  /*4-已合龙 以外*/
+		<if test="conbeamId != null">
+		  AND LXL.CONBEAMID IN 
+		<foreach item="item" index="index" collection="conbeamId" open="(" separator="," close=")">
+		  #{item}
+	    </foreach>
+		</if>
+		AND TMP.CONBEAMID = LD.CONBEAMID
+		AND TO_NUMBER(SUBSTR(LD.SHORTNAME,
+							0,
+							DECODE(INSTR(LD.SHORTNAME, ''''),
+									0,
+									DECODE(INSTR(LD.SHORTNAME, '-'),
+										  0,
+										  LENGTH(LD.SHORTNAME),
+										  INSTR(LD.SHORTNAME, '-') - 1),
+									INSTR(LD.SHORTNAME, '''') - 1))) =
+			(TO_NUMBER(SUBSTR(TMP.SHORTNAME,
+							 0,
+							 DECODE(INSTR(TMP.SHORTNAME, ''''),
+									0,
+									DECODE(INSTR(TMP.SHORTNAME, '-'),
+											0,
+											LENGTH(TMP.SHORTNAME),
+											INSTR(TMP.SHORTNAME, '-') - 1),
+									INSTR(TMP.SHORTNAME, '''') - 1))) - 1)
+	 ORDER BY LD.PIER
+  </select>
+</mapper>

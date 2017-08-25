@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 系统角色Mapper -->
+
+<mapper namespace="com.tky.lxl.platform.dao.system.SysRoleMapper">
+
+  <!--角色Map-->
+  <resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.system.SysRole">
+    <result column="ROLE_ID" jdbcType="DECIMAL" property="roleId" />
+    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+    <result column="IS_SHOW" jdbcType="DECIMAL" property="isShow" />
+    <result column="DESRIPTION" jdbcType="VARCHAR" property="desription" />
+    <result column="ROLE" jdbcType="VARCHAR" property="role" />
+    <result column="IS_SYS" jdbcType="DECIMAL" property="isSys" />
+    <result column="ROLE_LEVEL" jdbcType="DECIMAL" property="roleLevel" />
+  </resultMap>
+  
+  	<!--根据用户关系表查询角色信息  -->
+    <select id="getRolesByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        role.role_id, role.role_name, role.is_show, role.desription, role.role, role.is_sys, role.role_level
+        from
+        sys_role role
+        inner join
+        sys_user_role userRole
+        on
+        role.role_id=userRole.role_id and role.is_show =0
+        where  userRole.use_flag =0 and 
+        userRole.user_id = #{userId,jdbcType=DECIMAL}
+    </select>
+  
+  	<!-- 获取权限  -->
+    <select id="selectRole" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        	ROLE.ROLE_ID,
+        	ROLE.ROLE_NAME,
+        	ROLE.IS_SHOW,
+        	ROLE.DESRIPTION,
+        	ROLE.ROLE,
+        	ROLE.IS_SYS,
+        	ROLE.ROLE_LEVEL
+        FROM
+        	SYS_ROLE ROLE
+        WHERE
+        	ROLE_LEVEL = 0	/*默认权限*/
+        AND
+        	ORG_TYPE = #{orgType}
+    </select>
+  
+  
+</mapper>

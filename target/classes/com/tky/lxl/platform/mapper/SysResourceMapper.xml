@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.system.SysResourceMapper">
+    <!--资源信息Map-->
+  <resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.system.SysResource">
+    <id column="RES_ID" jdbcType="DECIMAL" property="resId" />
+    <result column="RES_NAME" jdbcType="VARCHAR" property="resName" />
+    <result column="PARENT_ID" jdbcType="DECIMAL" property="parentId" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="RESTYPE" jdbcType="VARCHAR" property="restype" />
+    <result column="IS_SHOW" jdbcType="DECIMAL" property="isShow" />
+    <result column="PERMISSION" jdbcType="VARCHAR" property="permission" />
+    <result column="SEQ" jdbcType="DECIMAL" property="seq" />
+  </resultMap>
+
+	<select id="getResourceByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+	
+        select
+            t.res_id, t.res_name, t.parent_id, t.url, t.restype,
+            t.is_show, t.permission, t.seq
+        from
+            sys_resource t
+        inner join
+            sys_res_role t1 on t.res_id=t1.res_id and t1.useflag=0
+        inner join
+            sys_user_role t2 on t1.role_id=t2.role_id and t2.use_flag=0
+        where
+            t.is_show=0 and t2.user_id=#{userId, jdbcType=DECIMAL}
+        order by t.seq
+    </select>
+  
+ 
+</mapper>

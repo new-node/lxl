@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+							xmlns:aop="http://www.springframework.org/schema/aop" 
+							xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+							xmlns:context="http://www.springframework.org/schema/context"
+							xmlns:jdbc="http://www.springframework.org/schema/jdbc" 
+							xmlns:jee="http://www.springframework.org/schema/jee"
+							xmlns:tx="http://www.springframework.org/schema/tx" 
+							xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+							xmlns:cache="http://www.springframework.org/schema/cache"
+							xsi:schemaLocation="
+										http://www.springframework.org/schema/beans
+										http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+										http://www.springframework.org/schema/context
+										http://www.springframework.org/schema/context/spring-context-3.1.xsd
+										http://www.springframework.org/schema/jdbc
+										http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+										http://www.springframework.org/schema/jee
+										http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+										http://www.springframework.org/schema/tx
+										http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+										http://www.springframework.org/schema/data/jpa
+										http://www.springframework.org/schema/data/jpa/spring-jpa-1.2.xsd
+										http://www.springframework.org/schema/aop
+										http://www.springframework.org/schema/aop/spring-aop-2.5.xsd"
+										default-lazy-init="true">
+
+	<description>Spring公共配置 </description>
+	<!-- 开启路径自动扫描 ，扫描路径由 base-package的属性指定 -->
+	<context:component-scan base-package="com.tky.lxl.platform.serviceimpl">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	<!-- 扫描redis路径 -->
+	<!-- <context:component-scan base-package="com.tky.lxl.platform.redis" /> -->
+	<!-- 引入classpath 下的properties文件 -->
+	<context:property-placeholder ignore-unresolvable="true" location="classpath*:/*.properties" />
+
+	<!-- 启动缓存注解 -->
+	<!-- <cache:annotation-driven/> -->
+
+
+	<import resource="classpath:spring-mybatis.xml" />
+	<!-- 注释掉eache -->
+	<!-- <import resource="classpath:spring-config-cache.xml" /> -->
+
+	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+
+	<!-- 启动对@AspectJ注解的支持 -->
+	<!-- <context:component-scan base-package="com.tky.lxl.platform.aop.UserOperateLogAspect"> 
+		</context:component-scan> <aop:aspectj-autoproxy/> -->
+
+	<!-- 文件上传 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"></bean>
+
+	<!-- 初始化处理工具类 -->
+	<bean class="com.tky.lxl.platform.utils.InitUtil" />
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!-- 引入定时器 -->
+	<!-- <import resource="classpath:timertask.xml"/> -->
+</beans>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.system.SysResRoleMapper">
+
+	<resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.system.SysResRole">
+		<result column="RR_ID" jdbcType="DECIMAL" property="rrId" />
+		<result column="RES_ID" jdbcType="VARCHAR" property="resId" />
+		<result column="RES_NAME" jdbcType="VARCHAR" property="resName" />
+		<result column="ORG_TYPE" jdbcType="VARCHAR" property="orgType" />
+		<result column="ROLE_ID" jdbcType="DECIMAL" property="roleId" />
+		<result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+	</resultMap>
+
+	<select id="selectResourceRole" resultMap="BaseResultMap">
+		SELECT
+		  SYS_RESOURCE.RES_ID,
+		  SYS_RESOURCE.RES_NAME,
+		  SYS_RESOURCE.ORG_TYPE,
+		  SYS_ROLE.ROLE_ID,
+		  SYS_ROLE.ROLE_NAME
+		FROM
+		  (
+			/* 授权角色 用户角色表中有用户的角色数据的时候, 使用授权的角色 */
+			SELECT
+			  ROLE_ID
+			FROM
+			  SYS_USER_ROLE
+			WHERE
+			  SYS_USER_ROLE.USE_FLAG = 0
+			AND
+			  SYS_USER_ROLE.ACCOUNT = #{ account }
+			        
+			UNION
+			        
+			/* 默认角色 用户角色表中未取消默认权限的时候, 使用默认角色 */
+			
+			SELECT
+			  SYS_ROLE.ROLE_ID
+			FROM
+			  SYS_ROLE
+			WHERE
+			  SYS_ROLE.ROLE_TYPE = #{ roleType }  /* 传值应为默认角色 */
+			AND
+			  SYS_ROLE.ROLE_LEVEL = #{ roleLevel }  /* 用户的角色级别 */
+			AND
+			  SYS_ROLE.IS_SHOW = 0
+			AND
+			 0 = 
+			(
+			  SELECT
+			    COUNT(SYS_ROLE.ROLE_ID)
+			  FROM
+			    SYS_ROLE
+			  INNER JOIN
+			    SYS_USER_ROLE
+			  ON
+			    SYS_USER_ROLE.ACCOUNT = #{ account }
+			  AND
+			    SYS_USER_ROLE.USE_FLAG = 1  /*默认权限已取消*/
+			  AND
+			    SYS_USER_ROLE.ROLE_ID = SYS_ROLE.ROLE_ID
+			  AND
+			    SYS_ROLE.ROLE_TYPE = #{ roleType }  /* 传值应为默认角色 */
+			  AND
+			    SYS_ROLE.ROLE_LEVEL = #{ roleLevel }  /* 用户的角色级别 */
+			  AND
+			    SYS_ROLE.IS_SHOW = 0
+			)
+			    
+			 UNION
+			 
+			 /*观测人员*/
+			 SELECT
+			   SYS_ROLE.ROLE_ID
+			 FROM
+			   SYS_ROLE
+			 WHERE
+			   SYS_ROLE.ROLE_TYPE = 2	/* 观测人员 Const.java/RoleType/OBSERVER */
+			 AND
+			   SYS_ROLE.ROLE_LEVEL = #{ roleLevel }  /* 用户的角色级别 */
+			 AND
+			   SYS_ROLE.IS_SHOW = 0
+			 AND
+			  <![CDATA[0 < ]]>
+			  (
+			    /*观测人员*/
+		        SELECT
+		         COUNT(ID)
+		        FROM
+		         T_OBSERVER
+		        WHERE
+		         T_OBSERVER.ACCOUNT = #{account,jdbcType=VARCHAR}
+		        AND
+		         T_OBSERVER.USE_FLAG = 0
+			  )
+		  ) SYS_USER_ROLE
+		INNER JOIN
+		  SYS_RES_ROLE
+		ON
+		  SYS_RES_ROLE.USEFLAG = 0
+		AND
+		  SYS_USER_ROLE.ROLE_ID = SYS_RES_ROLE.ROLE_ID
+		INNER JOIN
+		  SYS_RESOURCE
+		ON
+		  SYS_RESOURCE.IS_SHOW = 0
+		AND
+		  SYS_RES_ROLE.RES_ID = SYS_RESOURCE.RES_ID
+		INNER JOIN
+		  SYS_ROLE
+		ON
+		  SYS_ROLE.IS_SHOW = 0
+		AND
+		  SYS_RES_ROLE.ROLE_ID = SYS_ROLE.ROLE_ID
+		ORDER BY
+		  SYS_RESOURCE.RES_ID,
+		  SYS_ROLE.ROLE_ID
+	</select>
+
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.business.ProjectSectionMapper">
+	<sql id="Base_Column_List">
+	    ID, CODE, CREATEDATE, DELETEDATE, LINELENGTH, MODIFYDATE, NAME, PRIORITY, 
+	    PROJECTINFOID, PROJECTTYPE, RID, TOTALLENGTH, UPDATEAT, USEFLAG, GQID, GQNAME, PROJECTINFONAME, 
+	    STATE,COMMANDDEP
+	 </sql>
+	<select id="findByProjectId" resultType="com.tky.lxl.platform.model.business.ProjectSection" parameterType="java.lang.Long">
+		SELECT <include refid="Base_Column_List" />
+		FROM PROJECTSECTION
+		WHERE 1=1 
+		  AND PROJECTINFOID=#{projectinfoid}
+		  AND USEFLAG = 0
+	</select>
+	<select id="selectProjectSectionByID" resultType="com.tky.lxl.platform.model.business.ProjectSection">
+		SELECT <include refid="Base_Column_List" /> FROM PROJECTSECTION
+		WHERE ID = #{sectionid}
+	</select>
+	
+	<!-- 根据部门ID查找标段 建指管理员用 -->
+	<select id="selectSectionByDepartmentId" resultType="com.tky.lxl.platform.model.business.ProjectSection">
+		SELECT
+			<include refid="Base_Column_List" />
+		FROM
+			PROJECTSECTION
+		WHERE
+			DEPARTMENT_ID = #{ departmentId }
+	    AND
+	    	USEFLAG = 0
+	</select>
+</mapper>

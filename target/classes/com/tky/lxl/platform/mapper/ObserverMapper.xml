@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.business.ObserverMapper" >
+
+	<resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.Observer">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+		<result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+		<result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+		<result column="CERTIFICATE_NUMBER" jdbcType="VARCHAR" property="certificateNumber" />
+		<result column="CERTIFICATE_SCAN" jdbcType="VARCHAR" property="certificateScan" />
+		<result column="SECTION_ID" jdbcType="DECIMAL" property="sectionId" />
+		<result column="DEPARTMENT_ID" jdbcType="DECIMAL" property="departmentId" />
+		<result column="DEPARTMENT_NAME" jdbcType="DECIMAL" property="departmentName" />
+		<result column="SECTION_NAME" jdbcType="VARCHAR" property="sectionName" />
+		<result column="PRO_NAME" jdbcType="VARCHAR" property="proName" />
+		<result column="UPDATE_USER_ID" jdbcType="DECIMAL" property="updateUserId" />
+		<result column="UPDATE_DATE_TIME" jdbcType="DATE" property="updateDateTime" />
+		<result column="USE_FLAG" jdbcType="DECIMAL" property="useFlag" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		ID, ACCOUNT, USER_NAME, MOBILE, CERTIFICATE_NUMBER, CERTIFICATE_SCAN, SECTION_ID, 
+		PRO_NAME, UPDATE_USER_ID, UPDATE_DATE_TIME, USE_FLAG
+	</sql>
+	
+		<!-- 分页查询 -->
+	<sql id="selectpagestart">
+		SELECT *
+		FROM (SELECT ROWNUM RW,A.*
+		FROM (
+	</sql>
+	<sql id="selectpageend">
+		 <![CDATA[) A
+				 WHERE ROWNUM < #{endNum}) B
+		 WHERE B.RW > #{startNum}]]>
+	</sql>
+		<!-- 查询观测人员数量-->
+	<select id="findObserverCount" resultType="int">
+		SELECT COUNT(T.ID)
+		 FROM T_OBSERVER T
+			 INNER JOIN PROJECTSECTION SEC
+				ON T.SECTION_ID = SEC.ID AND SEC.USEFLAG=0
+			 INNER JOIN PROJECTINFO PRO
+				ON PRO.ID = SEC.PROJECTINFOID AND PRO.USEFLAG=0
+			 INNER JOIN CATEGORYITEM CATE
+				ON CATE.ID = PRO.CATEGORYID AND CATE.USEFLAG=0
+			 LEFT JOIN DEPARTMENT DEP
+				ON DEP.ID = T.DEPARTMENT_ID AND DEP.USEFLAG=0
+		 WHERE 1 = 1
+		<if test="userName !=null">
+			AND T.USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
+		</if>
+		<if test="sectionids !=null">
+			<!-- AND T.SECTION_ID IN (#{sectionId}) -->
+			AND T.SECTION_ID IN
+					<foreach item="item" index="index" collection="sectionids" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+		</if>
+		<if test="projectid !=null">
+			AND PRO.ID = #{projectid}
+		</if>
+		<if test="categoryid !=null">
+			AND CATE.ID in 
+		<foreach item="item" index="index" collection="categoryid" open="(" separator="," close=")">
+		    #{item}
+	    </foreach>
+		</if>
+			AND T.USE_FLAG = 0
+			ORDER BY CATE.NAME,PRO.NAMEABBR,SEC.NAME
+	</select>
+	
+	<select id="selectObserver" parameterType="com.tky.lxl.platform.model.business.Observer"
+		resultMap="BaseResultMap">
+		<include refid="selectpagestart"></include>
+		SELECT CATE.NAME	AS CATEGORYNAME,
+			PRO.NAMEABBR	AS PROJECTNAME,
+				SEC.NAME	AS SECTION_NAME,
+				DEP.NAME	AS DEPARTMENT_NAME,
+				T.USER_NAME,
+				T.PRO_NAME,
+				T.MOBILE,
+				T.ID
+		FROM T_OBSERVER T
+			 INNER JOIN PROJECTSECTION SEC
+				ON T.SECTION_ID = SEC.ID AND SEC.USEFLAG=0
+			 INNER JOIN PROJECTINFO PRO
+				ON PRO.ID = SEC.PROJECTINFOID AND PRO.USEFLAG=0
+			 INNER JOIN CATEGORYITEM CATE
+				ON CATE.ID = PRO.CATEGORYID AND CATE.USEFLAG=0
+			LEFT JOIN DEPARTMENT DEP
+				ON DEP.ID = T.DEPARTMENT_ID AND DEP.USEFLAG=0
+		 WHERE 1 = 1
+		<if test="userName !=null">
+			AND T.USER_NAME LIKE CONCAT(CONCAT('%',#{userName}),'%')
+		</if>
+		<if test="sectionids !=null">
+			<!-- AND T.SECTION_ID IN (#{sectionId}) -->
+			AND T.SECTION_ID IN
+					<foreach item="item" index="index" collection="sectionids" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+		</if>
+		<if test="projectid !=null">
+			AND PRO.ID = #{projectid}
+		</if>
+		<if test="categoryid !=null">
+			AND CATE.ID IN     
+		<foreach item="item" index="index" collection="categoryid" open="(" separator="," close=")">
+		    #{item}
+	    </foreach>
+		</if>
+			AND T.USE_FLAG = 0
+			ORDER BY CATE.NAME,PRO.NAMEABBR,SEC.NAME
+		<include refid="selectpageend"></include>
+	</select>
+	
+	
+
+	<!---->
+	<select id="searchObserver" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM T_OBSERVER
+		<if test="useFlag != -1 ">
+		WHERE USE_FLAG = #{useFlag}
+		</if>
+	</select>
+	
+	<!---->
+	<select id="searchObserverBySectionIdList" resultMap="BaseResultMap">
+		SELECT * FROM T_OBSERVER
+		WHERE SECTION_ID in 
+        <foreach item="item" index="index" collection="conbeamid" open="(" separator="," close=")">
+		#{item}
+	    </foreach>
+		<if test="useFlag != -1 ">
+		WHERE USE_FLAG = #{useFlag}
+		</if>
+	</select>
+	
+	<!-- 数量 -->
+	<select id="queryObserverCount" resultType="int">
+		SELECT COUNT(ID) FROM T_OBSERVER
+	</select>
+	
+	<!-- 标段管理员 设置观测人员 查询观测人员 -->
+	<select id="searchObserverBySectionId" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM T_OBSERVER
+		WHERE SECTION_ID = #{sectionId} 
+		
+		<!-- 观测人员时追加此条件 -->
+			<if test="useFlag == 0 ">
+			AND USE_FLAG = #{useFlag}
+			</if>
+	</select>
+	
+	
+	<!-- 标段管理员 设置观测人员 设为观测人员 -->
+	<insert id="saveObserver" parameterType="com.tky.lxl.platform.model.business.Observer">
+	
+		<selectKey keyProperty="count" resultType="int" order="BEFORE">
+			SELECT COUNT(ID) FROM T_OBSERVER WHERE ID = #{id,jdbcType=DECIMAL}
+		</selectKey>
+		<if test="count > 0">
+			UPDATE
+				T_OBSERVER
+			SET
+				USE_FLAG = 0,	/*设为观测人员*/
+				<if test="sectionId != null">
+					SECTION_ID = #{sectionId,jdbcType=DECIMAL},
+				</if>
+				<if test="certificateNumber != null">
+					CERTIFICATE_NUMBER = #{certificateNumber,jdbcType=VARCHAR},
+				</if>
+				<if test="certificateScan != null">
+					CERTIFICATE_SCAN =#{certificateScan,jdbcType=VARCHAR},
+				</if>
+				UPDATE_USER_ID = #{updateUserId,jdbcType=DECIMAL},
+				UPDATE_DATE_TIME = SYSDATE
+			WHERE
+				ID = #{id,jdbcType=DECIMAL}
+		</if>
+		<if test="count==0">
+			insert into T_OBSERVER
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="account != null">
+				ACCOUNT,
+			</if>
+			<if test="userName != null">
+				USER_NAME,
+			</if>
+			<if test="mobile != null">
+				MOBILE,
+			</if>
+			<if test="certificateNumber != null">
+				CERTIFICATE_NUMBER,
+			</if>
+			<if test="certificateScan != null">
+				CERTIFICATE_SCAN,
+			</if>
+			<if test="sectionId != null">
+				SECTION_ID,
+			</if>
+			<if test="departmentId != null">
+				DEPARTMENT_ID,
+			</if>
+			<if test="proName != null">
+				PRO_NAME,
+			</if>
+			<if test="updateUserId != null">
+				UPDATE_USER_ID,
+			</if>
+				UPDATE_DATE_TIME,
+			<if test="useFlag != null">
+				USE_FLAG,
+			</if>
+			</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=DECIMAL},
+			</if>
+			<if test="account != null">
+				#{account,jdbcType=VARCHAR},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="certificateNumber != null">
+				#{certificateNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="certificateScan != null">
+				#{certificateScan,jdbcType=VARCHAR},
+			</if>
+			<if test="sectionId != null">
+				#{sectionId,jdbcType=DECIMAL},
+			</if>
+			<if test="departmentId != null">
+				#{departmentId,jdbcType=DECIMAL},
+			</if>
+			<if test="proName != null">
+				#{proName,jdbcType=VARCHAR},
+			</if>
+			<if test="updateUserId != null">
+				#{updateUserId,jdbcType=DECIMAL},
+			</if>
+				SYSDATE,
+			<if test="useFlag != null">
+				#{useFlag,jdbcType=DECIMAL},
+			</if>
+			</trim>
+		</if>
+	</insert>
+	
+	<!-- 标段管理员 设置观测人员 取消观测人员 -->
+	<update id="cancelObserver">
+		UPDATE
+			T_OBSERVER
+		SET
+			USE_FLAG = 1,	/*非观测人员 逻辑删除*/
+			CERTIFICATE_NUMBER = NULL,
+			CERTIFICATE_SCAN = NULL,
+			SECTION_ID = #{sectionId,jdbcType=DECIMAL},
+			DEPARTMENT_ID = #{departmentId,jdbcType=DECIMAL},
+			UPDATE_USER_ID = #{updateUserId,jdbcType=DECIMAL},
+			UPDATE_DATE_TIME = SYSDATE
+		WHERE
+			ID = #{id,jdbcType=DECIMAL}
+	</update>
+	
+</mapper>

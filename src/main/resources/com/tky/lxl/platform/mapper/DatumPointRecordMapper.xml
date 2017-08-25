@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.DatumPointRecordMapper">
+  <resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.DatumPointRecord">
+    <result column="BASEID" jdbcType="DECIMAL" property="baseid" />
+    <result column="CHANGEPERSON" jdbcType="VARCHAR" property="changeperson" />
+    <result column="BASEXX" jdbcType="DECIMAL" property="basexx" />
+    <result column="BASEYY" jdbcType="DECIMAL" property="baseyy" />
+    <result column="BASEZZ" jdbcType="DECIMAL" property="basezz" />
+    <result column="CHANGEREASON" jdbcType="VARCHAR" property="changereason" />
+    <result column="CREATEDATE" jdbcType="TIMESTAMP" property="createdate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+		BASEID, CHANGEPERSON, BASEXX, BASEYY, BASEZZ, CHANGEREASON,
+		CREATEDATE
+  </sql>
+  	<select id="findById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM T_BASE_RECORD
+		WHERE 1=1
+		AND BASEID = #{baseid}
+		ORDER BY CREATEDATE DESC
+	</select>
+  <insert id="insertSelective" parameterType="com.tky.lxl.platform.model.business.DatumPointRecord">
+    INSERT INTO T_BASE_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="baseid != null">
+        BASEID,
+      </if>
+      <if test="changeperson != null">
+        CHANGEPERSON,
+      </if>
+      <if test="basexx != null">
+        BASEXX,
+      </if>
+      <if test="baseyy != null">
+        BASEYY,
+      </if>
+      <if test="basezz != null">
+        BASEZZ,
+      </if>
+      <if test="changereason != null">
+        CHANGEREASON,
+      </if>
+        CREATEDATE,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="baseid != null">
+        #{baseid},
+      </if>
+      <if test="changeperson != null">
+        #{changeperson},
+      </if>
+      <if test="basexx != null">
+        #{basexx},
+      </if>
+      <if test="baseyy != null">
+        #{baseyy},
+      </if>
+      <if test="basezz != null">
+        #{basezz},
+      </if>
+      <if test="changereason != null">
+        #{changereason},
+      </if>
+        SYSDATE,
+    </trim>
+  </insert>
+</mapper>

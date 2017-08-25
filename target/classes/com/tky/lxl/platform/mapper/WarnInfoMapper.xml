@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.WarnInfoMapper">
+	<!-- 分页查询 -->
+	<sql id="selectpagestrat">
+		SELECT *
+		FROM (SELECT rownum rw, a.*
+		FROM (
+	</sql>
+	<sql id="selectpageend">
+		 <![CDATA[
+				) a
+				WHERE rownum < #{endNum}) b
+		 WHERE b.rw > #{startNum}
+		 ]]>
+	</sql>
+	<resultMap id="WarnInfoMap" type="com.tky.lxl.platform.model.business.WarnInfo">
+		<result column="CONBEAMID" jdbcType="DECIMAL" property="conbeamid" />
+		<result column="POINTID" jdbcType="DECIMAL" property="pointid" />
+		<result column="WARNTYPE" jdbcType="VARCHAR" property="warntype" />
+		<result column="WARNTYPENAME" jdbcType="VARCHAR" property="warntypename" />
+		<result column="DELTA" jdbcType="FLOAT" property="delta" />
+		<result column="OUTL" jdbcType="FLOAT" property="outl" />
+		<result column="WARNTIME" jdbcType="VARCHAR" property="warntime" />
+		<result column="DEALFLAG" jdbcType="DECIMAL" property="dealflag" />
+		<result column="LOWERUPPER" jdbcType="VARCHAR" property="lowerupper" />
+		<result column="LOWERUPPERDEFAULT" jdbcType="VARCHAR" property="lowerupperdefault" />
+		<result column="CODE" jdbcType="VARCHAR" property="code" />
+		<result column="PIER" jdbcType="DECIMAL" property="pier" />
+		<result column="CONTENT" jdbcType="VARCHAR" property="content" />
+		<result column="GKBM" jdbcType="VARCHAR" property="gkbm" />
+		<result column="WARNID" jdbcType="VARCHAR" property="warnId" />
+		<result column="CDCODE" jdbcType="VARCHAR" property="cdCode" />
+		<result column="LDNAME" jdbcType="VARCHAR" property="ldName" />
+		<result column="WARNRANGE" jdbcType="VARCHAR" property="warnRange" />
+		<result column="MILEAGEFLAG" jdbcType="VARCHAR" property="mileageFlag" />
+		<result column="LDTYPE" jdbcType="VARCHAR" property="ldType" />
+		<result column="PARTID" jdbcType="VARCHAR" property="partid" />
+		<result column="SEQ" jdbcType="DECIMAL" property="seq" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		W.CONBEAMID,W.POINTID AS POINTID,
+		(SELECT TDC.NAME FROM T_DICTIONARY TDC WHERE W.WARNTYPE = TO_NUMBER(TDC.ID) AND TDC.TYPEID = 2 AND TDC.USEFLAG = 0) AS WARNTYPENAME,
+		W.WARNTYPE,
+		W.DELTA * 1000 AS
+		DELTA ,
+		W.OUTL * 1000 AS OUTL,
+		TO_CHAR(W.WARNTIME,'yyyy/MM/dd') AS WARNTIME,
+		W.DEALFLAG AS DEALFLAG,
+		(SELECT NVL(TO_CHAR(TD.LOWER),(SELECT TO_CHAR(TDE.LOWER)
+				 FROM T_DEVIATION TDE
+				WHERE TDE.USEFLAG = 0
+				  AND TDE.TYPE = W.WARNTYPE
+				  AND TDE.PROJECTINFOID IS NULL)) || ',' || NVL(TO_CHAR(TD.UPPER),(SELECT TO_CHAR(TDE.UPPER)
+				 FROM T_DEVIATION TDE
+				WHERE TDE.USEFLAG = 0
+				  AND TDE.TYPE = W.WARNTYPE
+				  AND TDE.PROJECTINFOID IS NULL)) FROM T_DEVIATION TD WHERE LXL.PROJECTINFOID = TD.PROJECTINFOID AND TD.USEFLAG = 0 AND W.WARNTYPE = TD.TYPE) AS LOWERUPPER,
+		(SELECT NVL(TO_CHAR(TD.LOWER),(SELECT TO_CHAR(TDE.LOWER)
+				 FROM T_DEVIATION TDE
+				WHERE TDE.USEFLAG = 0
+				  AND TDE.TYPE = W.WARNTYPE
+				  AND TDE.PROJECTINFOID IS NULL)) || ',' || NVL(TO_CHAR(TD.UPPER),(SELECT TO_CHAR(TDE.UPPER)
+				 FROM T_DEVIATION TDE
+				WHERE TDE.USEFLAG = 0
+				  AND TDE.TYPE = W.WARNTYPE
+				  AND TDE.PROJECTINFOID IS NULL)) FROM T_DEVIATION TD WHERE TD.PROJECTINFOID IS NULL AND TD.USEFLAG = 0 AND W.WARNTYPE = TD.TYPE) AS LOWERUPPERDEFAULT,
+		LD.SHORTNAME AS CODE,
+		LD.PARTID AS PARTID,
+		LD.PIER AS PIER,
+		(SELECT TDC.NAME FROM T_DICTIONARY TDC WHERE W.GKBM = TO_NUMBER(TDC.ID) AND TDC.TYPEID = 1 AND TDC.USEFLAG = 0) AS CONTENT,
+		W.GKBM AS GKBM,
+		W.WARNID AS WARNID,
+		CD.POINTPLACE AS CDCODE,
+		LD.PARTNUM AS LDNAME,
+		CD.MILEAGEFLAG AS MILEAGEFLAG,
+		LD.TYPE AS LDTYPE,
+		LD.SEQ
+	</sql>
+	<sql id="selectWarnInfoCondition">
+		FROM T_WARN W,
+			T_LD LD,
+			T_CD CD,
+			T_LXL LXL
+		WHERE W.CONBEAMID = #{conbeamID}
+			AND LXL.CONBEAMID = W.CONBEAMID
+			AND W.PARTID = LD.PARTID
+			AND W.USEFLAG = 0
+			<if test="pier != null and pier != ''">
+				AND LD.PIER = #{pier}
+			</if>
+			<if test="ldCode != null and ldCode != ''">
+				AND REPLACE(LD.SHORTNAME,'''','AA') = #{ldCode}
+			</if>
+			<if test="warnTimeL != null and warnTimeL != ''">
+				AND TO_CHAR(W.WARNTIME,'yyyy-MM-dd') >= TO_CHAR(TO_DATE(#{warnTimeL},'yyyy-MM-dd'),'yyyy-MM-dd')
+			</if>
+			<if test="gkbm != null and gkbm != ''">
+				AND	W.GKBM = #{gkbm}
+			</if>
+			<if test="cdbm != null and cdbm != ''">
+				AND	CD.POINTPLACE = #{cdbm}
+			</if>
+			<if test="cdlx != null and cdlx != ''">
+				AND	CD.PTYPE = #{cdlx}
+			</if>
+			<if test="warnTimeU != null and warnTimeU != ''">
+				<![CDATA[ AND TO_CHAR(W.WARNTIME,'yyyy-MM-dd') <= TO_CHAR(TO_DATE(#{warnTimeU},'yyyy-MM-dd'),'yyyy-MM-dd')]]>
+			</if>
+			AND LD.USEFLAG = 0
+			<if test="dealFlg != null">
+				<if test="dealFlg == 1">
+				AND W.DEALFLAG = #{dealFlg}
+				</if>
+				<if test="dealFlg == 0">
+				AND W.DEALFLAG IN (0,2,3)
+				</if>
+			</if>
+			AND W.POINTID = CD.CDID
+			AND CD.USEFLAG = 0
+	</sql>
+	<select id="selectWarnInfo"	resultMap="WarnInfoMap">
+		<include refid="selectpagestrat"></include>
+		SELECT DISTINCT
+			<include refid="Base_Column_List" />
+			<include refid="selectWarnInfoCondition" />
+		ORDER BY
+			LD.PIER,
+			CD.MILEAGEFLAG,
+			LD.SHORTNAME,
+			W.GKBM,
+			W.WARNTYPE,
+			CD.POINTPLACE 
+		<include refid="selectpageend"></include>
+	</select>
+	<select id="selectWarnInfoTotalCount" resultType="int">
+		SELECT COUNT(DISTINCT W.WARNID)
+			<include refid="selectWarnInfoCondition" />
+	</select>
+	<!-- 检索超限表，查看当前梁段下所有工况的处置状态  未处置 -->
+	<select id="selectChuzhiCount" resultType="int">
+		SELECT COUNT(W.WARNID)
+			FROM T_WARN W
+		WHERE W.CONBEAMID = #{lxlid}
+		  AND W.PARTID = #{ldcode}
+		  AND W.DEALFLAG = 0
+		  AND W.GKBM = #{gkbm}
+	</select>
+	
+	<!-- 检索超限表，查看当前梁段下是否有处置中的数据 -->
+	<select id="selectDelLxlCount" resultType="int">
+		SELECT COUNT(W.WARNID)
+			FROM T_WARN W
+		WHERE W.CONBEAMID = #{lxlid}
+		  AND W.PARTID = #{ldcode}
+		  AND W.DEALFLAG = 2
+	</select>
+	
+	<select id="selectPierList" resultType="java.util.HashMap">
+		SELECT DISTINCT LD.PIER
+		FROM T_WARN W, T_LD LD
+		WHERE W.CONBEAMID = #{conbeamID}
+			AND W.PARTID = LD.PARTID
+			AND W.USEFLAG = 0
+			AND LD.USEFLAG = 0
+		ORDER BY
+			LD.PIER
+	</select>
+	<select id="selectLdCodeList" resultType="java.util.HashMap">
+		SELECT DISTINCT
+			LD.SHORTNAME AS CODE,
+			LD.TYPE AS TYPE,
+			LD.MILEAGEFLAG AS MILEAGEFLAG,
+			LD.SEQ AS LDINDEX
+		FROM T_WARN W, T_LD LD
+		WHERE W.CONBEAMID = #{conbeamID}
+			AND W.PARTID = LD.PARTID
+			AND W.USEFLAG = 0
+			AND LD.USEFLAG = 0
+			<if test="pier != null and pier !=''">
+				AND LD.PIER = #{pier}
+			</if>
+		ORDER BY
+			LDINDEX
+	</select>
+
+	<select id="selectGkbmAndContentList" resultType="java.util.HashMap">
+	SELECT DISTINCT
+		TO_NUMBER(DC.ID) AS GKBM,DC.NAME AS NAME
+	FROM T_DICTIONARY DC
+	WHERE DC.USEFLAG = 0
+	AND DC.TYPEID = 1
+	ORDER BY
+		DC.ID
+	</select>
+
+	<update id="updateWarnByPrimaryKey">
+		UPDATE T_WARN
+		SET DEALFLAG = #{dealstatus}
+		WHERE T_WARN.GKBM = #{gkbm}
+		  AND T_WARN.PARTID= #{ldcode}
+		  AND T_WARN.CONBEAMID= #{lxlid}
+	</update>
+
+	<resultMap id="WarnPczInfoMap" type="com.tky.lxl.platform.model.business.WarnPczInfo">
+		<result column="POINTID" jdbcType="FLOAT" property="partid" />
+		<result column="PCZ" jdbcType="VARCHAR" property="pcz" />
+		<result column="SHORTNAME" jdbcType="VARCHAR" property="shortname" />
+		<result column="PIER" jdbcType="FLOAT" property="pier" />
+		<result column="LDTYPE" jdbcType="FLOAT" property="ldtype" />
+		<result column="POINTPLACE" jdbcType="FLOAT" property="pointplace" />
+		<result column="MILEAGEFLAG" jdbcType="FLOAT" property="mileageflag" />
+		<result column="SEQ" jdbcType="DECIMAL" property="seq" />
+		<result column="ISWARN" jdbcType="VARCHAR" property="iswarn" />
+	</resultMap>
+
+<!-- 高程偏差 -->
+	<select id="selectDeltaWarnInfo" resultMap="WarnPczInfoMap">
+	 SELECT TLD.PARTID,
+				 CASE WHEN LDTMP.PCZ IS NULL THEN
+				 	NULL 
+				 ELSE 
+				 	LDTMP.PCZ * 1000
+				 END AS PCZ,
+				TLD.SHORTNAME AS SHORTNAME,
+				TLD.PIER AS PIER,
+				TLD.TYPE AS LDTYPE,
+				LDTMP.POINTPLACE,
+				CASE
+					WHEN LDTMP.MILEAGEFLAG IS NOT NULL THEN
+					 LDTMP.MILEAGEFLAG
+					ELSE
+					 TLD.MILEAGEFLAG
+				END AS MILEAGEFLAG,
+				TLD.SEQ,
+				LDTMP.ISWARN
+	 FROM T_LD TLD
+	 LEFT JOIN (SELECT DISTINCT LD.PARTID,
+									XD.PCZ		 AS PCZ,
+									LD.SHORTNAME	AS SHORTNAME,
+									LD.PIER		AS PIER,
+									LD.TYPE		AS LDTYPE,
+									CD.POINTPLACE,
+									CD.MILEAGEFLAG,
+									XD.ISWARN
+								FROM T_XXKZD XD,
+										 T_LD LD,
+										 T_CD CD,
+										 T_LXL LXL,
+										 (SELECT MAX(XD.GKBM) AS MAXGKBM, XD.NOWPARTID
+												FROM T_XXKZD XD
+											 WHERE XD.USEFLAG = 0
+												 AND XD.PSTATE = 0
+											 GROUP BY XD.NOWPARTID) GK
+							 WHERE XD.CONBEAMID = #{conbeamID}
+								 AND XD.WARNTYPEDELTA = 2
+								 AND LXL.CONBEAMID = XD.CONBEAMID
+								 AND XD.NOWPARTID = LD.PARTID
+								 AND XD.USEFLAG = 0
+								 AND LD.USEFLAG = 0
+								 AND XD.GKBM IN (2, 3, 4, 5, 6)
+								 AND XD.CDID = CD.CDID
+								 AND CD.USEFLAG = 0
+								 AND CD.PTYPE = 2
+								 AND CD.POINTPLACE IN (1, 2, 3, 4, 5)
+								 AND XD.GKBM = GK.MAXGKBM
+								 AND XD.NOWPARTID = GK.NOWPARTID
+								 AND XD.PSTATE=0) LDTMP
+		 ON TLD.PARTID = LDTMP.PARTID
+	WHERE TLD.CONBEAMID = #{conbeamID}
+		AND TLD.USEFLAG = 0
+	ORDER BY TLD.PIER, TLD.SEQ, MILEAGEFLAG,LDTMP.POINTPLACE
+	</select>
+
+<!-- 立模偏差 -->
+	<select id="selectLmbgWarnInfo" resultMap="WarnPczInfoMap">
+	SELECT TLD.PARTID,
+				 CASE WHEN LDTMP.PCZ IS NULL THEN
+				 	NULL 
+				 ELSE 
+				 	LDTMP.PCZ * 1000
+				 END AS PCZ,
+				 TLD.SHORTNAME AS SHORTNAME,
+				 TLD.PIER AS PIER,
+				 TLD.TYPE AS LDTYPE,
+				 LDTMP.POINTPLACE,
+				 CASE
+					 WHEN LDTMP.MILEAGEFLAG IS NOT NULL THEN
+						LDTMP.MILEAGEFLAG
+					 ELSE
+						TLD.MILEAGEFLAG
+				 END AS MILEAGEFLAG,
+				 TLD.SEQ,
+				 LDTMP.ISWARN
+		FROM T_LD TLD
+		LEFT JOIN (SELECT DISTINCT LD.PARTID,
+									 XD.PCZ		 AS PCZ,
+									 LD.SHORTNAME	AS SHORTNAME,
+									 LD.PIER		AS PIER,
+									 LD.TYPE		AS LDTYPE,
+									 CD.POINTPLACE,
+									 CD.MILEAGEFLAG,
+									 XD.ISWARN
+								 FROM T_XXKZD XD, T_LD LD, T_CD CD, T_LXL LXL
+								WHERE XD.CONBEAMID = #{conbeamID}
+									AND XD.WARNTYPEDELTA = 3
+									AND LXL.CONBEAMID = XD.CONBEAMID
+									<!-- AND XD.PARTID = LD.PARTID -->
+									AND XD.NOWPARTID = LD.PARTID
+									AND XD.PSTATE=0
+									AND XD.USEFLAG = 0
+									AND LD.USEFLAG = 0
+									AND XD.GKBM = 1
+									AND XD.CDID = CD.CDID
+									AND CD.USEFLAG = 0
+									AND CD.PTYPE = 1
+									AND CD.POINTPLACE IN (1, 2, 3, 4, 5, 6)) LDTMP
+			ON TLD.PARTID = LDTMP.PARTID
+	 WHERE TLD.CONBEAMID = #{conbeamID}
+		 AND TLD.USEFLAG = 0
+	ORDER BY TLD.PIER, TLD.SEQ, MILEAGEFLAG,LDTMP.POINTPLACE
+	</select>
+
+<!-- 中线偏差 -->
+	<select id="selectOutlWarnInfo" resultMap="WarnPczInfoMap">
+	SELECT TLD.PARTID,
+				 CASE WHEN LDTMP.PCZ IS NULL THEN
+				 	NULL 
+				 ELSE 
+				 	LDTMP.PCZ * 1000
+				 END AS PCZ,
+				 TLD.SHORTNAME AS SHORTNAME,
+				 TLD.PIER AS PIER,
+				 TLD.TYPE AS LDTYPE,
+				 LDTMP.POINTPLACE,
+				 CASE
+					 WHEN LDTMP.MILEAGEFLAG IS NOT NULL THEN
+						LDTMP.MILEAGEFLAG
+					 ELSE
+						TLD.MILEAGEFLAG
+				 END AS MILEAGEFLAG,
+				 TLD.SEQ,
+				 LDTMP.ISWARN
+		FROM T_LD TLD
+		LEFT JOIN (SELECT DISTINCT LD.PARTID,
+									 XD.XXPCZ		AS PCZ,
+									 LD.SHORTNAME	AS SHORTNAME,
+									 LD.PIER		AS PIER,
+									 LD.TYPE		AS LDTYPE,
+									 CD.POINTPLACE,
+									 CD.MILEAGEFLAG,
+									 XD.ISWARN
+								 FROM T_XXKZD XD,
+											T_LD LD,
+											T_CD CD,
+											T_LXL LXL,
+											(SELECT MAX(XD.GKBM) AS MAXGKBM, XD.NOWPARTID
+												 FROM T_XXKZD XD
+												WHERE XD.USEFLAG = 0
+													AND XD.PSTATE = 0
+												GROUP BY XD.NOWPARTID) GK
+								WHERE XD.CONBEAMID = #{conbeamID}
+									AND XD.WARNTYPEOUTL = 1
+									AND LXL.CONBEAMID = XD.CONBEAMID
+									AND XD.NOWPARTID = LD.PARTID
+									AND XD.USEFLAG = 0
+									AND LD.USEFLAG = 0
+									AND XD.GKBM IN (2, 3, 4, 5, 6)
+									AND XD.CDID = CD.CDID
+									AND CD.USEFLAG = 0
+									AND CD.PTYPE = 2
+									AND CD.POINTPLACE = 3
+									AND XD.GKBM = GK.MAXGKBM
+									AND XD.NOWPARTID = GK.NOWPARTID
+									AND XD.PSTATE=0) LDTMP
+			ON TLD.PARTID = LDTMP.PARTID
+	 WHERE TLD.CONBEAMID = #{conbeamID}
+		 AND TLD.USEFLAG = 0
+	ORDER BY TLD.PIER, TLD.SEQ, MILEAGEFLAG,LDTMP.POINTPLACE
+	</select>
+
+<!-- 错台 -->
+	<select id="selectLdctInfo" resultMap="WarnPczInfoMap">
+	SELECT TLD.PARTID,
+				 CASE WHEN LDTMP.PCZ IS NULL THEN
+				 	NULL 
+				 ELSE 
+				 	LDTMP.PCZ * 1000
+				 END AS PCZ,
+				TLD.SHORTNAME AS SHORTNAME,
+				TLD.PIER AS PIER,
+				TLD.TYPE AS LDTYPE,
+				LDTMP.POINTPLACE,
+				CASE
+					WHEN LDTMP.MILEAGEFLAG IS NOT NULL THEN
+					 LDTMP.MILEAGEFLAG
+					ELSE
+					 TLD.MILEAGEFLAG
+				END AS MILEAGEFLAG,
+				TLD.SEQ,
+				LDTMP.ISWARN
+	 FROM T_LD TLD
+	 LEFT JOIN (SELECT DISTINCT LD.PARTID,
+									XD.PCZ		 AS PCZ,
+									LD.SHORTNAME	AS SHORTNAME,
+									LD.PIER		AS PIER,
+									LD.TYPE		AS LDTYPE,
+									CD.POINTPLACE,
+									CD.MILEAGEFLAG,
+									XD.ISWARN
+								FROM T_XXKZD XD,
+										 T_LD LD,
+										 T_CD CD,
+										 T_LXL LXL
+							 WHERE XD.CONBEAMID = #{conbeamID}
+								 AND XD.WARNTYPEDELTA = 2
+								 AND LXL.CONBEAMID = XD.CONBEAMID
+								 <!-- AND XD.PARTID = LD.PARTID -->
+								 AND XD.NOWPARTID = LD.PARTID
+								 AND XD.PSTATE = 0
+								 AND XD.USEFLAG = 0
+								 AND LD.USEFLAG = 0
+								 AND XD.GKBM = 3
+								 AND XD.CDID = CD.CDID
+								 AND CD.USEFLAG = 0
+								 AND CD.PTYPE = 2
+								 AND CD.POINTPLACE IN (1, 2, 3, 4, 5)
+								 ) LDTMP
+		 ON TLD.PARTID = LDTMP.PARTID
+	WHERE TLD.CONBEAMID = #{conbeamID}
+		AND TLD.USEFLAG = 0
+	ORDER BY TLD.PIER, TLD.SEQ, MILEAGEFLAG,LDTMP.POINTPLACE
+	</select>
+
+	<!--查询  -->
+	<select id="selectLdInfo" resultMap="WarnPczInfoMap">
+	SELECT DISTINCT
+		LD.PARTID,
+		LD.SHORTNAME AS SHORTNAME,
+		LD.PIER AS PIER,
+		LD.TYPE AS LDTYPE,
+		LD.MILEAGEFLAG
+	FROM T_LD LD, T_LXL LXL
+	WHERE LD.CONBEAMID = #{conbeamID}
+		AND LXL.CONBEAMID = LD.CONBEAMID
+		AND LD.USEFLAG = 0
+		AND LXL.USEFLAG = 0
+	ORDER BY
+		LD.PIER
+	</select>
+	
+	<!-- 查询某连续梁的超限处置信息 -->
+	<select id="getDealMessage" resultType="com.tky.lxl.platform.model.business.WarnLdCount" parameterType="java.lang.String">
+	SELECT CONBEAMID,
+		COUNT(CASE
+				WHEN MDEALFLAG IN ('0') THEN
+				'WARNLDCOUNTNODEAL'
+			 END) WARNLDCOUNTNODEAL,
+		COUNT(CASE
+				WHEN MDEALFLAG IN ('2','3') THEN
+				'WARNLDCOUNTDEAL'
+			 END) WARNLDCOUNTDEAL,
+		COUNT(CASE
+				WHEN MDEALFLAG IN ('4') THEN
+				'WARNLDCOUNTYESDEAL'
+			 END) WARNLDCOUNTYESDEAL
+  FROM (SELECT DISTINCT LXL.CONBEAMID AS CONBEAMID,
+						WARN.PARTID AS WPARTID,
+						MIN(CASE
+							  WHEN WARN.DEALFLAG = 1 THEN
+								4
+							  ELSE
+								WARN.DEALFLAG
+							END) AS MDEALFLAG
+		  FROM T_WARN WARN
+		 INNER JOIN T_LD LD
+			ON WARN.PARTID = LD.PARTID
+			AND LD.USEFLAG = 0
+			AND WARN.USEFLAG = 0
+		 INNER JOIN T_LXL LXL
+			ON LD.CONBEAMID = LXL.CONBEAMID
+			AND LXL.USEFLAG = 0
+		 WHERE LXL.CONBEAMID = #{lxlid}
+		 GROUP BY LXL.CONBEAMID, WARN.PARTID
+		 ORDER BY WARN.PARTID)
+		GROUP BY CONBEAMID
+	</select>
+	
+	<!-- 更新连续梁的处置信息 -->
+	<update id="updateLxlDeal" parameterType="com.tky.lxl.platform.model.business.WarnLdCount">
+	UPDATE T_LXL T SET T.WARNLDCOUNTDEAL=#{warnLdCount.warnldcountdeal} ,T.WARNLDCOUNTNODEAL=#{warnLdCount.warnldcountnodeal},
+	T.WARNLDCOUNT=(#{warnLdCount.warnldcountnodeal}+#{warnLdCount.warnldcountdeal}+#{warnLdCount.warnldcountyesdeal}) 
+	WHERE T.CONBEAMID=#{warnLdCount.conbeamid}
+	</update>
+	
+	<!-- 关闭超限的待关闭的信息 -->
+	<update id="warnClose">
+		update T_WARN t set t.dealflag = 1 where t.conbeamid = #{conbeamId} and t.partid=#{partId} and t.gkbm=#{gkbm} and t.useflag=0
+	</update>
+</mapper>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.UserLxlMapper">
+
+	<resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.UserLxl">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+	  <result column="CONBEAMID" jdbcType="DECIMAL" property="conBeamId" />
+	  <result column="CONBEAMNAME" jdbcType="DECIMAL" property="conBeamName" />
+	  <result column="LENGTH" jdbcType="DECIMAL" property="conBeamLenth" />
+	  <result column="USERNAME" jdbcType="VARCHAR" property="userName" />
+	  <result column="SECTION_ID" jdbcType="DECIMAL" property="sectionId" />
+	  <result column="PROJECTAREAID" jdbcType="DECIMAL" property="areaId" />
+	  <result column="USE_FLAG" jdbcType="DECIMAL" property="useFlag" />
+	</resultMap>
+  
+	<!-- 标段管理员 连续梁授权 获取标段下的连续梁及授权用户数 -->
+	<select id="selectUserLxlBySectionId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	    /*获取标段下的连续梁*/
+	    SELECT
+	      T_LXL.CONBEAMID,
+	      T_LXL.NAME AS CONBEAMNAME,
+	      T_LXL.LENGTH
+	    FROM
+	      T_LXL
+	    WHERE
+	      T_LXL.USEFLAG = 0  /*在用*/
+		AND
+		  T_LXL.SECTIONID = #{sectionId,jdbcType=DECIMAL}
+	    ORDER BY
+	      CONBEAMID
+	</select>
+	
+	<!-- 标段管理员 连续梁授权 获取标段下用户的授权信息 -->
+	<select id="selectUserBySectionId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		SELECT
+		  T_USER_LXL.SECTION_ID,
+		  T_USER_LXL.ACCOUNT,
+		  T_USER_LXL.USE_FLAG
+		FROM
+		  T_USER_LXL     /*用户连续梁*/
+		WHERE
+		  T_USER_LXL.USE_FLAG = 0   /*在用 授权用户*/
+		AND
+		  T_USER_LXL.SECTION_ID = #{sectionId,jdbcType=DECIMAL}
+	</select>
+	
+	<!-- 标段管理员 连续梁授权 获取用户的授权连续梁信息 -->
+	<select id="selectGrantInfoByUser" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT
+		  T_USER_LXL.CONBEAMID
+		FROM
+		  T_USER_LXL     /*用户连续梁*/
+		WHERE
+		  T_USER_LXL.USE_FLAG = 0   /*在用 授权用户*/
+		AND
+		  ACCOUNT = #{account,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 标段管理员 连续梁授权 授权 -->
+	<insert id="grantConBeamToUser" parameterType="com.tky.lxl.platform.model.business.UserLxl">
+	
+		<selectKey keyProperty="count" resultType="int" order="BEFORE">
+			SELECT COUNT(ID) FROM T_USER_LXL
+			WHERE ACCOUNT = #{account,jdbcType=VARCHAR}
+			AND CONBEAMID = #{conBeamId,jdbcType=DECIMAL}
+		</selectKey>
+		
+		<if test="count > 0">
+			UPDATE
+				T_USER_LXL
+			SET
+				USE_FLAG = 0,	/*授权*/
+		        <if test="userName != null">
+		        	USERNAME = #{userName,jdbcType=VARCHAR},
+		      	</if>
+		        <if test="sectionId != null">
+		        	SECTION_ID = #{sectionId,jdbcType=DECIMAL},
+		      	</if>
+		        <if test="areaId != null">
+		        	AREA_ID = #{areaId,jdbcType=DECIMAL},
+		      	</if>
+				UPDATE_USER_ID = #{updateUserId,jdbcType=DECIMAL},
+				UPDATE_DATE_TIME = SYSDATE
+			WHERE
+				ACCOUNT = #{account,jdbcType=VARCHAR}
+			AND
+				CONBEAMID = #{conBeamId,jdbcType=DECIMAL}
+		</if>
+		<if test="count==0">
+		    insert into T_USER_LXL
+		    <trim prefix="(" suffix=")" suffixOverrides=",">
+		        ID,
+		      <if test="account != null">
+		        ACCOUNT,
+		      </if>
+		      <if test="conBeamId != null">
+		        CONBEAMID,
+		      </if>
+		      <if test="userName != null">
+		        USERNAME,
+		      </if>
+		      <if test="sectionId != null">
+		      	SECTION_ID,
+		      </if>
+		      <if test="areaId != null">
+		       	AREA_ID,
+		      </if>
+		      <if test="useFlag != null">
+		        USE_FLAG,
+		      </if>
+		      <if test="updateUserId != null">
+		        UPDATE_USER_ID,
+		      </if>
+		        UPDATE_DATE_TIME,
+		    </trim>
+		    <trim prefix="values (" suffix=")" suffixOverrides=",">
+		        T_USER_LXL_ID.nextval,
+		      <if test="account != null">
+		        #{account,jdbcType=VARCHAR},
+		      </if>
+		      <if test="conBeamId != null">
+		        #{conBeamId,jdbcType=DECIMAL},
+		      </if>
+		      <if test="userName != null">
+		        #{userName,jdbcType=VARCHAR},
+		      </if>
+		      <if test="sectionId != null">
+		      	#{sectionId,jdbcType=DECIMAL},
+		      </if>
+		      <if test="areaId != null">
+		       	#{areaId,jdbcType=DECIMAL},
+		      </if>
+		      <if test="useFlag != null">
+		        #{useFlag,jdbcType=DECIMAL},
+		      </if>
+		      <if test="updateUserId != null">
+		        #{updateUserId,jdbcType=DECIMAL},
+		      </if>
+		        SYSDATE,
+		    </trim>
+		</if>
+	</insert>
+	
+	<!-- 标段管理员 连续梁授权 取消授权(取消选择用户的所有连续梁授权) -->
+	<update id="cancelGrant" parameterType="com.tky.lxl.platform.model.business.UserLxl">
+		UPDATE
+			T_USER_LXL
+		SET
+		   USE_FLAG = 1,	/*取消授权 逻辑删除*/
+		   UPDATE_USER_ID = #{updateUserId,jdbcType=DECIMAL},
+		   UPDATE_DATE_TIME = SYSDATE
+		WHERE
+			ACCOUNT = #{account,jdbcType=VARCHAR}
+	</update>
+	
+</mapper>

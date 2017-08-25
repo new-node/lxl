@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.mobile.MobileMapper">
+ <resultMap id="QSLDInfoMap" type="com.tky.lxl.platform.model.mobile.QSLDInfo">
+        <result column="SECTIONNAME" jdbcType="VARCHAR"  property="sectionName" />
+        <result column="NAME"  jdbcType="VARCHAR"  property="name" />
+        <result column="CONBEAMID"  jdbcType="VARCHAR"  property="conbeamid" />
+     	<result column="COU" jdbcType="DECIMAL"   property="cou" />
+    </resultMap>
+    
+	<select id="getQSLDInfoBysectionId"  resultMap="QSLDInfoMap">
+		SELECT   l.NAME,l.CONBEAMID,  COUNT(q.PARTID) AS COU 
+		FROM  T_LXL l ,VIEW_QSLD  q 
+		WHERE  l.CONBEAMID = q.CONBEAMID 
+		<if test="conbeamId!=null">
+			AND l.CONBEAMID in 
+        <foreach item="item" index="index" collection="conbeamId" open="(" separator="," close=")">
+		    #{item}
+	    </foreach>
+		</if>
+		<if test="sectionId!=null">
+			AND l.SECTIONID = #{sectionId}
+		</if>
+		GROUP BY  l.NAME, l.CONBEAMID 
+	</select>
+	<select id="getQSLDInfoByprojectId"  resultMap="QSLDInfoMap">
+		SELECT p.NAME AS SECTIONNAME , l.NAME,l.CONBEAMID,COUNT(q.PARTID)  AS COU 
+		FROM  PROJECTSECTION p ,T_LXL l ,VIEW_QSLD  q 
+		WHERE  p.ID = l.SECTIONID
+		AND  l.CONBEAMID = q.CONBEAMID 
+		<if test="conbeamId!=null">
+			AND l.CONBEAMID in 
+	    <foreach item="item" index="index" collection="conbeamId" open="(" separator="," close=")">
+		    #{item}
+	    </foreach>
+		</if>
+		<if test="projectId!=null">
+			AND l.projectinfoid = #{projectId}
+		</if>
+		GROUP BY  p.NAME ,l.NAME, l.CONBEAMID 
+	</select>
+	<select id="getProjectIdByconbeamId"   parameterType="String" resultType="Long">
+		<if test="conbeamId!=null">
+			select t.projectinfoid from T_LXL t where t.conbeamid = #{conbeamId} 
+		</if>
+	</select>
+	<select id="getqsldinfoByconbeamid"   parameterType="String"  resultType="String">
+		<if test="conbeamId!=null">
+			select t.PARTNUM from VIEW_QSLD t where t.CONBEAMID = #{conbeamId} order by t.PARTNUM ,t.SEQ
+		</if>
+	</select>
+</mapper>
+

@@ -1,0 +1,81 @@
+.modelBody {
+	margin: 10px;
+	height:120px !important;
+}
+
+#addDatumPoint >.managementPage{
+	width: 311px;
+	height: 227px;
+	left:23%;
+}
+#updateDatumPoint>.managementPage {
+	width: 311px;
+	height: 306px;
+}
+.datumPoint-input {
+    width: 148px;
+    /*  height: 24px !important;*/
+    text-decoration: none;
+    color: #000000;
+    text-align: left;
+    border: 1px solid #ABADB3;
+}
+.datumPoint-span{
+	font-size:14px !important;
+}
+.datumPoint-table td{
+	border:none !important;
+	
+}
+.datumPoint-table{
+	height:90px;
+}
+.right-td{
+	float:right;
+	margin:3px;
+}
+.modelBottom{
+	padding-left:40px !important;
+}
+.datumPoint-text{
+	font-size:14px !important;
+	width:148px;
+	height:78px;
+	line-height:20px !important;
+}
+.updatemodelBody{
+	margin: 10px;
+	height:210px !important;
+}
+#deleteDatumPoint>.managementPage{
+	width: 311px;
+	height: 152px;
+}
+.warning-span{
+	font-size:20px !important
+}
+.deletemodelBody {
+	margin: 10px;
+	height:60px !important;
+}
+.warning-ps{
+	color:red !important;
+}
+#watchRecord>.managementPage{
+	width:857px;
+	height:273px;
+	left:23%;
+}
+.showRecord {
+	margin-top:10px;
+	overflow-y:auto;
+	max-height:140px;
+	width:98%;
+}
+.watchmodelBottom{
+	padding-left:350px !important;
+}
+.watchmodelBody{
+	margin: 10px;
+	height:170px !important;
+}

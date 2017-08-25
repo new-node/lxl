@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.business.XXKZDMapper">
+	<select id="getXXKZDCount" resultType="int">
+		select count(t.xxkzdid)
+		 from T_XXKZD t
+		 inner join T_CD c
+			 on t.conbeamid = c.conbeamid
+			and t.nowpartid = c.partid
+			and t.gkbm = c.gkbm
+			and t.cdwz = c.pointplace
+		 where t.conbeamid = #{conbeamid}
+			and t.nowpartid = #{beam}
+			and t.gkbm = #{condition}
+				/*and t.cdid = '2722'*/
+			and t.pstate = 0
+			and t.useflag = 0
+	</select>
+</mapper>

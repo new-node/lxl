@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.LoginUserTempMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.tky.lxl.platform.model.business.LoginUserTemp">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+		<result column="RANDOMCODE" jdbcType="VARCHAR" property="randomcode" />
+		<result column="UPDATETIME" jdbcType="TIMESTAMP" property="updatetime" />
+		<result column="PRIVATEKEY" jdbcType="VARCHAR" property="privatekey" />
+		<result column="PUBLICKEY" jdbcType="VARCHAR" property="publickey" />
+		<result column="DESKEY" jdbcType="VARCHAR" property="deskey" />
+		<result column="USERINFOID" jdbcType="DECIMAL" property="userinfoid" />
+		<result column="USEFLAG" jdbcType="DECIMAL" property="useflag" />
+		<result column="CREATETIME" jdbcType="TIMESTAMP" property="createtime" />
+		<result column="DEVICENO" jdbcType="VARCHAR" property="deviceno" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		ID, ACCOUNT, RANDOMCODE, UPDATETIME, PRIVATEKEY, PUBLICKEY, DESKEY,
+		USERINFOID, USEFLAG,
+		CREATETIME, DEVICENO
+	</sql>
+	
+	<!-- 设为观测人员时添加更新数据 -->
+	<insert id="saveLoginUserForObserver" parameterType="com.tky.lxl.platform.model.business.LoginUserTemp">
+
+		<selectKey keyProperty="count" resultType="int" order="BEFORE">
+			SELECT COUNT(ID) FROM T_LOGINUSERTEMP
+			WHERE ACCOUNT =
+			#{account,jdbcType=VARCHAR}
+		</selectKey>
+
+		<if test="count > 0">
+			UPDATE
+				T_LOGINUSERTEMP
+			SET
+				USEFLAG = 0,
+				UPDATETIME = SYSDATE
+			WHERE
+				ACCOUNT = #{ account,jdbcType=VARCHAR }
+		</if>
+		<if test="count == 0">
+			insert into T_LOGINUSERTEMP
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+				ID,
+				<if test="account != null">
+					ACCOUNT,
+				</if>
+				CREATETIME,
+				UPDATETIME,
+			</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides=",">
+				SEQ_LOGINUSERTEMP_ID.NEXTVAL,
+				<if test="account != null">
+					#{account,jdbcType=VARCHAR},
+				</if>
+				SYSDATE,
+				SYSDATE,
+			</trim>
+		</if>
+	</insert>
+
+	<!-- 取消观测人员时更新数据 -->
+	<update id="cancelLoginUserForObserver" parameterType="com.tky.lxl.platform.model.business.LoginUserTemp">
+		UPDATE
+			T_LOGINUSERTEMP
+		SET
+			USEFLAG = 1,
+			UPDATETIME = SYSDATE
+		WHERE
+			ACCOUNT = #{ account,jdbcType=VARCHAR }
+	</update>
+</mapper>

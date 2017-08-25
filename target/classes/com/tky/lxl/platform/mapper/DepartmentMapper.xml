@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.business.DepartmentMapper">
+	<sql id="Base_Column_List">
+		ID,
+		CATEGORYID,
+		CREATEDATE,
+		DELETEDATE,
+		DEPLEVEL,
+		GRADE,
+		NAME,
+		PARENTID,
+		PRIORITY,
+		PROJECTAREAID,
+		PROJECTINFOID,
+		PROJECTSECTIONID,
+		RID,
+		SHORTNAME,
+		UDPATEDATE,
+		USEFLAG
+	</sql>
+	
+	<!-- 部门 -->
+	<select id="selectDepartmentByID" resultType="com.tky.lxl.platform.model.business.Department">
+		SELECT <include refid="Base_Column_List" />
+		FROM DEPARTMENT
+		WHERE ID = #{departId}
+	</select>
+	
+	<!-- 部门一览 -->
+	<select id="selectDepartmentByIdList" resultType="com.tky.lxl.platform.model.business.Department">
+		SELECT <include refid="Base_Column_List" />
+		FROM DEPARTMENT
+		WHERE ID IN 
+        <foreach item="item" index="index" collection="departs" open="(" separator="," close=")">
+		#{item}
+	    </foreach>
+
+	</select>
+	
+</mapper>

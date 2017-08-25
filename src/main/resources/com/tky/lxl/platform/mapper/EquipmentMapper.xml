@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.EquipmentMapper">
+<!-- 	<resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.Equipment"> -->
+<!-- 		    <id column="EQUIMENTID" jdbcType="DECIMAL" property="equimentid" /> -->
+<!-- 		    <result column="CATEGORYID" jdbcType="CHAR" property="categoryid" /> -->
+<!-- 		    <result column="SECTIONID" jdbcType="DECIMAL" property="sectionid" /> -->
+<!-- 		    <result column="PROJECTID" jdbcType="DECIMAL" property="projectid" /> -->
+<!-- 		    <result column="CONBEAMID" jdbcType="DECIMAL" property="conbeamid" /> -->
+<!-- 		    <result column="CODE" jdbcType="CHAR" property="code" /> -->
+<!-- 		    <result column="NAME" jdbcType="VARCHAR" property="name" /> -->
+<!-- 		    <result column="EQUTYPE" jdbcType="DECIMAL" property="equtype" /> -->
+<!-- 		    <result column="MAKER" jdbcType="VARCHAR" property="maker" /> -->
+<!-- 		    <result column="MODELNO" jdbcType="VARCHAR" property="modelno" /> -->
+<!-- 		    <result column="CHECKUPDATETIME"  property="checkupdatetime" /> -->
+<!-- 		    <result column="USEFLAG" jdbcType="DECIMAL" property="useflag" /> -->
+<!-- 		    <result column="CREATENAME" jdbcType="CHAR" property="createname" /> -->
+<!-- 		    <result column="CREATEDATE" jdbcType="CHAR" property="createdate" /> -->
+<!-- 		    <result column="UPDATENAME" jdbcType="CHAR" property="updatename" /> -->
+<!-- 		    <result column="UPDATEDATE" jdbcType="CHAR" property="updatedate" /> -->
+<!-- 		    <result column="CHECKUSER" jdbcType="VARCHAR" property="checkuser" /> -->
+<!-- 		    <result column="ISVERFIFY" jdbcType="DECIMAL" property="isverfify" /> -->
+<!-- 		    <result column="VERIFYUSER" jdbcType="VARCHAR" property="verifyuser" /> -->
+<!-- 		    <result column="VERIFYTIME" jdbcType="TIMESTAMP" property="verifytime" /> -->
+<!-- 		    <result column="VERIFYDAY" jdbcType="TIMESTAMP" property="verifyday" /> -->
+<!-- 		    <result column="UPDATEACCOUNT" jdbcType="VARCHAR" property="updateaccount" /> -->
+<!-- 		    <result column="CREATEACCOUNT" jdbcType="VARCHAR" property="createaccount" /> -->
+<!-- 	</resultMap> -->
+	<!-- 分页查询 -->
+	<sql id="selectpagestart">
+		SELECT *
+		FROM (SELECT ROWNUM RW,A.*
+		FROM (
+	</sql>
+	<sql id="selectpageend">
+		 <![CDATA[
+		          ) A
+		         WHERE ROWNUM < #{endNum}) B
+		 WHERE B.RW > #{startNum}
+		 ]]>
+	</sql>
+	<select id="queryEquipmentCount" resultType="int" parameterType="Map">
+		SELECT
+			COUNT(T.EQUIMENTID)
+		FROM
+			T_EQUIMENT T
+		WHERE
+			1=1
+		<if test="categoryid !=null">
+			AND T.CATEGORYID IN 
+        <foreach item="item" index="index" collection="categoryid" open="(" separator="," close=")">
+		    #{item}
+	    </foreach>
+		</if>
+		<if test="projectid !=null">
+			AND T.PROJECTID = #{projectid}
+		</if>
+		<if test="sectionid !=null">
+			AND T.SECTIONID IN 
+        <foreach item="item" index="index" collection="sectionid" open="(" separator="," close=")">
+		    #{item}
+	    </foreach>
+		</if>
+			AND T.USEFLAG = 0
+	</select>
+	<select id="queryEquipment" parameterType="Map" 
+	resultType="com.tky.lxl.platform.model.business.Equipment">
+		<include refid="selectpagestart"></include>
+		SELECT
+		T.EQUIMENTID,
+		T.NAME,
+		T.EQUTYPE,
+		T.MODELNO,
+		T.MAKER,
+		TO_CHAR(T.CHECKUPDATETIME,'yyyy-MM-dd hh:mi:ss') CHECKUPDATETIME,
+		T.UPDATEACCOUNT,
+		T.CREATEACCOUNT,
+		CATE.NAME AS PIANQUNAME,
+		PROINFO.NAMEABBR AS PROJECTNAME,
+		PROSECTION.NAME AS BIAODUANNAME
+		FROM
+		T_EQUIMENT T
+		LEFT JOIN CATEGORYITEM CATE
+		ON T.CATEGORYID = CATE.ID
+		LEFT JOIN PROJECTINFO PROINFO
+		ON T.PROJECTID = PROINFO.ID
+		LEFT JOIN PROJECTSECTION PROSECTION
+		ON T.SECTIONID = PROSECTION.ID
+		WHERE 1=1
+        <if test="categoryid !=null">
+            AND T.CATEGORYID in 
+        <foreach item="item" index="index" collection="categoryid" open="(" separator="," close=")">
+		    #{item}
+	    </foreach>
+        </if>
+        <if test="projectid !=null">
+            AND T.PROJECTID = #{projectid}
+        </if>
+        <if test="sectionid !=null">
+            AND T.SECTIONID IN 
+        <foreach item="item" index="index" collection="sectionid" open="(" separator="," close=")">
+		    #{item}
+	    </foreach>
+        </if>
+		AND T.USEFLAG = 0
+		ORDER BY T.EQUIMENTID
+		<include refid="selectpageend"></include>
+	</select>
+	<insert id="insertEquipment" parameterType="com.tky.lxl.platform.model.business.Equipment">
+    INSERT INTO T_EQUIMENT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        EQUIMENTID,
+      <if test="equtype != null">
+        EQUTYPE,
+      </if>
+      <if test="code != null">
+        CODE,
+      </if>
+      <if test="name != null">
+        NAME,
+      </if>
+      <if test="maker != null">
+        MAKER,
+      </if>
+      <if test="modelno != null">
+        MODELNO,
+      </if>
+      <if test="checkuser != null">
+        CHECKUSER,
+      </if>
+      <if test="checkupdatetime != null">
+        CHECKUPDATETIME,
+      </if>
+      <if test="isverfify != null">
+        ISVERFIFY,
+      </if>
+      <if test="verifyuser != null">
+        VERIFYUSER,
+      </if>
+      <if test="verifytime != null">
+        VERIFYTIME,
+      </if>
+      <if test="verifyday != null">
+        VERIFYDAY,
+      </if>
+      <if test="categoryid != null">
+        CATEGORYID,
+      </if>
+      <if test="projectid != null">
+        PROJECTID,
+      </if>
+      <if test="sectionid != null">
+        SECTIONID,
+      </if>
+      <if test="useflag != null">
+        USEFLAG,
+      </if>
+      <if test="conbeamid != null">
+        CONBEAMID,
+      </if>
+      <if test="createname != null">
+        CREATENAME,
+      </if>
+      <if test="createdate != null">
+        CREATEDATE,
+      </if>
+      <if test="createaccount != null">
+        CREATEACCOUNT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        SEQ_T_EQUIMENT.NEXTVAL,
+      <if test="equtype != null">
+        #{equtype},
+      </if>
+      <if test="code != null">
+        #{code},
+      </if>
+      <if test="name != null">
+        #{name},
+      </if>
+      <if test="maker != null">
+        #{maker},
+      </if>
+      <if test="modelno != null">
+        #{modelno},
+      </if>
+      <if test="checkuser != null">
+        #{checkuser},
+      </if>
+      <if test="checkupdatetime != null">
+        #{checkupdatetime},
+      </if>
+      <if test="isverfify != null">
+        #{isverfify},
+      </if>
+      <if test="verifyuser != null">
+        #{verifyuser},
+      </if>
+      <if test="verifytime != null">
+        #{verifytime},
+      </if>
+      <if test="verifyday != null">
+        #{verifyday},
+      </if>
+      <if test="categoryid != null">
+        #{categoryid},
+      </if>
+      <if test="projectid != null">
+        #{projectid},
+      </if>
+      <if test="sectionid != null">
+        #{sectionid},
+      </if>
+      <if test="useflag != null">
+        #{useflag},
+      </if>
+      <if test="conbeamid != null">
+        #{conbeamid},
+      </if>
+      <if test="createname != null">
+        #{createname},
+      </if>
+      <if test="createdate != null">
+        #{createdate},
+      </if>
+      <if test="createaccount != null">
+        #{createaccount},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateEquipment" parameterType="com.tky.lxl.platform.model.business.Equipment">
+    UPDATE T_EQUIMENT
+    <set>
+      <if test="equtype != null">
+        EQUTYPE = #{equtype},
+      </if>
+      <if test="code != null">
+        CODE = #{code},
+      </if>
+      <if test="name != null">
+        NAME = #{name},
+      </if>
+      <if test="maker != null">
+        MAKER = #{maker},
+      </if>
+      <if test="modelno != null">
+        MODELNO = #{modelno},
+      </if>
+      <if test="checkuser != null">
+        CHECKUSER = #{checkuser},
+      </if>
+      <if test="checkupdatetime != null">
+        CHECKUPDATETIME = #{checkupdatetime},
+      </if>
+      <if test="isverfify != null">
+        ISVERFIFY = #{isverfify},
+      </if>
+      <if test="verifyuser != null">
+        VERIFYUSER = #{verifyuser},
+      </if>
+      <if test="verifytime != null">
+        VERIFYTIME = #{verifytime},
+      </if>
+      <if test="verifyday != null">
+        VERIFYDAY = #{verifyday},
+      </if>
+      <if test="categoryid != null">
+        CATEGORYID = #{categoryid},
+      </if>
+      <if test="projectid != null">
+        PROJECTID = #{projectid},
+      </if>
+      <if test="sectionid != null">
+        SECTIONID = #{sectionid},
+      </if>
+      <if test="useflag != null">
+        USEFLAG = #{useflag},
+      </if>
+      <if test="conbeamid != null">
+        CONBEAMID = #{conbeamid},
+      </if>
+      <if test="updatename != null">
+        UPDATENAME = #{updatename},
+      </if>
+      <if test="updatedate != null">
+        UPDATEDATE = #{updatedate},
+      </if>
+      <if test="updateaccount != null">
+        UPDATEACCOUNT = #{updateaccount},
+      </if>
+    </set>
+    WHERE EQUIMENTID = #{equimentid}
+  </update>
+</mapper>

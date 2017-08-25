@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.system.UserOperateLogMapper" >
+  <!-- 将用户操作记录存入数据库 -->
+  <insert id="add" parameterType="com.tky.lxl.platform.model.system.UserOperate">
+  	INSERT INTO T_USERLOG
+	  (ID, ACCOUNT, NAME, IP, CONTENT)
+	VALUES
+	  (SEQ_USERLOG_ID.NEXTVAL, #{userOperate.account}, #{userOperate.name}, #{userOperate.ip}, #{userOperate.content})
+  </insert>
+</mapper>

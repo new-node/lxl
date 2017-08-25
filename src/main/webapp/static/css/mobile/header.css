@@ -1,0 +1,23 @@
+.header {
+	background-color: #F2F2F2;
+	text-align: center;
+	height: 44px;
+	line-height: 44px;
+	border-bottom: 1px solid #A5A5A5;
+	overflow: hidden;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+.back{
+	line-height: 50px;
+	float: left;
+	width: 44px;
+}
+.menu{
+	float: right;
+	width: 44px;
+}
+.font{
+	font-size: 20px;
+}

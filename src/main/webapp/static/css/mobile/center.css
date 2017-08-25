@@ -1,0 +1,115 @@
+*{
+	margin: 0;padding: 0;
+}
+body{
+	margin: 0;
+	padding: 0;
+}
+.black{
+	color: black;
+}
+.bold{
+	font-weight: bold;
+}
+.white{
+	color: white;
+}
+.w4{
+	width: 40%;
+}
+.w5{
+	width: 50%;
+}
+.w6{
+	width: 60%;
+}
+.w10{
+	width: 100%;
+}
+.h10{
+	height: 100%;
+}
+.bF2{
+	background-color: #F2F2F2;
+}
+.right{
+	float: right;	
+}
+.content1 {
+	text-align: center;
+}
+.c_header{
+	height: 30px;
+	border-bottom: 3px solid #F2F2F2;
+	line-height: 36px;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: left;
+	padding-left: 2px;	
+}
+.body1{
+	height: 50px;
+	margin: 10px 5px 0 5px;
+	font-size: 12px;
+}
+.body1_box1{
+	float:left;
+	width: 30%;
+	line-height: 50px;
+	height: 50px;
+}
+.body1_box2{
+	width: 30%;
+	margin:auto;
+	height: 50px;
+	overflow: hidden;
+}
+.body1_box3{
+	width: 30%;
+	float: right;
+	height: 50px;
+	overflow: hidden;
+}
+.content2 {
+	text-align: center;
+}
+.content2_box{
+	font-size: 12px;
+	margin: 5px 2px;
+}
+.pq_div{
+	height: 30px;
+/* 	background-color: #7D7D7D; */
+/* 	background: linear-gradient(#333,#777 40%,#777 60%,#333); */
+	background: linear-gradient(#6A6A6A,#888 40%,#888 60%,#6A6A6A);
+	color: white;
+	font-weight: bold;
+	line-height: 30px;
+}
+.pq_div .icon{
+	background-attachment: scroll;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+}
+.pq_div .d{
+	background-image: url('../../images/mobile/center_arrow_d.png');
+}
+.pq_div .r{
+	background-image: url('../../images/mobile/center_arrow_r.png');
+}
+.table {border-collapse: collapse; }   
+.table, .table tr td { border:1px solid #D7D7D7;border-top: 0;}
+.table thead{background-color: #169BD5;color:#ffffff }
+.table thead tr td { border:1px solid #ffffff; }
+.content3_box{
+	font-size: 12px;
+	margin: 5px 2px;
+	text-align: center;
+}
+.projectList {border-collapse: collapse;}   
+.projectList tr td { border:1px solid #D7D7D7;border-top: 0;line-height: 30px;}
+.projectList .f_td{ border-left: 0;color: blue;}
+.projectList .last_td{ border-right: 0;}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tky.lxl.platform.dao.business.TaskUpWarnCloseStatusMapper">
+
+	<!-- 查询处置中的梁段信息 -->
+	<select id="getDealingLd" parameterType="com.tky.lxl.platform.model.business.LdMonitorStatus" resultType="com.tky.lxl.platform.model.business.LdMonitorStatus">
+		SELECT T.CONBEAMID, T.PARTID,L.PIER,L.TYPE AS LDTYPE,L.MILEAGEFLAG,L.SEQ
+			FROM T_WARN T INNER JOIN T_LD L
+			ON T.CONBEAMID=L.CONBEAMID
+			AND T.PARTID = L.PARTID
+			AND L.USEFLAG=0
+		 WHERE T.CONBEAMID = 23653
+			 AND T.DEALFLAG = 2
+			 AND T.USEFLAG = 0
+		GROUP BY T.CONBEAMID, T.PARTID,L.PIER,L.TYPE,L.MILEAGEFLAG,T.GKBM,L.SEQ
+	</select>
+
+	<!-- 将处置中的更新成待关闭 -->
+	<update id="saveOrUpdate"	parameterType="com.tky.lxl.platform.model.business.LdMonitorStatus">
+		update T_WARN t set t.dealflag = 3 where t.conbeamid =#{conbeamid,jdbcType=DECIMAL} and t.partid=#{partid,jdbcType=DECIMAL}
+	</update>
+</mapper>

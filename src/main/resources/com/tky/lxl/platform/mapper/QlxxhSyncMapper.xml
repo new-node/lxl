@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.QlxxhSyncMapper">
+	<!-- 同步连续梁表的数据 --> 
+ 	<update id="saveOrUpdateLxl" parameterType="com.tky.lxl.platform.model.business.Lxl">
+ 				Merge into T_LXL lxl USING DUAL  
+	            ON(lxl.CONBEAMID = #{id,jdbcType=DECIMAL})  
+	        When matched then  
+	            UPDATE  SET
+						  lxl.NAME = #{structurename,jdbcType=VARCHAR},
+						  <!-- lxl.BEAMASPAN = #{beamaspan,jdbcType=VARCHAR},
+						  lxl.MAINKDLENGTH = #{mainkdlength,jdbcType=DECIMAL}, -->
+						  lxl.LDCOUNT = #{ldcount,jdbcType=DECIMAL},
+						  lxl.PROJECTINFOID = #{projectid,jdbcType=DECIMAL},
+						  lxl.SECTIONID = #{sectionid,jdbcType=DECIMAL},
+						  lxl.SITEID = #{siteid,jdbcType=DECIMAL},
+						  lxl.LENGTH = #{length,jdbcType=DECIMAL},
+						  lxl.CENTERMILE = #{centerMileage,jdbcType=DECIMAL},
+						  lxl.CENTERMILESTR = #{centerMileagestr,jdbcType=VARCHAR}
+			
+	        When not matched then  
+			          INSERT (
+			          			  CONBEAMID,
+			          			  NAME,
+						          BEAMASPAN ,
+						  	      MAINKDLENGTH,
+						          LDCOUNT ,
+						          PROJECTINFOID,
+						          SECTIONID ,
+						          SITEID ,
+						          LENGTH ,
+						          CENTERMILE ,
+						          CENTERMILESTR 
+      							)
+    						VALUES 
+    						(
+    							  #{id,jdbcType=DECIMAL},
+	    						  #{structurename,jdbcType=VARCHAR},
+							      #{beamaspan,jdbcType=VARCHAR},
+							  	  #{mainkdlength,jdbcType=DECIMAL},
+							      #{ldcount,jdbcType=DECIMAL},
+							      #{projectid,jdbcType=DECIMAL},
+							      #{sectionid,jdbcType=DECIMAL},
+							      #{siteid,jdbcType=DECIMAL},
+							      #{length,jdbcType=DECIMAL},
+							      #{centerMileage,jdbcType=DECIMAL},
+							      #{centerMileagestr,jdbcType=VARCHAR}
+      						)
+ 	</update>
+ 	<!-- 同步梁段==中跨的数据 -->
+ 	<update id="saveOrUpdateLdCentrespan" parameterType="com.tky.lxl.platform.model.business.Centrespan">
+ 			Merge into T_LD ld USING DUAL  
+	            ON(ld.CONBEAMID = #{conbeamid,jdbcType=DECIMAL}  AND   ld.PIER = #{pier,jdbcType=DECIMAL} AND ld.SEQ = #{seq,jdbcType=DECIMAL})  
+	        When matched then  
+	            UPDATE  SET				      
+					      ld.SECTLENGTH = #{sectlength,jdbcType=DECIMAL},
+					      ld.PARTNUM =#{partnum,jdbcType=VARCHAR}, 
+					      ld.HEIGHTS = #{heights,jdbcType=DECIMAL},
+					      ld.HEIGHTB = #{heightb,jdbcType=DECIMAL},
+					      ld.TYPE = #{type,jdbcType=DECIMAL},
+					      ld.MILEAGEFLAG = #{mileageflag,jdbcType=DECIMAL},
+					      ld.SHORTNAME = #{shortname,jdbcType=VARCHAR},
+					      ld.FULLNAME = #{fullname,jdbcType=VARCHAR},
+					      ld.PIERNAME = #{piername,jdbcType=VARCHAR},
+					      ld.QLPIER = #{qlpier,jdbcType=DECIMAL},
+					      ld.LINEFLAG = #{lineflag,jdbcType=DECIMAL},
+					      ld.USEFLAG = 0
+					      
+	        When not matched then  
+			          INSERT (
+			          			  PARTID, 
+			          			  PARTNUM, 
+							      SECTLENGTH, 
+							      HEIGHTS, 
+							      HEIGHTB, 
+							      TYPE, 
+							      MILEAGEFLAG, 
+							      USEFLAG, 
+							      CONBEAMID, 
+							      PIER, 
+							      SHORTNAME, 
+							      FULLNAME, 
+							      PIERNAME, 
+							      LINEFLAG,
+							      SEQ,
+							      QLPIER
+      							)
+    						VALUES 
+    						(
+    							  SEQ_LDID.nextval, 
+
+    							  #{partnum,jdbcType=VARCHAR}, 
+							      #{sectlength,jdbcType=DECIMAL}, 
+							      #{heights,jdbcType=DECIMAL}, 
+							      #{heightb,jdbcType=DECIMAL}, 
+							      #{type,jdbcType=DECIMAL}, 
+							      #{mileageflag,jdbcType=DECIMAL}, 
+							      0, 
+							      #{conbeamid,jdbcType=DECIMAL}, 
+							      #{pier,jdbcType=DECIMAL}, 
+							      #{shortname,jdbcType=VARCHAR}, 
+							      #{fullname,jdbcType=VARCHAR}, 
+							      #{piername,jdbcType=VARCHAR}, 
+							      #{lineflag,jdbcType=DECIMAL},
+							      #{seq,jdbcType=DECIMAL},
+							      #{qlpier,jdbcType=DECIMAL}
+      						)
+	
+ 	</update>
+ 	
+ 	<!-- 同步梁段==节段的数据 -->
+ 	<update id="saveOrUpdateLdSegment" parameterType="com.tky.lxl.platform.model.business.Segment">
+ 	Merge into T_LD ld USING DUAL  
+	            ON(ld.CONBEAMID = #{conbeamid,jdbcType=DECIMAL}  AND ld.SEQ = #{seq,jdbcType=DECIMAL} AND ld.PIER = #{pier,jdbcType=DECIMAL})  
+	        When matched then  
+	            UPDATE  SET				      
+					      ld.SECTLENGTH = #{sectlength,jdbcType=DECIMAL},
+					      ld.HEIGHTS = #{heights,jdbcType=DECIMAL},
+					      ld.HEIGHTB = #{heightb,jdbcType=DECIMAL},
+					      ld.TYPE = #{type,jdbcType=DECIMAL},
+					      ld.MILEAGEFLAG = #{mileageflag,jdbcType=DECIMAL},
+					      ld.SHORTNAME = #{shortname,jdbcType=VARCHAR},
+					      ld.FULLNAME = #{fullname,jdbcType=VARCHAR},
+					      ld.PIERNAME = #{piername,jdbcType=VARCHAR},
+					      ld.QLPIER = #{qlpier,jdbcType=DECIMAL},
+					      ld.CENTERHEIGHT = #{centerheight,jdbcType=DECIMAL},
+					      ld.BOTTOMWIDTH = #{bottomwidth,jdbcType=DECIMAL},
+					      ld.CENTERMILEAGESTR = #{centermileagestr,jdbcType=VARCHAR},
+					      ld.CENTERMILEAGE = #{centermileage,jdbcType=DECIMAL},
+					      ld.PARTNUM =#{partnum,jdbcType=VARCHAR}
+	        When not matched then  
+			          INSERT (
+			          			  PARTID, 
+			          			  PARTNUM, 
+							      SECTLENGTH, 
+							      HEIGHTS, 
+							      HEIGHTB, 
+							      TYPE, 
+							      MILEAGEFLAG, 
+							      USEFLAG, 
+							      CONBEAMID, 
+							      PIER, 
+							      SHORTNAME, 
+							      FULLNAME, 
+							      PIERNAME, 
+							      QLPIER, 
+							      CENTERHEIGHT, 
+							      BOTTOMWIDTH, 
+							      CENTERMILEAGESTR, 
+							      CENTERMILEAGE,
+							      SEQ
+      							)
+    						VALUES 
+    						(
+    							  SEQ_LDID.nextval, 
+    							  #{partnum,jdbcType=VARCHAR}, 
+							      #{sectlength,jdbcType=DECIMAL}, 
+							      #{heights,jdbcType=DECIMAL}, 
+							      #{heightb,jdbcType=DECIMAL}, 
+							      #{type,jdbcType=DECIMAL}, 
+							      #{mileageflag,jdbcType=DECIMAL}, 
+							      0, 
+							      #{conbeamid,jdbcType=DECIMAL}, 
+							      #{pier,jdbcType=DECIMAL}, 
+							      #{shortname,jdbcType=VARCHAR}, 
+							      #{fullname,jdbcType=VARCHAR}, 
+							      #{piername,jdbcType=VARCHAR}, 
+							      #{qlpier,jdbcType=DECIMAL}, 
+							      #{centerheight,jdbcType=DECIMAL}, 
+							      #{bottomwidth,jdbcType=DECIMAL}, 
+							      #{centermileagestr,jdbcType=VARCHAR}, 
+							      #{centermileage,jdbcType=DECIMAL},
+							      #{seq,jdbcType=DECIMAL}
+      						)
+ 	</update>
+ 	
+ 	<!-- 同步墩身信息 -->
+ 	<update id="saveOrUpdatePierBody" parameterType="com.tky.lxl.platform.model.business.PierBody">
+ 		Merge into T_PIERBODY pierbody USING DUAL  
+	            ON(pierbody.PIERID = #{pierid,jdbcType=DECIMAL})  
+	        When matched then  
+	            UPDATE  SET
+						  pierbody.WIDTH = #{width,jdbcType=DECIMAL},
+					      pierbody.HEIGHT = #{height,jdbcType=DECIMAL},
+					      pierbody.CENTERMILEAGE = #{centermileage,jdbcType=DECIMAL},
+					      pierbody.CENTERMILEAGESTR = #{centermileagestr,jdbcType=VARCHAR},
+					      pierbody.PIERNAME = #{piername,jdbcType=VARCHAR},
+					      pierbody.TSID = #{tsid,jdbcType=DECIMAL}
+	        When not matched then  
+			          INSERT (
+								  PIERID, 
+							      WIDTH, 
+							      HEIGHT, 
+							      CENTERMILEAGE, 
+							      CENTERMILEAGESTR, 
+							      PIERNAME, 
+							      USEFLAG, 
+							      TSID
+      							)
+    						VALUES 
+    						(
+								  #{pierid,jdbcType=DECIMAL}, 
+								  #{width,jdbcType=DECIMAL}, 
+								  #{height,jdbcType=DECIMAL}, 
+							      #{centermileage,jdbcType=DECIMAL}, 
+							      #{centermileagestr,jdbcType=VARCHAR}, 
+							      #{piername,jdbcType=VARCHAR}, 
+							      0, 
+							      #{tsid,jdbcType=DECIMAL}
+      						)
+	</update>
+</mapper>

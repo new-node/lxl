@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.SgPlanMapper">
+    <resultMap id="BaseResultMap"
+        type="com.tky.lxl.platform.model.business.SgPlan">
+        <id column="ID" jdbcType="DECIMAL" property="id" />
+        <result column="BUILDID" jdbcType="DECIMAL" property="buildid" />
+        <result column="STATE" jdbcType="DECIMAL" property="state" />
+        <result column="STARTDATE" jdbcType="TIMESTAMP" property="startdate" />
+        <result column="FINISHDATE" jdbcType="TIMESTAMP" property="finishdate" />
+        <result column="CALENDARS" jdbcType="OTHER" property="calendars" />
+        <result column="CALENDARUID" jdbcType="DECIMAL" property="calendaruid" />
+        <result column="DESCRIBE" jdbcType="OTHER" property="describe" />
+        <result column="CREATEDATE" jdbcType="TIMESTAMP" property="createdate" />
+        <result column="UPDATEDATE" jdbcType="TIMESTAMP" property="updatedate" />
+        <result column="CREATEUSERID" jdbcType="DECIMAL" property="createuserid" />
+        <result column="UPDATEUSERID" jdbcType="DECIMAL" property="updateuserid" />
+        <result column="USEFLAG" jdbcType="DECIMAL" property="useflag" />
+        <result column="SPECIALSTRUCTUREID" jdbcType="DECIMAL" property="specialstructureid" />
+        <result column="VERSIONNO" jdbcType="DECIMAL" property="versionno" />
+        <result column="MODIFYREASON" jdbcType="OTHER" property="modifyreason" />
+        <result column="ISLOCK" jdbcType="DECIMAL" property="islock" />
+        <result column="VERSIONNAME" jdbcType="OTHER" property="versionname" />
+        <result column="VERIFYCOMMENT" jdbcType="OTHER" property="verifycomment" />
+        <result column="VERIFYID" jdbcType="DECIMAL" property="verifyid" />
+        <result column="PASSDATE" jdbcType="TIMESTAMP" property="passdate" />
+        <result column="LAYTRACKBEGINDATE" jdbcType="TIMESTAMP" property="laytrackbegindate" />
+        <result column="LAYTRACKENDDATE" jdbcType="TIMESTAMP" property="laytrackenddate" />
+        <result column="PASSDIRECTION" jdbcType="DECIMAL" property="passdirection" />
+        <result column="LAYTRACKDIRECTION" jdbcType="DECIMAL" property="laytrackdirection" />
+        <result column="PLANTYPE" jdbcType="DECIMAL" property="plantype" />
+        <result column="SECTIONID" jdbcType="DECIMAL" property="sectionid" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID, BUILDID, STATE, STARTDATE, FINISHDATE, CALENDARS,
+        CALENDARUID,
+        DESCRIBE, CREATEDATE,
+        UPDATEDATE, CREATEUSERID,
+        UPDATEUSERID, USEFLAG, SPECIALSTRUCTUREID, VERSIONNO,
+        MODIFYREASON,
+        ISLOCK, VERSIONNAME, VERIFYCOMMENT, VERIFYID, PASSDATE,
+        LAYTRACKBEGINDATE,
+        LAYTRACKENDDATE,
+        PASSDIRECTION, LAYTRACKDIRECTION,
+        PLANTYPE, SECTIONID
+    </sql>
+    <select id="selectSgplan" resultType="com.tky.lxl.platform.model.business.SgPlan">
+        SELECT * FROM
+        T_SG_PLAN
+        WHERE 1=1
+    </select>
+    <select id="selectSgplanByID" parameterType="java.math.BigDecimal"
+        resultType="com.tky.lxl.platform.model.business.SgPlan">
+        SELECT * FROM
+        T_SG_PLAN
+        WHERE ID = #{id}
+    </select>
+    <insert id="saveOrUpdate" parameterType="com.tky.lxl.platform.model.business.SgPlan">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            SELECT COUNT(*) FROM T_SG_PLAN WHERE ID = #{id}
+        </selectKey>
+        <if test="count > 0">
+            update T_SG_PLAN
+            <set>
+                <if test="id != null">
+                    ID = #{id,jdbcType=DECIMAL},
+                </if>
+                <if test="buildid != null">
+                    BUILDID = #{buildid,jdbcType=DECIMAL},
+                </if>
+                <if test="state != null">
+                    STATE = #{state,jdbcType=DECIMAL},
+                </if>
+                <if test="startdate != null">
+                    STARTDATE = #{startdate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="finishdate != null">
+                    FINISHDATE = #{finishdate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="calendars != null">
+                    CALENDARS = #{calendars,jdbcType=OTHER},
+                </if>
+                <if test="calendaruid != null">
+                    CALENDARUID = #{calendaruid,jdbcType=DECIMAL},
+                </if>
+                <if test="describe != null">
+                    DESCRIBE = #{describe,jdbcType=OTHER},
+                </if>
+                <if test="createdate != null">
+                    CREATEDATE = #{createdate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="updatedate != null">
+                    UPDATEDATE = #{updatedate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="createuserid != null">
+                    CREATEUSERID = #{createuserid,jdbcType=DECIMAL},
+                </if>
+                <if test="updateuserid != null">
+                    UPDATEUSERID = #{updateuserid,jdbcType=DECIMAL},
+                </if>
+                <if test="useflag != null">
+                    USEFLAG = #{useflag,jdbcType=DECIMAL},
+                </if>
+                <if test="specialstructureid != null">
+                    SPECIALSTRUCTUREID =
+                    #{specialstructureid,jdbcType=DECIMAL},
+                </if>
+                <if test="versionno != null">
+                    VERSIONNO = #{versionno,jdbcType=DECIMAL},
+                </if>
+                <if test="modifyreason != null">
+                    MODIFYREASON = #{modifyreason,jdbcType=OTHER},
+                </if>
+                <if test="islock != null">
+                    ISLOCK = #{islock,jdbcType=DECIMAL},
+                </if>
+                <if test="versionname != null">
+                    VERSIONNAME = #{versionname,jdbcType=OTHER},
+                </if>
+                <if test="verifycomment != null">
+                    VERIFYCOMMENT = #{verifycomment,jdbcType=OTHER},
+                </if>
+                <if test="verifyid != null">
+                    VERIFYID = #{verifyid,jdbcType=DECIMAL},
+                </if>
+                <if test="passdate != null">
+                    PASSDATE = #{passdate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="laytrackbegindate != null">
+                    LAYTRACKBEGINDATE =
+                    #{laytrackbegindate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="laytrackenddate != null">
+                    LAYTRACKENDDATE = #{laytrackenddate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="passdirection != null">
+                    PASSDIRECTION = #{passdirection,jdbcType=DECIMAL},
+                </if>
+                <if test="laytrackdirection != null">
+                    LAYTRACKDIRECTION =
+                    #{laytrackdirection,jdbcType=DECIMAL},
+                </if>
+                <if test="plantype != null">
+                    PLANTYPE = #{plantype,jdbcType=DECIMAL},
+                </if>
+                <if test="sectionid != null">
+                    SECTIONID = #{sectionid,jdbcType=DECIMAL},
+                </if>
+            </set>
+            where ID = #{id}
+        </if>
+        <if test="count == 0">
+            insert into T_SG_PLAN
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">
+                    ID,
+                </if>
+                <if test="buildid != null">
+                    BUILDID,
+                </if>
+                <if test="state != null">
+                    STATE,
+                </if>
+                <if test="startdate != null">
+                    STARTDATE,
+                </if>
+                <if test="finishdate != null">
+                    FINISHDATE,
+                </if>
+                <if test="calendars != null">
+                    CALENDARS,
+                </if>
+                <if test="calendaruid != null">
+                    CALENDARUID,
+                </if>
+                <if test="describe != null">
+                    DESCRIBE,
+                </if>
+                <if test="createdate != null">
+                    CREATEDATE,
+                </if>
+                <if test="updatedate != null">
+                    UPDATEDATE,
+                </if>
+                <if test="createuserid != null">
+                    CREATEUSERID,
+                </if>
+                <if test="updateuserid != null">
+                    UPDATEUSERID,
+                </if>
+                <if test="useflag != null">
+                    USEFLAG,
+                </if>
+                <if test="specialstructureid != null">
+                    SPECIALSTRUCTUREID,
+                </if>
+                <if test="versionno != null">
+                    VERSIONNO,
+                </if>
+                <if test="modifyreason != null">
+                    MODIFYREASON,
+                </if>
+                <if test="islock != null">
+                    ISLOCK,
+                </if>
+                <if test="versionname != null">
+                    VERSIONNAME,
+                </if>
+                <if test="verifycomment != null">
+                    VERIFYCOMMENT,
+                </if>
+                <if test="verifyid != null">
+                    VERIFYID,
+                </if>
+                <if test="passdate != null">
+                    PASSDATE,
+                </if>
+                <if test="laytrackbegindate != null">
+                    LAYTRACKBEGINDATE,
+                </if>
+                <if test="laytrackenddate != null">
+                    LAYTRACKENDDATE,
+                </if>
+                <if test="passdirection != null">
+                    PASSDIRECTION,
+                </if>
+                <if test="laytrackdirection != null">
+                    LAYTRACKDIRECTION,
+                </if>
+                <if test="plantype != null">
+                    PLANTYPE,
+                </if>
+                <if test="sectionid != null">
+                    SECTIONID,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">
+                    #{id,jdbcType=DECIMAL},
+                </if>
+                <if test="buildid != null">
+                    #{buildid,jdbcType=DECIMAL},
+                </if>
+                <if test="state != null">
+                    #{state,jdbcType=DECIMAL},
+                </if>
+                <if test="startdate != null">
+                    #{startdate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="finishdate != null">
+                    #{finishdate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="calendars != null">
+                    #{calendars,jdbcType=OTHER},
+                </if>
+                <if test="calendaruid != null">
+                    #{calendaruid,jdbcType=DECIMAL},
+                </if>
+                <if test="describe != null">
+                    #{describe,jdbcType=OTHER},
+                </if>
+                <if test="createdate != null">
+                    #{createdate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="updatedate != null">
+                    #{updatedate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="createuserid != null">
+                    #{createuserid,jdbcType=DECIMAL},
+                </if>
+                <if test="updateuserid != null">
+                    #{updateuserid,jdbcType=DECIMAL},
+                </if>
+                <if test="useflag != null">
+                    #{useflag,jdbcType=DECIMAL},
+                </if>
+                <if test="specialstructureid != null">
+                    #{specialstructureid,jdbcType=DECIMAL},
+                </if>
+                <if test="versionno != null">
+                    #{versionno,jdbcType=DECIMAL},
+                </if>
+                <if test="modifyreason != null">
+                    #{modifyreason,jdbcType=OTHER},
+                </if>
+                <if test="islock != null">
+                    #{islock,jdbcType=DECIMAL},
+                </if>
+                <if test="versionname != null">
+                    #{versionname,jdbcType=OTHER},
+                </if>
+                <if test="verifycomment != null">
+                    #{verifycomment,jdbcType=OTHER},
+                </if>
+                <if test="verifyid != null">
+                    #{verifyid,jdbcType=DECIMAL},
+                </if>
+                <if test="passdate != null">
+                    #{passdate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="laytrackbegindate != null">
+                    #{laytrackbegindate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="laytrackenddate != null">
+                    #{laytrackenddate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="passdirection != null">
+                    #{passdirection,jdbcType=DECIMAL},
+                </if>
+                <if test="laytrackdirection != null">
+                    #{laytrackdirection,jdbcType=DECIMAL},
+                </if>
+                <if test="plantype != null">
+                    #{plantype,jdbcType=DECIMAL},
+                </if>
+                <if test="sectionid != null">
+                    #{sectionid,jdbcType=DECIMAL},
+                </if>
+            </trim>
+        </if>
+    </insert>
+</mapper>

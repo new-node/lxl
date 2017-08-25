@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.MeasureInfoMapper">
+
+	<!-- 分页查询 -->
+	<sql id="selectpagestrat">
+		SELECT *
+		FROM (SELECT rownum rw, a.*
+		FROM (
+	</sql>
+	<sql id="selectpageend">
+		 <![CDATA[
+				) a
+				WHERE rownum < #{endNum}) b
+		 WHERE b.rw > #{startNum}
+		 ]]>
+	</sql>
+	<resultMap id="MeasureInfoMap"
+		type="com.tky.lxl.platform.model.business.MeasureInfo">
+		<result column="PIER" property="pier" jdbcType="DECIMAL" />
+		<result column="LDNAME" property="ldName" jdbcType="VARCHAR" />
+		<result column="CDBM" property="cdbm" jdbcType="VARCHAR" />
+		<result column="PTYPE" property="pType" jdbcType="VARCHAR" />
+		<result column="MTIME" property="mTime" jdbcType="VARCHAR" />
+		<result column="CALCULATEHT" property="calculateht" jdbcType="DECIMAL" />
+		<result column="MAVALUE" property="mavalue" jdbcType="DECIMAL" />
+		<result column="PCZ" property="pcz" jdbcType="DECIMAL" />
+		<result column="LLX" property="llx" jdbcType="DECIMAL" />
+		<result column="XXVALUE" property="xxValue" jdbcType="DECIMAL" />
+		<result column="LLY" property="lly" jdbcType="DECIMAL" />
+		<result column="YYVALUE" property="yyValue" jdbcType="DECIMAL" />
+		<result column="XXPCZ" property="xxPcz" jdbcType="DECIMAL" />
+		<result column="MILEAGEFLAG" property="mileageFlag" jdbcType="VARCHAR" />
+		<result column="TYPE" property="ldType" jdbcType="VARCHAR" />
+		<result column="GKBM" property="gkbm" jdbcType="VARCHAR" />
+		<result column="WARNCOUNT" property="warncount" jdbcType="VARCHAR" />
+		<result column="SGJDID" property="sgjdid" jdbcType="DECIMAL" />
+		<result column="CDID" property="cdid" jdbcType="VARCHAR" />
+		<result column="GKNAME" property="gkName" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		XD.XXKZDID AS XXKZDID,
+		LD.PIER AS PIER,
+		LD.SHORTNAME AS LDNAME,
+		TINIT.POINTNAME AS CDBM,
+		CD.POINTPLACE AS CDID,
+		CD.PTYPE AS PTYPE,
+		TO_CHAR(XD.MTIME,'YYYY/MM/DD HH24:MI:SS') AS MTIME,
+		CD.CALCULATEHT AS CALCULATEHT,
+		XD.MAVALUE AS MAVALUE,
+		XD.PCZ * 1000 AS PCZ,
+		CD.LL_X AS LLX,
+		XD.XXVALUE,
+		XD.XXPCZ * 1000 AS XXPCZ,
+		CD.MILEAGEFLAG,
+		XD.GKBM,
+		LD.TYPE,
+		XD.SGJDID,
+		XD.PSTATE
+	</sql>
+	<sql id="Base_Column_Lists">
+		XD.XXKZDID AS XXKZDID,
+		LD.PIER AS PIER,
+		LD.SHORTNAME AS LDNAME,
+		TINIT.POINTNAME AS CDBM,
+		CD.POINTPLACE AS CDID,
+		CD.PTYPE AS PTYPE,
+		TO_CHAR(XD.MTIME,'YYYY/MM/DD HH24:MI:SS') AS MTIME,
+		CD.CALCULATEHT AS CALCULATEHT,
+		XD.MAVALUE AS MAVALUE,
+		XD.PCZ * 1000 AS PCZ,
+		CD.LL_X AS LLX,
+		CD.LL_Y AS LLY,
+		XD.XXVALUE,
+		XD.YYVALUE,
+		XD.XXPCZ * 1000 AS XXPCZ,
+		CD.MILEAGEFLAG,
+		XD.GKBM,
+		LD.TYPE,
+		XD.SGJDID,
+		XD.PSTATE
+	</sql>
+	<sql id="Base_Column_List2">
+		 XD.XXKZDID AS XXKZDID,
+		 LD.PIER AS PIER,
+		 (SELECT TLD.SHORTNAME FROM T_LD TLD WHERE XD.PARTID = TLD.PARTID AND TLD.USEFLAG = 0) AS LDNAME,
+		 TINIT.POINTNAME AS CDBM,
+		 TINIT.POINTPLACE AS CDID,
+		 TINIT.POINTTYPE AS PTYPE,
+		 TO_CHAR(XD.MTIME, 'YYYY/MM/DD HH24:MI:SS') AS MTIME,
+		 0 AS CALCULATEHT,
+		 XD.MAVALUE AS MAVALUE,
+		 XD.PCZ * 1000 AS PCZ,
+		 0 LLX,
+		 XD.XXVALUE,
+		 XD.XXPCZ,
+		 TINIT.MILEAGEFLAG,
+		 XD.GKBM,
+		 LD.TYPE,
+		 XD.SGJDID,
+		 XD.PSTATE
+	</sql>
+	<sql id="Base_Column_List2s">
+		XD.XXKZDID AS XXKZDID,
+		 LD.PIER AS PIER,
+		 (SELECT TLD.SHORTNAME FROM T_LD TLD WHERE XD.PARTID = TLD.PARTID AND TLD.USEFLAG = 0) AS LDNAME,
+		 TINIT.POINTNAME AS CDBM,
+		 TINIT.POINTPLACE AS CDID,
+		 TINIT.POINTTYPE AS PTYPE,
+		 TO_CHAR(XD.MTIME, 'YYYY/MM/DD HH24:MI:SS') AS MTIME,
+		 0 AS CALCULATEHT,
+		 XD.MAVALUE AS MAVALUE,
+		 XD.PCZ * 1000 AS PCZ,
+		 0 LLX,
+		 0 LLY,
+		 XD.XXVALUE,
+		 XD.YYVALUE,
+		 XD.XXPCZ * 1000 AS XXPCZ,
+		 TINIT.MILEAGEFLAG,
+		 XD.GKBM,
+		 LD.TYPE,
+		 XD.SGJDID,
+		 XD.PSTATE
+	</sql>
+	
+	<select id="selectMeasureInfo" resultMap="MeasureInfoMap">
+		<include refid="selectpagestrat"></include>
+		SELECT MEASURE.*, DIC.NAME AS GKNAME FROM (
+			SELECT
+				<include refid="Base_Column_Lists" />
+			FROM T_LD LD,
+				T_XXKZD XD,
+				T_CD CD,
+				T_INITPOINT TINIT
+			WHERE XD.CONBEAMID = #{conbeamID}
+				AND LD.PARTID = XD.NOWPARTID
+				AND XD.USEFLAG = 0
+				AND LD.USEFLAG = 0
+				<if test="pier != null and pier != ''">
+					AND LD.PIER = #{pier}
+				</if>
+				<if test="shortName != null and shortName != ''">
+					AND REPLACE(LD.SHORTNAME,'''','AA') = #{shortName}
+				</if>
+				<if test="gkbm != null and gkbm != ''">
+					AND  XD.GKBM = #{gkbm}
+				</if>
+				<if test="licheng != null and licheng != ''">
+					AND  CD.MILEAGEFLAG = #{licheng}
+				</if>
+				AND CD.CDID = XD.CDID
+				AND CD.USEFLAG = 0
+				AND TINIT.INITPOINTID = XD.INITPOINTID
+				AND TINIT.USEFLAG = 0
+				AND XD.PSTATE = 0
+			UNION ALL
+			SELECT
+				<include refid="Base_Column_List2s" />
+			FROM T_LD LD, T_XXKZD XD, T_INITPOINT TINIT
+			WHERE XD.CONBEAMID = #{conbeamID}
+				AND LD.PARTID = XD.NOWPARTID
+				AND XD.USEFLAG = 0
+				AND LD.USEFLAG = 0
+				<if test="pier != null and pier != ''">
+					AND LD.PIER = #{pier}
+				</if>
+				<if test="shortName != null and shortName != ''">
+					AND REPLACE(LD.SHORTNAME,'''','AA') = #{shortName}
+				</if>
+				<if test="gkbm != null and gkbm != ''">
+					AND  XD.GKBM = #{gkbm}
+				</if>
+				<if test="licheng != null and licheng != ''">
+					AND  TINIT.MILEAGEFLAG = #{licheng}
+				</if>
+				AND TINIT.INITPOINTID = XD.INITPOINTID
+				AND TINIT.USEFLAG = 0
+				AND XD.PSTATE = 1) MEASURE
+				
+			LEFT JOIN T_DICTIONARY DIC
+			ON MEASURE.GKBM = DIC.ID
+			AND DIC.TYPEID = 1
+			AND DIC.USEFLAG = 0
+		ORDER BY MEASURE.PSTATE,MEASURE.MTIME DESC
+		<include refid="selectpageend"></include>
+	</select>
+	<select id="selectMeasureInfoTotalCount" resultType="int">
+		SELECT COUNT(XXKZDID) FROM (
+			SELECT
+				<include refid="Base_Column_List" />
+			FROM T_LD LD,
+				T_XXKZD XD,
+				T_CD CD,
+				T_INITPOINT TINIT
+			WHERE XD.CONBEAMID = #{conbeamID}
+				AND LD.PARTID = XD.NOWPARTID
+				AND XD.USEFLAG = 0
+				AND LD.USEFLAG = 0
+				<if test="pier != null and pier != ''">
+					AND LD.PIER = #{pier}
+				</if>
+				<if test="shortName != null and shortName != ''">
+					AND REPLACE(LD.SHORTNAME,'''','AA') = #{shortName,jdbcType=VARCHAR}
+				</if>
+				<if test="gkbm != null and gkbm != ''">
+					AND  XD.GKBM = #{gkbm}
+				</if>
+				<if test="licheng != null and licheng != ''">
+					AND  CD.MILEAGEFLAG = #{licheng}
+				</if>
+				AND CD.CDID = XD.CDID
+				AND CD.USEFLAG = 0
+				AND TINIT.INITPOINTID = XD.INITPOINTID
+				AND TINIT.USEFLAG = 0
+				AND XD.PSTATE = 0
+			UNION ALL
+			SELECT
+				<include refid="Base_Column_List2" />
+			FROM T_LD LD, T_XXKZD XD, T_INITPOINT TINIT
+			WHERE XD.CONBEAMID = #{conbeamID}
+				AND LD.PARTID = XD.NOWPARTID
+				AND XD.USEFLAG = 0
+				AND LD.USEFLAG = 0
+				<if test="pier != null and pier != ''">
+					AND LD.PIER = #{pier}
+				</if>
+				<if test="shortName != null and shortName != ''">
+					AND REPLACE(LD.SHORTNAME,'''','AA') = #{shortName}
+				</if>
+				<if test="gkbm != null and gkbm != ''">
+					AND  XD.GKBM = #{gkbm}
+				</if>
+				<if test="licheng != null and licheng != ''">
+					AND  TINIT.MILEAGEFLAG = #{licheng}
+				</if>
+				AND TINIT.INITPOINTID = XD.INITPOINTID
+				AND TINIT.USEFLAG = 0
+				AND XD.PSTATE = 1) MEASURE
+		ORDER BY MEASURE.MTIME DESC
+	</select>
+	<select id="selectPierList" resultType="java.util.HashMap">
+		SELECT DISTINCT TO_CHAR(LD.PIER) AS PIER
+		FROM T_XXKZD XD, T_LD LD
+		WHERE XD.CONBEAMID = #{conbeamID}
+			AND XD.PARTID = LD.PARTID
+			AND XD.USEFLAG = 0
+			AND LD.USEFLAG = 0
+			AND XD.PSTATE = 0
+		ORDER BY
+			LD.PIER
+	</select>
+	<select id="selectLdCodeList" resultType="java.util.HashMap">
+		SELECT DISTINCT
+			LD.SHORTNAME AS SHORTNAME,
+			LD.TYPE AS TYPE,
+			LD.MILEAGEFLAG AS MILEAGEFLAG,
+			LD.SEQ AS LDINDEX
+		FROM T_XXKZD XD, T_LD LD
+		WHERE XD.CONBEAMID = #{conbeamID}
+			AND XD.PARTID = LD.PARTID
+			AND XD.USEFLAG = 0
+			AND LD.USEFLAG = 0
+			AND XD.PSTATE = 0
+			<if test="pier != null and pier != ''">
+				AND LD.PIER = #{pier}
+			</if>
+		ORDER BY
+			LDINDEX
+	</select>
+	<select id="selectAllMeasureInfo" resultMap="MeasureInfoMap">
+		SELECT
+			<include refid="Base_Column_Lists" />,
+			(SELECT COUNT(T.WARNID) FROM T_WARN T 
+			WHERE T.POINTID = CD.CDID) AS WARNCOUNT
+		FROM T_LD LD,
+			T_XXKZD XD,
+			T_CD CD,
+			T_INITPOINT TINIT
+		WHERE XD.CONBEAMID = #{conbeamID}
+			AND LD.PARTID = XD.PARTID 
+			<!-- AND LD.PARTID = XD.NOWPARTID -->
+			AND XD.USEFLAG = 0
+			AND LD.USEFLAG = 0
+			<if test="pier != null and pier != ''">
+				AND LD.PIER = #{pier}
+			</if>
+			<if test="shortName != null and shortName != ''">
+				AND REPLACE(LD.SHORTNAME,'''','AA') = #{shortName}
+			</if>
+			<if test="gkbm != null and gkbm != ''">
+				AND  XD.GKBM = #{gkbm}
+			</if>
+			<if test="licheng != null and licheng != ''">
+				AND  CD.MILEAGEFLAG =#{licheng}
+			</if>
+			AND CD.CDID = XD.CDID
+			AND CD.USEFLAG = 0
+			AND TINIT.INITPOINTID = XD.INITPOINTID
+			AND TINIT.USEFLAG = 0
+			AND XD.PSTATE = 0
+		ORDER BY
+			XD.GKBM DESC,
+			MTIME DESC
+	</select>
+
+	<select id="selectGkbmAndContentList" resultType="java.util.HashMap">
+	SELECT
+		TO_NUMBER(DC.ID) AS GKBM,DC.NAME AS NAME
+	FROM T_DICTIONARY DC
+	WHERE DC.USEFLAG = 0
+	AND DC.TYPEID = 1
+	ORDER BY
+		DC.ID
+	</select>
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+<!-- org.springframework.jdbc.datasource.DriverManagerDataSource -->
+<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		初始化连接大小
+		<property name="initialSize" value="${jdbc.initialSize}"></property>
+		连接池最大数量
+		<property name="maxActive" value="${jdbc.maxActive}"></property>
+		连接池最大空闲
+		<property name="maxIdle" value="${jdbc.maxIdle}"></property>
+		连接池最小空闲
+		<property name="minIdle" value="${jdbc.minIdle}"></property>
+		获取连接最大等待时间
+		<property name="maxWait" value="${jdbc.maxWait}"></property>
+	</bean> -->
+	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
+	<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="false" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="validationInterval" value="30000" />
+		<property name="timeBetweenEvictionRunsMillis" value="30000" />
+		<property name="maxActive" value="100" />
+		<property name="minIdle" value="2" />
+		<property name="maxWait" value="10000" />
+		<property name="initialSize" value="4" />
+		<property name="removeAbandonedTimeout" value="180" />
+		<property name="removeAbandoned" value="true" />
+		<property name="logAbandoned" value="true" />
+		<property name="minEvictableIdleTimeMillis" value="30000" />
+		<property name="jmxEnabled" value="true" />
+	</bean>
+<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 自动扫描mapping.xml文件 -->
+		<property name="mapperLocations" value="classpath:com/tky/lxl/platform/mapper/*.xml"></property>
+		<property name="typeAliasesPackage" value="com.tky.lxl.platform.model" />
+	</bean>
+
+	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.tky.lxl.platform.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	
+	<!-- 配置redis部分 start -->
+	<!-- 配置redis连接池 JedisPoolConfig-->
+	<!-- <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		连接池中最大空闲的连接数
+		<property name="maxIdle" value="300" />
+		连接池中最少空闲的连接数.
+		<property name="minIdle" value="1" />
+		连接池中最大连接数
+		<property name="maxTotal" value="600" /> 
+	</bean> 
+	配置CoonnectionFactory JedisConnectionFactory
+	<bean id="connFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		连接池配置.
+		<property name="poolConfig" ref="poolConfig"></property>
+		Redis服务主机.
+		<property name="hostName" value="121.42.177.217"></property>
+		Redis服务端口号.
+		<property name="port" value="6379"></property>
+		<property name="password" value="redis123"></property>
+		连超时设置.
+		<property name="timeout" value="15000" />
+		是否使用连接池.
+		<property name="usePool" value="true" />
+	</bean>
+	配置redisTemplate StringRedisTemplate
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="connFactory"/>
+		<property name="keySerializer">
+			<bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+		</property>
+		<property name="valueSerializer">
+			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+			<bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer" />
+		</property>
+	</bean>
+	<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager"> 
+		<property name="caches"> 
+			<set> 
+				<bean class="com.tky.lxl.platform.redis.RedisUtil"> 
+					<property name="redisTemplate" ref="redisTemplate" /> 
+					<property name="name" value="lxl"/>
+					User名称要在类或方法的注解中使用 
+				</bean> 
+			</set> 
+		</property>
+	</bean> -->
+</beans>

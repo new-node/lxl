@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.PierMapper">
+ 
+  
+  <!--查询墩身的信息  -->
+  <select id="selectPierMessage" parameterType="com.tky.lxl.platform.model.business.PierQuery" resultType="com.tky.lxl.platform.model.business.PierDraw">
+	  SELECT PIERID, WIDTH, HEIGHT, CENTERMILEAGE, CENTERMILEAGESTR,TSID,PIERNAME
+ 		 FROM T_PIERBODY
+ 		 WHERE 1=1
+ 		 <if test="tsid != null">
+          and TSID = #{tsid}
+      </if>
+      <if test="piername != null">
+          and PIERNAME = #{piername}
+      </if>
+  </select>
+  
+</mapper>

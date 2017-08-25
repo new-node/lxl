@@ -1,0 +1,1016 @@
+@charset "utf-8";
+body{font-family: "微软雅黑", Arial;font-size: 12px;}
+ul li{list-style: none;}
+a{text-decoration: none;}
+a:focus{
+	text-decoration:none;
+}
+html,body{padding: 0px;margin: 0px;}
+img,input,div{
+    border: none;
+}
+*{
+	padding:0;
+	margin:0;
+}
+ a:hover{
+ 	color:#555;
+ 	cursor:pointer;
+ }
+ .active{
+ 	background:#fff;
+ 	color:#555;
+ }
+ .clear{
+ 	clear:both;
+ }
+ .fr{
+ 	float:right;
+ }
+ .fl{
+ 	float:left;
+ }
+ 
+ input,div,img{
+ 	boder:none;
+ }
+ .br{
+ 	border-radius:6px;
+ }
+ .cl{
+ 	background:#0066FF;
+ }
+ 
+
+@media screen and (min-width: 1600px){
+    .main-header{
+        width: 1889px;
+        height: 50px;
+        margin: 0 auto;
+        background: #214080;
+    }
+
+    article{
+        width: 1895px;
+        height: auto;
+        margin: 0 auto;
+        background:#F2F2F2;
+    }
+    .allmask{
+		width:1895px;
+		height:100%;
+		background:rgba(201,201,201,0.7);
+		position:absolute;
+		top:0;
+		display:none;
+		z-index:0;
+	}
+.monitoring-statistics .allNum{
+	line-height:117px;
+	text-align:center;
+	float:left;
+	height:117px;
+	width:135px;
+	background-color: rgba(108, 202, 201, 1);
+}
+.monitoring-statistics .allNum span{
+	color: #FFFFFF;
+	font-size: 24px;
+	font-weight: 700;
+	font-style: normal;
+	font-family: 'Arial Normal', 'Arial';
+}
+.monitoring-statistics .num{
+	line-height:117px;
+	text-align:center;
+	float:left;
+	height:117px;
+	width:135px;
+	background-color: #F2F2F2;
+}
+.monitoring-statistics .num span{
+	color: #333333;
+	font-size: 24px;
+	font-weight: 700;
+	font-style: normal;font-family: 'Arial Normal', 'Arial'
+}
+
+    #tit{
+        background: url(../images/tit1.png);
+        background-repeat:repeat-x;
+        width:500px;
+        float:right;
+    }
+    #logo{
+        height:50px;
+        width: 668px;
+         float: left; 
+        background:url(../images/logo.png) center no-repeat;
+        background-size:100% 100%; 
+        display:inline-block;
+    }
+    #tit ul.tit{
+    	margin-bottom:-10px;
+    }
+    ul.tit li{
+        float:right;
+        line-height:50px;
+        color:#fff;
+        margin:0 10px;
+    }
+    .main-sidebars{
+        background-color: #F2F2F2;
+        padding:1px 2px;
+        width:294px;
+        height:100%;
+        float:left;
+     	margin:0 4px 0 2px;
+       
+    }
+  .tablehead{	
+	padding-left: 6px;
+    width: 100%;
+    height: 30px;
+    margin-bottom: 9px;
+    border-bottom: 1px solid #C9C9C9;
+} 
+.tablehead  {
+	font-size:14px;
+	font-family:"微软雅黑   Arial"!important;
+}
+.tablehead  select.categoryItem{
+	width:80px;
+	height:24px;
+	margin-right:20px;
+	
+}
+.tablehead  #name{
+	height:24px;	
+}
+.tablehead  #search{
+	display:inline;
+	font-size:14px;
+	width:75px;
+	height:25px;
+	background:#169BD5;
+	color:#fff;
+	margin-left:60px;
+	border-radius:6px;
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+	border:none;
+}
+
+.span-list-first{
+	width:90%;
+}
+
+  .structure-number{
+	
+	margin-left:24%;
+	margin-right:30px;
+    }
+    .aside-head{
+        width:300px;
+        height:32px;
+    }
+    .main-sidebars select{
+        width:70px;
+        height:34px;
+        font-size:14px;
+    }
+    .input-text {
+        width: 156px;
+        height: 33px;
+        border:1px solid #797979;
+    }
+    #left-menu{
+       /*  height:774px; */
+        margin-top:4px;
+        border:1px solid #949494;
+        width:288px;
+        overflow-x:auto;
+    }
+    nav.head-nav{
+        height:37px;
+        background: #333333;
+        float:left;
+        padding-left:7px;
+        width:1589px;
+        margin-bottom:1px;
+    }
+    nav.head-nav ul{
+        width:100%;
+        height:100%
+    }
+    nav.head-nav ul li{
+        float: left;
+        line-height:37px;
+    }
+    nav.head-nav ul li a{
+        padding: 12px 20px;
+        text-decoration: none;
+        color:#fff;
+        width:65px;
+        height:37px;
+        line-height:37px;
+    }
+
+    .hovers{
+        background: #0099FF;
+    }
+    .allRegion{
+        /*width:80%;*/
+        float: left;
+        margin: 0 auto;
+    }
+  
+  
+  .for-echart{
+  	height: 300px;
+  	width:1572px;
+  	margin-bottom:10px;
+  }
+  #main{
+	float:left;
+	width: 54%;
+	height:265px;
+	text-align: center;
+	background:#fff!important;
+}
+#echartProgress{
+	float:left;
+	width:44%;
+	height:299px;
+	padding-left:5px;
+	background:#fff;
+	margin-left:7px;
+	margin-top:-35px;
+}
+    .myChart {
+        background-color: #ffffff;
+        height: 270px;
+        margin-top: 3px;
+        width: 600px;
+        float: left;
+        margin-left: 50px;
+    }
+    .myChart2{
+        padding-top: 10px;
+    }
+
+    .echarts {
+        width: 691px;
+        float: left;
+    }
+    .chartHead {
+        margin-top: 10px;
+        padding-left: 10px;
+    }
+    .myDiv h5 {
+        display: inline;
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .date {
+        display: inline;
+        margin-left: 135px;
+    }
+    .chartHead input {
+        width: 100px;
+        height: 20px;
+    }
+    .progressHead{
+    	width:94%;
+    	margin-top:-4px;
+    }
+    .progress{
+        width: 94%;
+        height: 90px!important;
+    }
+
+    .progress2{
+        margin-top: 45px;
+    }
+    .progressN{
+        display: inline-block;
+    }
+    
+    .grayLine{
+	    width: 94%;
+	    margin-left: 20px;
+	    height: 5px;
+	    background: #F2F2F2;
+	    margin-top: -7px;
+    	
+    }
+    
+    .echart-region {
+        width: 1591px;
+        /* height: 774px; */
+        float: left;
+        background: #F2F2F2;
+        position:relative;
+        overflow:auto;
+    }
+    section.content {
+       
+        height: 300px;
+        float:left;
+    }
+    #myTab{
+        margin-left: 1px;
+        width: 100%;
+        border-radius: 10px 10px 0 0;
+        height:41px;
+        background: rgba(0,102,255,1);
+        line-height:40px;
+        padding-top:2px;
+        padding-left:180px;
+    }
+     ul#myTab li{
+        float: left;
+		margin:0 5px;
+    }
+    
+     ul#myTab li h5{
+     	font-size:16px;
+     	color:#fff;
+     	padding:0 12px 0 5px;
+     }
+    ul#myTab li a{
+        padding: 10px 10px;
+        color:#fff;
+        font-size:14px;
+        font-weight:bold;
+        border-radius:7px 7px 0 0;
+    }
+    ul#myTab li a.active{
+        background: #FFFFFF;
+		color:#555;
+    }
+    
+    ul#myTab li a.default{
+    	 padding: 10px 10px;
+        color:#fff;
+        font-size:14px;
+        font-weight:bold;
+        border-radius:7px 7px 0 0;
+        background:#199ED8;
+    }
+    .area-region{
+        width: 1505px;
+        margin-left: 5px;
+    }
+    table.span-list{
+        height: 90px;
+        margin-left: 10px;
+        background: #FFFFFF;
+        width: 1540px;
+    }
+  
+    .span-region{
+        background-color:#FFFFFF;
+        width:1550px;
+        margin-bottom:10px;
+     
+    }
+    .circle-region{
+    	width:1345px;
+    	height:205px;
+    }
+    .circle-region li{
+        float: left;
+    }
+    #mainPie2,#mainPie3,#mainPie4,#mainPie5,#mainPie1{
+        height:205px;
+        width:20%;
+        border:0 solid #FFFFFF;
+        padding:20px;
+    }
+    .monitoring-statistics{
+        background-color:#FFFFFF;
+        width:1550px;
+        height: 186px;
+        padding-left:15px;
+    }
+    .region-list{
+    width: 1550px;
+    padding-bottom: 15px;
+    padding-top:7px;
+    }
+
+  
+    
+  #dater-star,#dater-end{
+    	cursor:pointer;
+    }
+section.all-region{
+	width:1899px;
+	margin:0 auto;
+}
+
+.right-region{
+		width: 1591px;
+        height: auto;
+        margin: 0 auto;
+        float:right;
+  }
+  
+ 
+   thead tr th{
+  	background:#169BD5;
+  	color:#fff;
+  	font-size:14px;	
+  	font-family:'微软雅黑','Arial';
+  }
+  
+  /*观测人员样式结束*/
+
+
+/*理论维护值*/
+.structure-number,.beam-section{
+    display: inline-block;
+    font-size: 14px;
+}
+
+#beam{
+    width: 103px;
+}
+#structure{
+	width:103px;
+	height:22px;
+}
+#structure,#beam:hover{
+    cursor: pointer;
+}
+#drawing-area{
+    width: 100%;
+    height: 270px;
+    background: #ffffff;
+  
+}
+.drawing-pic{
+    border-right: 1px solid #D7D7D7;
+    margin-top: 20px;
+    height: 245px;
+    width:600px;
+    float:left;
+}
+.construction-condition{
+    padding-top: 33px;
+    height: 100%;
+    font-size: 16px;
+    position: relative;
+    width:700px;
+    float:left;
+    padding-left:89px;
+}
+.construction{
+    padding-left: 50px;
+}
+.construction span{
+    padding-left: 10px;
+}
+#condition{
+    width: 135px;
+   height: 25px;
+   margin-left:3px;
+}
+.measuring-point{
+    padding-left: 50px;
+}
+.measuring{
+    display: inline;
+    padding-left: 12px;
+}
+p.measuring span.measuring em{
+	position:absolute;
+	top:-7px;
+	left:3px;
+}
+ span.measuring{
+	display:inline-block;
+	width:16px;
+	height:16px;	
+	position:relative;
+	border:1px solid #000;
+	top:2px;
+}
+span.measuring em{
+	position:absolute;
+	top:-3px;
+	left:3px;
+}
+.measuring input[type='radio']{
+    margin: 0 7px 0 12px;
+}
+.measuring input[type='radio']:hover{
+    cursor: pointer;
+}
+.circle-point{
+    padding-left: 60px;
+}
+.circle-point span{
+    font-size: 12px;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border: 1px solid #333333;
+    display: inline-block;
+    text-align: center;
+    margin-right: 15px;
+    position:relative;
+    margin-left:1px;
+}
+.circle-point span e{
+	position:absolute;
+	top:-7px;
+	left:3px;
+}
+
+.circle-point input[type=radio]{
+    margin: 3px;
+}
+.theoretical{
+    padding-left: 52px;
+}
+.theoretical-elevation{
+    display: inline-block;
+    margin-left: 12px;
+}
+.theory{
+    width: 145px;
+    height: 22px;
+    text-align:right;
+    border:1px solid #797979;
+}
+
+
+#canvas{
+	width:400px;
+	height:240px;
+	background:url('../images/theroPic.png') center no-repeat;
+	margin:-1px 105px;
+}
+
+
+.elevation{
+    padding-left: 51px;
+}
+.elevationX{
+    display: inline-block;
+    margin-left: 12px;
+}
+.theoryX,.theoryY{
+    width: 70px;
+    height: 22px;
+    margin:0 1px;
+   border:1px solid #797979;
+}
+
+ input.theoryX,.theoryY::-ms-input-placeholder{text-align: center;} 
+ input.theoryX,.theoryY::-webkit-input-placeholder{text-align: center;}
+.add-list{
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.list{
+    width: 100px;
+    height: 28px;
+    background: #169BD5;
+    color: #ffffff;
+    font-size: 14px;
+    border: none;
+    border-radius: 7px;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+}
+.add-list a{
+    margin-left: 10px;
+}
+.test-table{
+    margin-top: 10px;
+}
+.test-table thead{
+    background: #169BD5;
+    
+}
+.test-table thead tr td{
+	color: #fff; 
+	font-weight:bold;
+}
+
+.test{
+    text-align: center;
+}
+.test-number{
+    width: 4%;
+    line-height: 24px!important;
+    padding-top: 14px!important;
+}
+.test-style{
+    line-height: 55px!important;
+}
+.test tr td{
+    border:1px solid #797671!important;
+}
+.measuring-pile{
+    font-weight: bold;
+}
+.theory-color{
+    background: #F2F2F2;
+}
+
+.point-type{
+    width: 10%;
+    line-height: 38px!important;
+}
+.draw-circle{
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border: 1px solid #F2F2F2;
+    display: inline-block;
+    line-height: 17px;
+    color:#fff;
+}
+.elevation-point{
+    font-weight: bold;
+    line-height: 45px!important;
+    font-size: 14px;
+}
+
+.altitude{
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.test-table table{
+	width:99%;
+}
+
+
+#celiangzhuang,#linshicedian{
+	margin-left:10px;
+}
+
+.right-head-region{
+	width:1590px;
+	height:30px;
+	
+	line-height:30px;
+}
+
+#celiangzhuang thead tr td.test-number{
+	width:6%;
+	padding:13px;
+}
+
+
+
+
+/*偏差超限*/
+
+section.devi{
+    width: 1590px;
+    height: auto;
+}
+.top-header{
+    width: 100%;
+    height: 35px;
+    border-bottom: 1px solid #333333;
+    background: #F2F2F2;
+    line-height: 32px;
+    padding-left:5px;
+}
+.clear{
+    clear: both;
+}
+.head-left{
+    width: 390px;
+    height: 100%;
+    float: left;
+    font-size:14px;
+    
+}
+.head-right{
+    width: 660px;
+    height: 100%;
+    float: left;
+    font-size:14px;
+}
+.cons-segment{
+	width:103px;
+	height:22px;
+}
+#dater-star,#dater-end{
+    width: 113px;
+    height: 22px;
+}
+.Number,.segment{
+    width: 103px;
+    height: 22px;
+}
+.deviation-region{
+    width: 100%;
+    height: 200px;
+    background: #F2F2F2;
+    padding-top: 12px;
+}
+
+.deviation-region ul{
+    width: 100%;
+    height: 30px;
+    margin-bottom: 7px;
+    margin: -5px 0 7px -2px;
+}
+.deviation-region ul li{
+    float: left;
+    list-style: none;
+}
+.deviation-region ul li a.close-deviation-list{
+    padding:10px 30px;
+    text-decoration: none;
+    background: #FFFFFF;
+    line-height: 35px;
+    color: #333333;
+    font-size:13px;
+}
+
+.deviation-region ul li a.deviation-list{
+    padding:10px 30px;
+    text-decoration: none;
+    color: #000000;
+    line-height: 35px;
+}
+.deviation-list{
+   background: #D7D7D7;
+}
+
+.over-list{
+    display: block;
+	margin-left:-5px;
+}
+.deviation-bottom{
+    width: 100%;
+    height: 30px;
+    margin-top: -10px;
+}
+.bottom-left{
+    float: left;
+    width: 300px;
+    height: 100%;
+    padding-left:10px;
+}
+.bottom-right{
+    float: right;
+    width: 300px;
+    height: 100%;
+}
+.close-list{
+    display: none;
+}
+.table{
+	width:99%!important;
+	margin-left:4px;
+	
+}
+table#measureInfoTbl{
+	margin-top:5px;
+}
+
+
+.tablehead-btn button{
+	width:50px;
+	height:22px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	background:#169BD5;
+	color:#fff;
+	line-height:22px;
+	border:none;
+}
+
+.query-btn{
+	width:63px;
+	height:26px;
+	font-size:14px;
+	line-height:26px;
+	border-radius:6px;
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+	background:#169BD5;
+	color:#fff;
+	border:none;
+	margin-top:-2px;
+}
+.tablehead-btn{
+	width:99%;
+	height:30px;
+	border-bottom:1px solid #C9C9C9;
+	line-height:25px;
+	margin-bottom:5px;
+	
+}
+.M-tablehead{
+	font-size:14px;
+	font-family:"微软雅黑， Arial";
+	height:35px;
+	border-bottom:1px solid #C9C9C9;
+	padding-left:20px;
+	line-height:30px;
+}
+.M-tablehead select{
+	width:103px;
+	height:22px;
+}
+
+.m-search #search{
+	 width: 70px;
+    height: 26px;
+    font-size: 14px;
+    color: #fff;
+    background: #169BD5;
+    border: none;
+    float:right;
+    margin-right:24px;
+    border-radius:3px;
+    -web-border-radius:3px;
+    -moz-border-radius:3px;
+}
+
+.m-search{
+	width:100%;
+	height:31px;
+	border-bottom:1px solid #C9C9C9;
+	margin-bottom:10px;
+}
+
+.measureHeaderDiv{
+	height:30px;
+}
+.measureSearchBtn{
+    width: 63px;
+    height: 22px;
+    font-size: 14px;
+    color: #fff;
+    background: #169BD5;
+    border: none;
+    margin-left:60px;
+    border-radius:6px;
+    -web-border-radius:6px;
+    -moz-border-radius:6px;
+    line-height:22px;
+}
+
+.ld-tablehead{
+	width:100%;
+	height:30px;
+	border-bottom:1px solid #C9C9C9;
+	margin-bottom:5px;
+	line-height:30px;
+}
+#ld-btn{
+	width:76px;
+	height:25px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	background:#169BD5;
+	color:#fff;
+	float:right;
+	margin-right:50px;
+	border:none;
+	font-size:14px;
+	margin-top:4px;
+}
+.ld-head{
+	width:300px;
+	height:30px;
+	float:left;
+	padding-left:23px;
+	font-size:14px;
+	position:relative;
+	line-height:30px;
+	
+}
+.ld-head select{
+	width:100px;
+	height:22px;
+	position:absolute;
+	top:3px;
+}
+.ld-cx{
+	width:71px;
+	height:22px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	background:#169BD5;
+	color:#fff;
+	font-size:14px;
+	border:none;
+	position:absolute;
+	left:209px;
+	line-height:22px;
+}
+.stru-T{
+	vertical-align:middle;	
+  }
+  .mileage-region{
+  	display:inline-block;
+  	display:none;
+  }
+  .sall-mileage{
+  	margin:0 3px 0 100px!important;
+  }
+   .mileage-region .big-mileage{
+   	margin:0 0 0 40px;
+   }
+   .mileage-region input:hover{
+   	cursor:point;
+   }
+   .circle-point input:hover{
+   	cursor:point;	
+   }
+   #mileage{
+	display:none;
+}
+
+.mainHead{
+	width:54%;
+	background:#fff;
+	position:relative;
+}
+ /*
+   *铁路首页样式补充开始
+   */
+   
+.echartsRegionHead span{
+	margin-right:64%;
+}
+.lxljcBottom{
+	width: 98%;
+    margin-left: 4px;
+    background-color: #F2F2F2;
+    padding-top: 2px;
+    height: 4px;
+    margin-bottom: 15px;
+    margin-top: 30px;
+}
+ /*
+   *铁路首页样式补充结束
+   */
+   
+   
+   table#datumPointList{
+   	margin-left:0;
+   }
+   table#cedianInfo{
+   	margin-left:0;
+   }
+   
+   /*连续梁页面大小的的补充*/
+   
+#hightDeviation,#middleLineDeviation,#elevationDeviation,#ldCuoTai{
+   
+   width:1570px;
+   
+   height:450px;
+   
+   background:#fff!important;
+   
+   }
+   
+   /*理论维护值增加的按钮*/
+ .T-chaxun{
+	margin-left:41px;
+	display:inline-block;
+}
+.T-chaxun-btn{
+	width:58px;
+	height:25px;
+	font-size:14px;
+	line-height:25px;
+	color:#fff;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	-o-border-radius:5px;
+	background:#169BD5;
+	
+}
+   
+  
+}
+
+ 

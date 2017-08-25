@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.CDMapper">
+	<resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.CD">
+	<id column="CDID" jdbcType="DECIMAL" property="cdid" />
+	<result column="CDBM" jdbcType="VARCHAR" property="cdbm" />
+	<result column="MILEAGEFLAG" jdbcType="DECIMAL" property="mileageflag" />
+	<result column="CODE" jdbcType="VARCHAR" property="code" />
+	<result column="PTYPE" jdbcType="DECIMAL" property="ptype" />
+	<result column="POINTPLACE" jdbcType="DECIMAL" property="pointplace" />
+	<result column="GKBM" jdbcType="DECIMAL" property="gkbm" />
+	<result column="CALCULATEHT" jdbcType="DECIMAL" property="calculateht" />
+	<result column="LL_X" jdbcType="DECIMAL" property="llX" />
+	<result column="LL_Y" jdbcType="DECIMAL" property="llY" />
+	<result column="CONBEAMID" jdbcType="DECIMAL" property="conbeamid" />
+	<result column="PIER" jdbcType="DECIMAL" property="pier" />
+	<result column="PARTID" jdbcType="DECIMAL" property="partid" />
+	<result column="UPDATETIME" jdbcType="DATE" property="updatetime" />
+	<result column="USEFLAG" jdbcType="DECIMAL" property="useflag" />
+	<result column="CREATETIME" jdbcType="DATE" property="createtime" />
+	<result column="CREATEUSER" jdbcType="VARCHAR" property="createuser" />
+	<result column="UPDATEUSER" jdbcType="VARCHAR" property="updateuser" />
+	<result column="INITPOINTID" jdbcType="DECIMAL" property="initpointid" />
+	</resultMap>
+	<sql id="Base_Column_List">
+	CDID, CDBM, MILEAGEFLAG, CODE, PTYPE, POINTPLACE, GKBM, CALCULATEHT, LL_X, LL_Y, CONBEAMID, PIER, PARTID, 
+	UPDATETIME, USEFLAG,INITPOINTID
+	</sql>
+	<select id="select" parameterType="com.tky.lxl.platform.model.business.CD" resultMap="BaseResultMap">
+	select 
+	<include refid="Base_Column_List" />
+	from T_CD
+	where 1=1
+		<if test="conbeamid != null">
+			and CONBEAMID = #{conbeamid}
+		</if>
+		<if test="pier != null">
+			AND PIER = #{pier}
+		</if>
+		<if test="partid != null">
+			AND PARTID = #{partid}
+		</if>
+		<if test="mileageflag != null">
+			AND MILEAGEFLAG = #{mileageflag}
+		</if>
+	order by PTYPE,GKBM
+	</select>
+	<select id="selectByPoint" parameterType="com.tky.lxl.platform.model.business.CD" resultMap="BaseResultMap">
+	select 
+	<include refid="Base_Column_List" />
+	from T_CD
+	where 1=1
+	<if test="conbeamid != null">
+		AND CONBEAMID = #{conbeamid}
+	</if>
+	<if test="pier != null">
+		AND PIER = #{pier}
+	</if>
+	<if test="partid != null">
+		AND PARTID = #{partid}
+	</if>
+	<if test="mileageflag != null">
+		AND MILEAGEFLAG = #{mileageflag}
+	</if>
+	<if test="gkbm != null">
+		AND GKBM = #{gkbm}
+	</if>
+	<if test="ptype != null">
+		AND PTYPE = #{ptype}
+	</if>
+	<if test="pointplace != null">
+		AND POINTPLACE = #{pointplace}
+	</if>
+	</select>
+	<select id="selectByPartID" parameterType="com.tky.lxl.platform.model.business.CD" resultMap="BaseResultMap">
+	select DISTINCT
+		T.GKBM,
+		DIC.NAME AS NAME
+	from T_CD T,T_DICTIONARY DIC
+	where 1=1
+	<if test="partid != null">
+		and T.PARTID = #{partid}
+	</if>
+	<if test="pier != null">
+		and T.PIER	= #{pier}
+	</if>
+	<if test="conbeamid != null">
+		and T.CONBEAMID = #{conbeamid}
+	</if>
+	<if test="useflag != null">
+		and T.USEFLAG = #{useflag}
+	</if>
+		and T.GKBM = DIC.ID
+	</select>
+	<update id="UpdateByPoint" parameterType="com.tky.lxl.platform.model.business.CD">
+
+		update T_CD
+		<set>
+		<if test="cdbm != null">
+		CDBM = #{cdbm,jdbcType=VARCHAR},
+		</if>
+		<if test="mileageflag != null">
+		MILEAGEFLAG = #{mileageflag,jdbcType=DECIMAL},
+		</if>
+		<if test="code != null">
+		CODE = #{code,jdbcType=VARCHAR},
+		</if>
+		<if test="ptype != null">
+		PTYPE = #{ptype,jdbcType=DECIMAL},
+		</if>
+		<if test="calculateht != null">
+		CALCULATEHT = #{calculateht,jdbcType=DECIMAL},
+		</if>
+		LL_X = #{llX,jdbcType=DECIMAL},
+		LL_Y = #{llY,jdbcType=DECIMAL},
+		UPDATETIME = SYSDATE,
+		<if test="updateuser != null">
+		UPDATEUSER = #{updateuser,jdbcType=VARCHAR},
+		</if>
+		USEFLAG = 0,
+	</set>
+	where 1=1
+	<if test="conbeamid != null">
+			 AND CONBEAMID = #{conbeamid}
+		 </if>
+		 <if test="pier != null">
+			 AND PIER = #{pier}
+		 </if>
+		 <if test="partid != null">
+			 AND PARTID = #{partid}
+		 </if>
+		 <if test="mileageflag != null">
+			 AND MILEAGEFLAG = #{mileageflag}
+		 </if>
+		 <if test="gkbm != null">
+			 AND GKBM = #{gkbm}
+		 </if>
+		 <if test="ptype != null">
+			 AND PTYPE = #{ptype}
+		 </if>
+		 <if test="pointplace != null">
+			 AND POINTPLACE = #{pointplace}
+		</if>
+	</update>
+		 
+	<select id="getMiletype" parameterType="int" resultType="int">
+		SELECT MILEAGEFLAG FROM T_LD WHERE PARTID=#{beam}
+	</select>
+		
+	<insert id="Insert" parameterType="com.tky.lxl.platform.model.business.CD">
+	insert into T_CD
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+		CDID,
+		<if test="cdbm != null">
+		CDBM,
+		</if>
+		<if test="mileageflag != null">
+		MILEAGEFLAG,
+		</if>
+		<if test="code != null">
+		CODE,
+		</if>
+		<if test="ptype != null">
+		PTYPE,
+		</if>
+		<if test="pointplace != null">
+		POINTPLACE,
+		</if>
+		<if test="gkbm != null">
+		GKBM,
+		</if>
+		<if test="calculateht != null">
+		CALCULATEHT,
+		</if>
+		<if test="llX != null">
+		LL_X,
+		</if>
+		<if test="llY != null">
+		LL_Y,
+		</if>
+		<if test="conbeamid != null">
+		CONBEAMID,
+		</if>
+		<if test="pier != null">
+		PIER,
+		</if>
+		<if test="partid != null">
+		PARTID,
+		</if>
+		CREATETIME,
+		UPDATETIME,
+		<if test="createuser != null">
+		CREATEUSER,
+		</if>
+		<if test="updateuser != null">
+		UPDATEUSER,
+		</if>
+		USEFLAG,
+		<if test="initpointid != null">
+		INITPOINTID,
+		</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+		cdid_sequence.nextval,
+		<if test="cdbm != null">
+		#{cdbm,jdbcType=VARCHAR},
+		</if>
+		<if test="mileageflag != null">
+		#{mileageflag,jdbcType=DECIMAL},
+		</if>
+		<if test="code != null">
+		#{code,jdbcType=VARCHAR},
+		</if>
+		<if test="ptype != null">
+		#{ptype,jdbcType=DECIMAL},
+		</if>
+		<if test="pointplace != null">
+		#{pointplace,jdbcType=DECIMAL},
+		</if>
+		<if test="gkbm != null">
+		#{gkbm,jdbcType=DECIMAL},
+		</if>
+		<if test="calculateht != null">
+		#{calculateht,jdbcType=DECIMAL},
+		</if>
+		<if test="llX != null">
+		#{llX,jdbcType=DECIMAL},
+		</if>
+		<if test="llY != null">
+		#{llY,jdbcType=DECIMAL},
+		</if>
+		<if test="conbeamid != null">
+		#{conbeamid,jdbcType=DECIMAL},
+		</if>
+		<if test="pier != null">
+		#{pier,jdbcType=DECIMAL},
+		</if>
+		<if test="partid != null">
+		#{partid,jdbcType=DECIMAL},
+		</if>
+		SYSDATE,
+		SYSDATE,
+		<if test="createuser != null">
+		#{createuser,jdbcType=VARCHAR},
+		</if>
+		<if test="updateuser != null">
+		#{updateuser,jdbcType=VARCHAR},
+		</if>
+		0,
+		<if test="initpointid != null">
+		#{initpointid,jdbcType=DECIMAL},
+		</if>
+	</trim>
+	</insert>
+</mapper>

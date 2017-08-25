@@ -1,0 +1,829 @@
+
+ /*
+ 	table表格引用bootstrap中的表格
+ */
+ 
+/*表格样式*/
+	table thead tr td{
+		font-size:14px;
+	 	font-style:normal;
+	 	text-align:center;
+	 	vertical-align:middle!important;
+		color:#fff;
+	 	text-align:center;
+		border:1px solid #797671!important;
+		font-weight:700;
+		background:#169BD5;
+		
+	}
+   table thead tr th{
+	   	text-align:center;
+	   	border:1px solid #797671!important;
+   }
+    table tbody tr td{
+		background:#169BD5;
+		font-size:13px;
+		font-style:normal;
+		text-align:center;
+		vertical-align:middle!important;
+		color:#333;
+		text-align:center;
+		border:1px solid #797671!important;
+		font-weight:400;
+    }
+    
+ table .sz{
+ 	vertical-align:middle;
+ }
+
+  table.span-list>tbody>tr>td{
+ 	text-align:center;
+ 	border:none!important;
+ }
+ /*测量信息页面表*/
+ #measureInfoTbl thead tr td:nth-child(2){
+ 	min-width:45px;
+ }
+  #measureInfoTbl thead tr td:nth-child(3){
+ 	min-width:40px;
+ }
+  #measureInfoTbl thead tr td:nth-child(4){
+ 	min-width:63px;
+ }
+  #measureInfoTbl thead tr td:nth-child(5){
+ 	min-width:80px;
+ }
+  #measureInfoTbl thead tr td:nth-child(6){
+ 	min-width:73px;
+ }
+  #measureInfoTbl thead tr td:nth-child(7){
+ 	min-width:73px;
+ }
+  #measureInfoTbl thead tr td:nth-child(8){
+ 	min-width:135px;
+ }
+  #measureInfoTbl thead tr td:nth-child(9){
+ 	min-width:95px;
+ }
+  #measureInfoTbl thead tr td:nth-child(10){
+ 	min-width:95px;
+ }
+  #measureInfoTbl thead tr td:nth-child(11){
+ 	min-width:107px;
+ }
+  #measureInfoTbl thead tr td:nth-child(12){
+ 	min-width:82px;
+ }
+  #measureInfoTbl thead tr td:nth-child(13){
+ 	min-width:82px;
+ }
+  #measureInfoTbl thead tr td:nth-child(14){
+ 	min-width:88px;
+ }
+ 
+/*弹出框样式*/
+/*头部*/
+popUp-head{
+	width:0%;
+	height:30px;
+	background:#169BD5;
+	border-radius:5px 5px 0 0;
+	font-size:14px;
+	color:#fff;
+}
+/*取消*/
+.popUp-cancel-btn{
+	width:70px;
+	height:30px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-webkit-border-radius:5px;
+	background:#FF0000;
+}
+/*确定*/
+.popUp-sure-btn{
+	width:70px;
+	height:30px;
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	-moz-webkit-border-radius:5px;
+	background:#008000;
+	
+}
+
+ /*关闭*/
+ .popUp-close-btn{
+ 	width:100px;
+ 	height:30px;
+ 	border-radius:5px;
+ 	-webkit-border-radius:5px;
+	-moz-webkit-border-radius:5px;
+	background:#169BD5;
+ }
+ /*居中*/
+.align{
+	text-align:center;
+}
+/* 主体部分高度 */
+.mainContent {
+	height : 100%;
+}
+ /*组织结构树*/
+.orgTree li{
+ 	float:none;
+}
+/*hidden*/
+.hidden {
+	display : none;
+}
+
+/*标段管理员*/
+.menu-nav ul li {
+	margin-right:5px;
+	margin-top:2px;
+	float:left;
+}
+.menu-nav ul li button {
+	border-width: 0px;
+	left: 0px;
+	top: 0px;
+	width: 96px;
+	height: 25px;
+	background-color: rgba(92, 155, 213, 1);
+	border: none;
+	border-radius: 5px;
+	font-weight: 700;
+	font-style: normal;
+	color:#FFFFFF;
+	line-height:25px;
+	outline:none;
+	font-size:13px;
+}
+.active{
+	background:#fff!important;
+	color:rgba(92, 155, 213, 1)!important;
+	outline: none;
+}
+
+.areaSummaryRegion{
+	background:#fff;
+	width:99%;
+	height:auto;
+	position:absolute;
+	top:42px;
+	
+}
+
+table.home-table{
+	margin-left: 10px;
+	
+}
+
+table#areaSummary,#eastNorth,#eastChina,#northChina,#middleChina,#southChina,#westSouth,#westNorth  tr td{
+	background:#fff;
+	font-size:14px;
+	font-weight:400;
+	vertical-align:middle;
+	text-align:center;
+	color:#333;
+	border:1px solid #797671;
+}
+
+table.home-table thead{
+	border:1px solid #797979;
+}
+
+.eastNorthRegion,.northChinaRegion,.eastChinaRegion,.middleChinaRegion,.southChinaRegion,.westSouthRegion,.westNorthRegion{
+	display:none;
+}
+
+
+#tableinfo{
+	padding:25px;
+}
+#tableinfo span:nth-child(1){
+	font-size:14px;
+	color:#333;
+}
+#shebeiList{
+	padding-left:20px;
+	margin:3px 0 0 7px;
+}
+table#tbl_Deal{
+	width:98%!important;
+	margin:3px 0 0 5px;
+}
+
+table tbody tr td{
+	background:#fff;
+}
+
+.allRegionChina table thead tr td{
+	background:#fff;
+	color:#333333;
+	font-weight:400;
+}
+
+/*项目首页echarts*/
+
+.chartHead{
+	margin-top: 10px;
+}
+.progress{
+	width: 380px;
+	height: 90px;
+	margin-bottom: 10px;
+}
+.progress1{
+	background: #40cbc1;
+	position: relative;
+}
+.progress2{
+	background: #40cbc1;
+	position: relative;
+}
+
+.progressName{
+		background: #669999; 
+		color:#ffffff;
+		height: 30px;
+		width:100%;
+		position: absolute;
+		bottom: 0;
+		line-height: 30px;
+		padding-left: 10px;	
+		font-size:16px;	
+}
+
+.progressName span{
+	float:right;
+	color:#fff;
+	font-size:14px;
+	margin:0 10px;
+}
+
+
+.tip{
+	margin-top:10px;
+	}
+	
+.icon { 
+	display: inline-block; 
+	width:25px;
+	height:14px;
+	background-color: #189fd9;
+	vertical-align:text-top;
+
+		
+	}
+		
+/*某项目首页*/
+
+.progressHead h5{
+	display:inline-block;
+	margin-left:15px;
+}
+
+.progress{
+	width:94%;
+	margin-left:20px;
+	height:5px;
+	background:#00CC99;
+	margin-top:-7px;
+}
+#jqmeter-container1,#jqmeter-container2{
+	width:90%;
+	height:50px;
+	margin:-12px auto;
+	position:relative;
+}
+/* .inner-therm{ */
+/* 	overflow:visible!important; */
+/* } */
+
+
+
+/*桥梁首页echart*//
+
+
+
+.transfiniteNumber{
+	width:198px;
+	height:35px;
+	font-size:15px;
+	color:#1E1E1E;
+	font-weight:700;
+	line-height:35px;
+	padding-left:5px;
+}
+.timeQuery{
+	width:296px;
+	height:35px;		
+	line-height:28px;
+	position:relative;
+}
+.timeQuery span{
+	font-size: 14px;
+    font-weight: bold;
+    position:absolute;
+    left:5px;
+    top:3px;
+    display:inline-block;
+}
+
+.timeView-btn{
+	width: 50px;
+    height: 24px;
+    position:absolute;
+    color: #fff;
+    line-height: 24px;
+    border-radius: 6px;
+    -webkit-border-radius:6px;
+    -moz-border-radius:6px;
+    -o-border-radius:6px;
+    background: #169BD5;	
+    top:3px;
+    right:-2px;
+    border:none;
+}
+
+.time-view-start{
+	border:1px solid #333;
+	width:80px;
+	height:20px;
+	line-height:20px;
+	position:absolute;
+	left:65px;
+	top:6px;
+}
+
+.timeQuery p em{
+	position:absolute;
+	top:4px;
+	left:145px;
+}
+
+.time-view-end{
+	border:1px solid #333;
+	width:80px;
+	height:20px;
+	line-height:20px;
+	position:absolute;
+	left:162px;
+	top:6px;
+}
+
+
+
+#mainHead-bottom{
+	width:98%;
+    border-bottom:2px solid #F2F2F2;
+	margin:0 auto;
+	height:36px;
+	
+}
+
+
+/*
+   *铁路首页样式补充开始
+   */
+   
+.allRegionChina h4{
+	display: inline-block;
+    position: absolute;
+    left: 45px;
+    color: #fff;
+    font-weight: 700;
+    font-size:15px;
+    top:2px;
+}
+.allRegionChina{
+	padding-left: 2px;
+	position:relative;
+}
+.echartsRegionHead{
+	padding-left:15px;
+	position:relative;
+	width:100%;
+	height:29px;
+}
+.echartsRegionHead span{
+	font-size: 15px;
+    font-weight: 700;
+    float: left;
+    display: inline-block;
+    margin-top: 6px;
+    color:#1E1E1E;
+    margin-right: 49%;
+    
+}
+.echartsRegionBottom{
+	background-color: #F2F2F2;
+    width: 94%;
+    padding-top: 2px;
+    margin-left: 15px;
+    height: 4px;
+}
+.lxljcHead{
+	float:left;
+}
+/*
+   *铁路首页样式补充结束
+   */
+   
+/*
+* 某项目首页底部table表头 
+**/
+#smprojectTable thead tr td{
+	background:#fff;
+	color:#333;
+	font-weight:400;
+}
+
+/*桥梁首页中echart中span样式*/
+
+#pointFirst{
+	width:20px;
+	height:20px;
+	background:#fff;
+	position:absolute;
+	top:70px;
+	left:5px;
+	text-align:center;
+	color:#0000FF;
+	font-size:14px;
+}
+
+#pointSecond,#pointThird,#pointFour,#pointFifth{
+	width:20px;
+	height:20px;
+	background:#fff;
+	position:absolute;
+	top:70px;
+	text-align:center;
+	color:#0000FF;
+	font-size:14px;
+}
+#pointSecond{
+	left:46px;
+}
+#pointThird{
+	left:140px;
+}
+#pointFour{
+	left:231px;
+}
+
+#pointFifth{
+	left:275px;
+}
+/*头部导航样式*/
+ul.tit li a{
+	color:#fff;
+}
+
+.time-view-start,.time-view-end:hover{
+	cursor:pointer;
+}
+
+/*项目首页增加的样式*/
+.progressHead h4{
+	font-weight: 700;
+    display: inline-block;
+    margin-left: 20px;
+    font-size:15px;
+    color:#1E1E1E;
+    position:absolute;
+    top:-2px;
+
+}
+
+ .pull-right{
+        margin-right: 22px;
+        font-size: 17px;
+	    display: inline-block;
+	    width: 190px;
+	    height: 27px;
+	    position: relative;
+	    text-align:center;
+    }
+
+.progressHead span{
+	    display: inline-block;
+	    font-size: 14px;
+	    position: absolute;
+	    top:-1px;
+		right:35px;
+		color:#333;
+}
+
+/* 立模标高偏差中的echart图片样式*/
+
+#elevationFirst{
+	position: absolute;
+	top: 85px;
+	left:5px;
+	width: 25px;
+	height: 25px;
+	text-align:center;
+	color:#0000FF;
+	font-size:14px;
+}
+
+#elevationSecond,#elevationThird,#elevationFour,#elevationFifth,#elevationsixth{
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	text-align:center;
+	color:#0000FF;
+	font-size:14px;
+}
+#elevationSecond{
+	top: 85px;
+	left:41px;
+}
+
+#elevationThird{
+	top:170px;
+	left:41px;
+}
+
+#elevationFour{
+	top:170px;
+	left:264px;
+}
+#elevationFifth{
+	top: 82px;
+	left:264px;
+}
+
+#elevationsixth{
+	top: 82px;
+	left:301px;
+}
+
+/*项目首页右侧progress顶部标题*/
+.progressHead{
+	margin-top:-3px;
+	position:relative;
+	width:100%;
+	height:38px;
+}
+
+/*观测人员样式*/
+#username{
+	border:1px solid #A9A9A9;
+	width:103px;
+	height:24px;
+	vertical-align:top;
+}
+
+#observerList{
+	padding-left: 20px;
+    margin: 3px 0 0 7px;
+	
+}
+.table-conbeam tbody tr th{
+	text-align:center;
+}
+
+/*偏差超限页面*/
+
+.tablehead{
+	width: 100%;
+    height: 35px;
+    padding-top: 2px;
+    border-bottom: 1px solid #C9C9C9;
+}
+
+/*梁段测点*/
+.cdconstruction-condition span.ld-window{
+	font-weight: bold;
+	font-size:14px;
+	
+}
+.cdconstruction-condition p{
+	margin:0;
+	
+}
+.cdElevation textarea#reason{
+	width:224px;
+	height:50px;
+	margin-left:108px;
+	
+}
+.cdElevation{
+	position:relative;
+	padding-left:20px;
+	
+}
+.cdElevation span{
+	position:absolute;
+		top:10px;
+		left:76px;
+}
+
+.cdelevation#theoryX,.cdelevation#theoryY{
+	width: 148px;
+    height: 24px;
+    border: 1px solid #797979;
+    margin-left: 3px;
+}
+
+.ld-cedian{
+	
+	margin-left:9px;
+}
+.radio1{
+	margin-left:-16px;
+	
+}
+.ldtheoretical,.cdelevation,.cdelevation,.cdElevation p{
+	margin-left:10px;
+}
+.cdconstruction{
+	padding-left:62px;
+}
+.cdmeasuring-point{
+	
+	padding-left:62px;
+}
+/*标段首页时间戳**/
+
+.grayLine{
+	width:96%;
+	height:2px;
+	background:#F2F2F2;
+	margin:-5px auto;
+}
+/*修改页梁段测点的table中tr th*/
+#celiangzhuang thead tr th.theory-height{
+	padding:0;
+}
+/*项目首页*/
+.mainkua{
+	font-size: 14px;
+	 font-weight: bold; 
+	 display:inline-block;
+	 float:left;
+	 margin-left:20px;
+}
+
+.mainkuaColor{
+	display: inline-block; 
+	height: 15px; width: 24px;
+	 margin-top: 8px;
+	  background-color: rgba(79, 129, 189, 1); 
+	  margin: 0 4px 0 440px;
+}
+
+
+
+.headshow-first{
+	margin-left:15px;
+}
+.headshow{
+	font-size:15px;
+}
+
+.managePage{
+    width: 540px;
+    height: 170px;
+    border: 1px solid #797979;
+    border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    -moze-border-radius: 6px 6px 0 0;
+    z-index: 1;
+    position: absolute;
+    top: 100px;
+    left: 300px;
+    background: #fff;
+}
+
+.errorBody{
+    margin:10px;
+    height:70px !important;
+    font-size: 16px;
+    text-align: center;
+}
+
+.errorbottom {
+    padding-left: 185px !important;
+}
+
+.errorContent{
+	width: 500px;
+    height: 100px;
+}
+
+#errormsg{
+	font-size: 24px;
+	text-align: center;
+	height: 150px;
+    text-align: center;
+    line-height: 70px;
+}
+
+/*switch开关  */
+
+.switchBtn{
+	margin-top:20px;
+	padding-left:28px;
+}
+.closeChaoxian{
+	color:#c3c3c;
+	font-size:14px;
+}
+
+/*开关的大小*/
+      .switch-container {
+          height: 30px;
+          width: 70px;
+          display:inline-block;
+          position: relative;
+      }
+
+      /*设置checkbox不显示*/
+      .switch {
+          display: none;
+      }
+
+      /*设置label标签为椭圆状*/
+      label {
+          display: block;
+          background-color: #EEEEEE;
+          height: 100%;
+          width: 100%;
+          cursor: pointer;
+          border-radius: 35px;
+          margin-top:7px;
+          border:1px solid #797979;
+      }
+      span.yes{
+          font-size: 15px;
+          position: absolute;
+          top: 11px;
+          left: 6px;
+          color: #fff;
+      }
+      span.no{
+          font-size: 15px;
+          position: absolute;
+          top: 11px;
+          right: 11px;
+          color: #fff;
+      }
+      /*在label标签内容之前添加如下样式，形成一个未选中状态*/
+      label:before {
+          content: '';
+          display: block;
+          border-radius: 30px;
+          height: 100%;
+          width: 30px;
+          background-color: white;
+          opacity: 1;
+          box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08);
+          -webkit-transition: all 0.2s ease;
+      }
+
+      /*在label标签内容之后添加如下样式，形成一个选中状态*/
+      label:after {
+          position: relative;
+          top: -28px;
+          left: 40px;
+          content: '';
+          display: block;
+          border-radius: 25px;
+          height: 100%;
+          width: 30px;
+          background-color: white;
+          opacity: 0;
+          box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08);
+          -webkit-transition: all 0.2s ease;
+      }
+
+
+      /* ~ 兄弟选择符。
+         p~ul ：位于 p 元素之后的所有 ul 元素
+      */
+
+      /*选中后，选中样式显示*/
+      #switch:checked~label:after {
+          opacity: 1;
+      }
+
+      /*选中后，未选中样式消失*/
+      #switch:checked~label:before {
+          opacity: 0;
+      }
+
+      /*选中后label的背景色改变*/
+      #switch:checked~label {
+          background-color: green;
+      }
+.tishi{
+	color:#c9c9c9;
+	font-size:13px;
+}
+
+

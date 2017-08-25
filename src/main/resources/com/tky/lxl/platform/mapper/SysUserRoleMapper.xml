@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.system.SysUserRoleMapper">
+
+
+	<resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.system.SysUserRole">
+		<id column="RU_ID" jdbcType="DECIMAL" property="ruId" />
+		<result column="GRANT_STATE" jdbcType="DECIMAL" property="grantState" />
+		<result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+		<result column="ROLE_ID" jdbcType="DECIMAL" property="roleId" />
+		<result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+		<result column="DESRIPTION" jdbcType="VARCHAR" property="description" />
+	    <result column="ROLE_TYPE" jdbcType="DECIMAL" property="roleType" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		RU_ID, ACCOUNT, ROLE_ID, USE_FLAG, USER_ID
+	</sql>
+
+	<select id="selectRoleByAccount" resultMap="BaseResultMap">
+		
+		SELECT
+		  GRANTED.ROLE_ID AS GRANTED_ROLE_ID,
+		  NOT_GRANTED.ROLE_ID AS NOT_GRANTED_ROLE_ID,
+		  CASE
+		     WHEN SYS_ROLE.ROLE_TYPE = 2 AND OBSERVER.USE_FLAG = 0 THEN 4  /* 观测人员 */
+		     WHEN GRANTED.ROLE_ID IS NOT NULL AND NOT_GRANTED.ROLE_ID IS NULL THEN 0  /* 有授权数据,已授权 */
+		     WHEN GRANTED.ROLE_ID IS NULL AND NOT_GRANTED.ROLE_ID IS NOT NULL THEN 1  /* 有授权数据,未授权*/
+		     WHEN GRANTED.ROLE_ID IS NULL AND NOT_GRANTED.ROLE_ID IS NULL AND SYS_ROLE.ROLE_TYPE = 0 THEN 3  /*  无授权数据,默认授权*/
+		     WHEN GRANTED.ROLE_ID IS NULL AND NOT_GRANTED.ROLE_ID IS NULL AND SYS_ROLE.ROLE_TYPE = 1 THEN 1  /*  无授权数据,未授权*/
+		  END AS GRANT_STATE,
+		  SYS_ROLE.ROLE_ID AS ROLE_ID,
+		  SYS_ROLE.ROLE_NAME AS ROLE_NAME,
+		  SYS_ROLE.DESRIPTION AS DESRIPTION,
+		  SYS_ROLE.ROLE_TYPE AS ROLE_TYPE
+		FROM
+		  (SELECT ROLE_ID, ROLE_NAME, DESRIPTION, ROLE_TYPE FROM SYS_ROLE
+		  WHERE SYS_ROLE.ROLE_LEVEL = #{roleLevel,jdbcType=DECIMAL}
+		  AND IS_SHOW = 0 ) SYS_ROLE
+		LEFT JOIN
+		(
+			/*已授权角色*/
+			SELECT
+				  SYS_USER_ROLE.ROLE_ID AS ROLE_ID
+				FROM
+				  SYS_USER_ROLE
+		    WHERE
+		      SYS_USER_ROLE.USE_FLAG = 0
+		    AND
+		      SYS_USER_ROLE.ACCOUNT = #{account,jdbcType=VARCHAR}
+		
+		) GRANTED
+		ON
+		  SYS_ROLE.ROLE_ID = GRANTED.ROLE_ID
+		AND
+		  SYS_ROLE.ROLE_TYPE != 2	/* 非观测人员 */
+		LEFT JOIN
+		(
+			/*未授权角色*/
+		    SELECT
+		     SYS_USER_ROLE.ROLE_ID AS ROLE_ID
+		    FROM
+		     SYS_USER_ROLE
+		    WHERE
+		     SYS_USER_ROLE.USE_FLAG = 1
+		    AND
+		     SYS_USER_ROLE.ACCOUNT = #{account,jdbcType=VARCHAR}
+		) NOT_GRANTED
+		ON
+		  SYS_ROLE.ROLE_ID = NOT_GRANTED.ROLE_ID
+		AND
+		  SYS_ROLE.ROLE_TYPE != 2	/* 非观测人员 */
+		LEFT JOIN
+		(
+			/*观测人员*/
+		    SELECT
+		     ID,
+		     USE_FLAG
+		    FROM
+		     T_OBSERVER
+		    WHERE
+		     T_OBSERVER.ACCOUNT = #{account,jdbcType=VARCHAR}
+		) OBSERVER
+		ON
+		  SYS_ROLE.ROLE_TYPE = 2	/* 观测人员 Const.java/RoleType/OBSERVER */
+		
+		ORDER BY
+		  ROLE_TYPE,
+		  GRANT_STATE,
+		  SYS_ROLE.ROLE_ID
+	</select>
+
+	<!-- 标段管理员 角色授权 授权 -->
+	<insert id="saveUserRole" parameterType="com.tky.lxl.platform.model.system.SysUserRole">
+	
+		<selectKey keyProperty="count" resultType="int" order="BEFORE">
+			SELECT COUNT(RU_ID) FROM SYS_USER_ROLE
+			WHERE
+				ACCOUNT = #{account,jdbcType=VARCHAR}
+			AND
+				ROLE_ID = #{roleId,jdbcType=DECIMAL}
+		</selectKey>
+		
+		<if test="count > 0">
+		
+		    update SYS_USER_ROLE
+		    <set>
+		      <if test="account != null">
+		        ACCOUNT = #{account,jdbcType=VARCHAR},
+		      </if>
+		      <if test="roleId != null">
+		        ROLE_ID = #{roleId,jdbcType=DECIMAL},
+		      </if>
+		      <if test="useFlag != null">
+		        USE_FLAG = #{useFlag,jdbcType=DECIMAL},
+		      </if>
+		      <if test="userId != null">
+		        USER_ID = #{userId,jdbcType=DECIMAL},
+		      </if>
+		      <if test="userName != null">
+		        USER_NAME = #{userName,jdbcType=VARCHAR},
+		      </if>
+				UPDATE_USER_ID = #{updateUserId,jdbcType=DECIMAL},
+				UPDATE_DATE_TIME = SYSDATE
+		    </set>
+			WHERE
+				ACCOUNT = #{account,jdbcType=VARCHAR}
+			AND
+				ROLE_ID = #{roleId,jdbcType=DECIMAL}
+		</if>
+		<if test="count==0">
+		
+		    insert into SYS_USER_ROLE
+		    <trim prefix="(" suffix=")" suffixOverrides=",">
+		        RU_ID,
+		      <if test="account != null">
+		        ACCOUNT,
+		      </if>
+		      <if test="roleId != null">
+		        ROLE_ID,
+		      </if>
+		      <if test="useFlag != null">
+		        USE_FLAG,
+		      </if>
+		      <if test="userId != null">
+		        USER_ID,
+		      </if>
+		      <if test="userName != null">
+		        USER_NAME,
+		      </if>
+		      <if test="updateUserId != null">
+		        UPDATE_USER_ID,
+		      </if>
+		        UPDATE_DATE_TIME,
+		    </trim>
+		    <trim prefix="values (" suffix=")" suffixOverrides=",">
+		        SEQ_SYS_USER_ROLE.NEXTVAL,
+		      <if test="account != null">
+		        #{account,jdbcType=VARCHAR},
+		      </if>
+		      <if test="roleId != null">
+		        #{roleId,jdbcType=DECIMAL},
+		      </if>
+		      <if test="useFlag != null">
+		        #{useFlag,jdbcType=DECIMAL},
+		      </if>
+		      <if test="userId != null">
+		        #{userId,jdbcType=DECIMAL},
+		      </if>
+		      <if test="userName != null">
+		        #{userName,jdbcType=VARCHAR},
+		      </if>
+		      <if test="updateUserId != null">
+		        #{updateUserId,jdbcType=DECIMAL},
+		      </if>
+		        SYSDATE
+		    </trim>
+		</if>
+	</insert>
+	
+	<!-- 标段管理员 角色授权 取消授权(取消选择用户的所有角色授权) -->
+	<update id="cancelUserAllRole" parameterType="com.tky.lxl.platform.model.system.SysUserRole">
+		UPDATE
+			SYS_USER_ROLE
+		SET
+		   USE_FLAG = 1,	/*取消授权 逻辑删除*/
+		   UPDATE_USER_ID = #{updateUserId,jdbcType=DECIMAL},
+		   UPDATE_DATE_TIME = SYSDATE
+		WHERE
+			ACCOUNT = #{account,jdbcType=VARCHAR}
+	</update>
+	
+</mapper>

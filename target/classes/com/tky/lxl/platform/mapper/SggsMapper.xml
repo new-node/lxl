@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.SggsMapper">
+	  <resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.Sggs">
+	    <id column="CONBEAMID" jdbcType="DECIMAL" property="conbeamid" />
+	    <result column="INDUSTRIAL" jdbcType="VARCHAR" property="industrial" />
+	    <result column="MAINKDLENGTH" jdbcType="DECIMAL" property="mainkdlength" />
+	    <result column="BEAMASPAN" jdbcType="VARCHAR" property="beamaspan" />
+	    <result column="CENTERMILE" jdbcType="VARCHAR" property="centermile" />
+	    <result column="STARTDATE" jdbcType="DATE" property="startdate" />
+	    <result column="ENDDATE" jdbcType="DATE" property="enddate" />
+	    <result column="PLANJCUNIT" jdbcType="VARCHAR" property="planjcunit" />
+	    <result column="DESIGNUNIT" jdbcType="VARCHAR" property="designunit" />
+	  </resultMap>
+	  <sql id="Base_Column_List">
+	    CONBEAMID, INDUSTRIAL, MAINKDLENGTH, BEAMASPAN, CENTERMILE, STARTDATE, ENDDATE, PLANJCUNIT, 
+	    DESIGNUNIT
+	  </sql>
+	  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	    select 
+	    <include refid="Base_Column_List" />
+	    from T_SGGS
+	    where CONBEAMID = #{conbeamid}
+	  </select>
+  
+      <insert id="saveOrUpdate" parameterType="com.tky.lxl.platform.model.business.Sggs">
+        <selectKey keyProperty="count" resultType="int" order="BEFORE">
+            SELECT COUNT(CONBEAMID) FROM T_SGGS WHERE CONBEAMID = #{conbeamid}
+        </selectKey>
+        <if test="count > 0">
+	        UPDATE T_SGGS SET
+		        INDUSTRIAL = #{industrial,jdbcType=VARCHAR},
+		        MAINKDLENGTH = #{mainkdlength,jdbcType=DECIMAL},
+		        BEAMASPAN = #{beamaspan,jdbcType=VARCHAR},
+		        CENTERMILE = #{centermile,jdbcType=VARCHAR},
+		        STARTDATE = #{startdate,jdbcType=DATE},
+		        ENDDATE = #{enddate,jdbcType=DATE},
+		        PLANJCUNIT = #{planjcunit,jdbcType=VARCHAR},
+		        DESIGNUNIT = #{designunit,jdbcType=VARCHAR}
+		    where CONBEAMID = #{conbeamid}
+        </if>
+        <if test="count == 0">
+	        insert into T_SGGS
+		    <trim prefix="(" suffix=")" suffixOverrides=",">
+		      <if test="conbeamid != null">
+		        CONBEAMID,
+		      </if>
+		      <if test="industrial != null">
+		        INDUSTRIAL,
+		      </if>
+		      <if test="mainkdlength != null">
+		        MAINKDLENGTH,
+		      </if>
+		      <if test="beamaspan != null">
+		        BEAMASPAN,
+		      </if>
+		      <if test="centermile != null">
+		        CENTERMILE,
+		      </if>
+		      <if test="startdate != null">
+		        STARTDATE,
+		      </if>
+		      <if test="enddate != null">
+		        ENDDATE,
+		      </if>
+		      <if test="planjcunit != null">
+		        PLANJCUNIT,
+		      </if>
+		      <if test="designunit != null">
+		        DESIGNUNIT,
+		      </if>
+		    </trim>
+		    <trim prefix="values (" suffix=")" suffixOverrides=",">
+		      <if test="conbeamid != null">
+		        #{conbeamid,jdbcType=DECIMAL},
+		      </if>
+		      <if test="industrial != null">
+		        #{industrial,jdbcType=VARCHAR},
+		      </if>
+		      <if test="mainkdlength != null">
+		        #{mainkdlength,jdbcType=DECIMAL},
+		      </if>
+		      <if test="beamaspan != null">
+		        #{beamaspan,jdbcType=VARCHAR},
+		      </if>
+		      <if test="centermile != null">
+		        #{centermile,jdbcType=VARCHAR},
+		      </if>
+		      <if test="startdate != null">
+		        #{startdate,jdbcType=DATE},
+		      </if>
+		      <if test="enddate != null">
+		        #{enddate,jdbcType=DATE},
+		      </if>
+		      <if test="planjcunit != null">
+		        #{planjcunit,jdbcType=VARCHAR},
+		      </if>
+		      <if test="designunit != null">
+		        #{designunit,jdbcType=VARCHAR},
+		      </if>
+		    </trim>
+        </if>
+    </insert>
+</mapper>

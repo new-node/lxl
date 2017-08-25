@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tky.lxl.platform.dao.business.SgjdMapper">
+  <resultMap id="BaseResultMap" type="com.tky.lxl.platform.model.business.Sgjd">
+    <result column="BAROMETRIC" jdbcType="DECIMAL" property="barometric" />
+    <result column="WEATHER" jdbcType="DECIMAL" property="weather" />
+    <result column="TEMPERATURE" jdbcType="DECIMAL" property="temperature" />
+    <result column="NAME" jdbcType="VARCHAR" property="cly" />
+    <result column="MTIME" jdbcType="VARCHAR" property="mtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    BAROMETRIC, WEATHER, TEMPERATURE, TO_CHAR(UPLOADTIME,'yyyy/MM/dd') AS MTIME, NAME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM T_SGJD
+    WHERE STEPID = #{stepid}
+  </select>
+</mapper>
